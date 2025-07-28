@@ -1,0 +1,26 @@
+Structure of MyABM models
+=========================
+
+Models contain three main components, the mesh, the agent grid, and the agents
+
+.. image:: ../_static/myabm_schematic.png
+
+The Mesh
+--------
+The mesh defines the geometry and connectivity of the model. A key benefit
+of MyABM is that models can be easily defined on arbitrary meshes, not just
+uniform grids. 
+
+MyABM is built on `MyMesh <https://bu-smbl.github.io/mymesh/index.html>`_ 
+which enables the construction of a wide variety of meshes, including 
+`pre-defined meshes <https://bu-smbl.github.io/mymesh/generated/mymesh.primitives.html>`_ for uniform grids, spheres, and more, as well as 
+`image-based <https://bu-smbl.github.io/mymesh/generated/mymesh.image.html>`_ 
+or `implicitly defined <https://bu-smbl.github.io/mymesh/generated/mymesh.implicit.html>`_ meshes. 
+Meshes can also easily be loaded from a variety of file types using 
+:func:`mymesh.mesh.read`, facilitated by `meshio <https://github.com/nschloe/meshio>`_
+
+The Agent Grid
+--------------
+The agent grid (:class:`myabm.AgentGrid`) constitutes the environment that 
+agents operate within. It contains key :ref:`connectivity <Connectivity Information>` information from the 
+mesh to enable agent migration, neighboring agent interactions, and more. 
