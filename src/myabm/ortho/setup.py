@@ -13,13 +13,14 @@ from .. import Model, AgentGrid, Agent
 from . import actions, geometries, mechanobiology
 from . import OrthoModel
 
-def implicit_scaffold(func, bounds, h, seeding_density=1e3, parameters=None, filled=False, ncells=None):
+def implicit_scaffold(func, bounds, h, seeding_density=1e3, agent_parameters=None, filled=False, ncells=None):
     # seeding_density is default, but if ncells is provided it takes precedence
     
     # Create mesh grid
     Grid = primitives.Grid(bounds, h)
     Grid.verbose=False
     model = OrthoModel(Grid)
+    model.agent_grid.parameters['h'] = h
 
     # initialize properties
     if filled is not False:
@@ -38,8 +39,8 @@ def implicit_scaffold(func, bounds, h, seeding_density=1e3, parameters=None, fil
     exclude = np.setdiff1d(Grid.SurfNodes, Pore.SurfNodes)
     # Create agent grid
 
-    model.agent_grid.NodeData['CellsAllowed'] = np.ones(model.agent_grid.NNode)
-    model.agent_grid.NodeData['CellsAllowed'][exclude] = 0 
+    model.agent_grid.NodeData['Cells Allowed'] = np.ones(model.agent_grid.NNode)
+    model.agent_grid.NodeData['Cells Allowed'][exclude] = 0 
     model.agent_grid.ElemData['Scaffold Fraction'][model.agent_grid.ElemData['material'] == 8] = 1
     model.agent_grid.ElemData['Volume Fraction'][model.agent_grid.ElemData['material'] == 8] = 1
     if filled:
@@ -63,14 +64,14 @@ def implicit_scaffold(func, bounds, h, seeding_density=1e3, parameters=None, fil
     # Seed scaffold
     Scaffold = Grid.Threshold(model.agent_grid.ElemData['material'], 8, '==')
     Scaffold.verbose=False
-    ScafSurfNodes = np.setdiff1d(Scaffold.SurfNodes, np.arange(Grid.NNode)[model.agent_grid.NodeData['CellsAllowed']==0])
+    ScafSurfNodes = np.setdiff1d(Scaffold.SurfNodes, np.arange(Grid.NNode)[model.agent_grid.NodeData['Cells Allowed']==0])
     
     if filled:
         tissue = Grid.Threshold(model.agent_grid.ElemData['Volume Fraction'], 0.2, '>=')
         ScafInteriorNodes = np.setdiff1d(Scaffold.MeshNodes, Scaffold.SurfNodes)
         
         SeedNodes = np.setdiff1d(
-                np.union1d(np.setdiff1d(tissue.MeshNodes, np.arange(Grid.NNode)[model.agent_grid.NodeData['CellsAllowed']==0]), ScafSurfNodes),
+                np.union1d(np.setdiff1d(tissue.MeshNodes, np.arange(Grid.NNode)[model.agent_grid.NodeData['Cells Allowed']==0]), ScafSurfNodes),
                 ScafInteriorNodes)
     else:
         SeedNodes = ScafSurfNodes
@@ -81,9 +82,23 @@ def implicit_scaffold(func, bounds, h, seeding_density=1e3, parameters=None, fil
     if ncells is None:
         ncells = int(np.round(seeding_density*SurfArea))
     
-    model.seed(ncells, 'msc', SeedNodes, 'random', parameters)
+    model.seed(ncells, 'msc', SeedNodes, 'random', agent_parameters)
     
 
+    return model
+
+def demo_block(h, ncells=1, agent_parameters=None):
+
+    dt = 0.02
+    h = .025
+    func, bounds = geometries.demo_block(h)
+    model = implicit_scaffold(func, bounds, h, ncells=ncells, agent_parameters=agent_parameters)
+    # agent_grid.NodeData['Cells Allowed'] = np.repeat(np.int32(1), agent_grid.NNode) 
+    model.agent_grid.TimeStep = dt
+    node = list(model.agent_grid.NodeAgents.keys())[0]
+    if ncells == 1:
+        if node != 29:
+            model.agent_grid.move_agent(model.agents[0], 29)
     return model
 
 # def setup_wellplate(size, h, zstep=None, media_volume=True, seeding_density=None, parameters=None):
@@ -145,7 +160,7 @@ def implicit_scaffold(func, bounds, h, seeding_density=1e3, parameters=None, fil
 #     # Create agent grid
 #     agent_grid = abm.initialize(Grid)
 #     agent_grid.ElementVolume = h*h*zstep
-#     agent_grid.NodeData['CellsAllowed'][agent_grid.SurfNodes] = 0     # TODO: Should make this an option
+#     agent_grid.NodeData['Cells Allowed'][agent_grid.SurfNodes] = 0     # TODO: Should make this an option
 #     agent_grid.ElemData['Scaffold Fraction'][agent_grid.ElemData['material'] == 8] = 1
 #     agent_grid.ElemData['Volume Fraction'][agent_grid.ElemData['material'] == 8] = 1
 #     agent_grid.ElemData['Mineral Density'][agent_grid.ElemData['material'] == 8] = 3 # mg/mm^3

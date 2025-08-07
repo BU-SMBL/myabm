@@ -4,8 +4,11 @@
 # @author: toj
 """
 
+Actions for the Ortho Model
+===========================
+
 Ortho Agent Actions
-===================
+-------------------
 .. autosummary::
     :toctree: submodules/
 
@@ -15,9 +18,22 @@ Ortho Agent Actions
     apoptose
     produce
     produce_oriented
+    differentiate_prendergast
+
+Ortho Grid Actions
+------------------
+.. autosummary::
+    :toctree: submodules/
+
+    update_mineral
 
 Ortho Model Actions
-===================
+-------------------
+.. autosummary::
+    :toctree: submodules/
+
+    update_curvature
+    update_scaffold_curvature
 
 """
 
@@ -44,10 +60,6 @@ def null(agent, grid):
     grid : myabm.AgentGrid
         Grid environment that the agent is in.
 
-    Returns
-    -------
-    None.
-
     """
     
     pass
@@ -57,6 +69,8 @@ def migrate(agent, grid):
     """
     Random walk migration.
 
+    See also: :ref:`Migration - Random Walk`
+
     Parameters
     ----------
     agent : myabm.Agent
@@ -64,39 +78,19 @@ def migrate(agent, grid):
     grid : myabm.AgentGrid
         Grid environment that the agent is in.
 
-    Requires
-    --------
-    grid.parameters['Mineral Walk Threshold'] : float
-        Mineral content threshold above which cells cannot migrate through
-        In units of mg/mm^3, ~0.8 corresponds to bone mineral content.  
-    grid.parameters['Tissue Threshold'] : float
-        Volume fraction of extracellular matrix above which cells can migrate
-        across. Below this threshold, the voxel is considered empty and 
-        cannot be crossed, in range [0, 1].
-    grid.ElemData['Mineral Density'] : np.ndarray(dtype=float)
-        Array of mineral content for each voxel in the grid, in units of mg/mm^3
-    grid.ElemData['Volume Fraction'] : np.ndarray(dtype=float)
-        Array of volume fractions for each voxel in the grid, in range [0, 1]
-    grid.NodeData['CellsAllowed'] : np.ndarray(dtype=float)
-        Binary array indicating whether a cell is able to migrate to each node
-
-    Returns
-    -------
-    None.
-
     """
 
-    # for required in ['MigrRate', 'Tissue Threshold']:
-    #     assert required in agent.parameters, 'agent.parameters must contain "'+required+'"'
-    # for required in ['Mineral Walk Threshold', 'Tissue Threshold']:
-    #     assert required in grid.parameters, 'agent_grid.parameters must contain "'+required+'"'
-    # for required in ['Mineral Density', 'Volume Fraction']:
-    #     assert required in grid.ElemData, 'agent_grid.ElemData must contain "'+required+'"'
-    # for required in ['CellsAllowed']:
-    #     assert required in grid.NodeData, 'agent_grid.NodeData must contain "'+required+'"'
+    for required in ['MigrRate']:
+        assert required in agent.parameters, 'agent.parameters must contain "'+required+'"'
+    for required in ['Mineral Walk Threshold', 'Tissue Threshold', 'h']:
+        assert required in grid.parameters, 'agent_grid.parameters must contain "'+required+'"'
+    for required in ['Mineral Density', 'Volume Fraction']:
+        assert required in grid.ElemData, 'agent_grid.ElemData must contain "'+required+'"'
+    for required in ['Cells Allowed']:
+        assert required in grid.NodeData, 'agent_grid.NodeData must contain "'+required+'"'
 
     TimeStep = grid.TimeStep
-    StepSize = grid.h
+    StepSize = grid.parameters['h']
     MineralWalkThreshold = grid.parameters['Mineral Walk Threshold']
     ECMWalkThreshold = grid.parameters['Tissue Threshold']
     
@@ -119,21 +113,19 @@ def migrate(agent, grid):
     if np.random.rand() < MigrationProbability:            
         if len(edge_set) > 0:
             # neighbors that are reachable and not occupied
-            open_neighbors = np.array([n for n in np.unique(grid.Edges[np.array(list(edge_set))]) if (n not in grid.NodeAgents) and (grid.NodeData['CellsAllowed'][n] == 1)])
+            open_neighbors = np.array([n for n in np.unique(grid.Edges[np.array(list(edge_set))]) if (n not in grid.NodeAgents) and (grid.NodeData['Cells Allowed'][n] == 1)])
             # TODO: modify this to allow for swapping/
             if len(open_neighbors) > 0:
                 step = np.random.choice(open_neighbors) # Choose new node
-                
-                # Update data structure
-                del grid.NodeAgents[agent.node]          # Remove cell from old node
-                agent.node = step                        # Update cell's node id
-                grid.NodeAgents[step] = agent            # Move cell to new node
+                grid.move_agent(agent, step)
 
 @numba.njit    
 def migrate_curvotaxis(agent, grid):
     """
     Curvotactic walk migration.
-    Random walk weighted by surface curvature, based on Pieuchot et al. 2018
+    Random walk weighted by surface curvature, based on :cite:t:`Pieuchot2018a`
+
+    See also: :ref:`Curvotaxis`
 
     Parameters
     ----------
@@ -142,43 +134,10 @@ def migrate_curvotaxis(agent, grid):
     grid : myabm.AgentGrid
         Grid environment that the agent is in.
 
-    Requires
-    --------
-    grid.parameters['Mineral Walk Threshold'] : float
-        Mineral content threshold above which cells cannot migrate through
-        In units of mg/mm^3, ~0.8 corresponds to bone mineral content.  
-    grid.parameters['Tissue Threshold'] : float
-        Volume fraction of extracellular matrix above which cells can migrate
-        across. Below this threshold, the voxel is considered empty and 
-        cannot be crossed, in range [0, 1].
-    agent.parameters['MigrationWeight0'] : float
-
-        migration_rate = (w0 * w1**H + w2) / 1000 * 24 (mm/day)
-    agent.parameters['MigrationWeight1']
-
-        migration_rate = (w0 * w1**H + w2) / 1000 * 24 (mm/day)
-    agent.parameters['MigrationWeight2']
-
-        migration_rate = (w0 * w1**H + w2) / 1000 * 24 (mm/day)
-    agent.parameters['MigrationWeight3']
-
-    agent.parameters['MigrationWeight4']
-
-    grid.ElemData['Mineral Density'] : np.ndarray(dtype=float)
-        Array of mineral content for each voxel in the grid, in units of mg/mm^3
-    grid.ElemData['Volume Fraction'] : np.ndarray(dtype=float)
-        Array of volume fractions for each voxel in the grid, in range [0, 1]
-
-    grid.NodeData['Mean Curvature']
-
-    Returns
-    -------
-    None.
-
     """
 
     TimeStep = grid.TimeStep
-    StepSize = grid.h
+    StepSize = grid.parameters['h']
     MineralWalkThreshold = grid.parameters['Mineral Walk Threshold']
     ECMWalkThreshold = grid.parameters['Tissue Threshold']
     
@@ -208,13 +167,13 @@ def migrate_curvotaxis(agent, grid):
     b = agent.parameters['MigrationWeight1']
     c = agent.parameters['MigrationWeight2']
     # MigrationProbability = np.minimum((a * b**H + c) / 1000 * 24 / agent.parameters['MscMaxMigrRate'], 1)
-    k = (a * b**H + c) / 1000 * 24 # migration rate (mm/day)
+    k = agent.parameters['MigrRate']*(a * b**H + c) # migration rate (mm/day)
     Lambda = k/StepSize # migration event rate (/day)
     MigrationProbability = 1 - np.exp(-Lambda*TimeStep)
     if np.random.rand() < MigrationProbability:             
         if len(edge_set) > 0:
             # neighbors that are reachable and not occupied
-            open_neighbors = np.array([n for n in np.unique(grid.Edges[np.array(list(edge_set))]) if (n not in grid.NodeAgents) and (grid.NodeData['CellsAllowed'][n] == 1)])
+            open_neighbors = np.array([n for n in np.unique(grid.Edges[np.array(list(edge_set))]) if (n not in grid.NodeAgents) and (grid.NodeData['Cells Allowed'][n] == 1)])
             # TODO: modify this to allow for swapping?
             
             
@@ -243,16 +202,15 @@ def migrate_curvotaxis(agent, grid):
                 # step = np.random.choice(open_neighbors)#, p = p) # Choose new node
                     
                 # Update data structure
-                oldnode = agent.node
-                agent.node = step                        # Update cell's node id
-                grid.NodeAgents[step] = agent            # Move cell to new node
-                del grid.NodeAgents[oldnode]          # Remove cell from old node
+                grid.move_agent(agent, step)
       
 @numba.njit
 def proliferate(agent, grid):
     """
     Cell proliferation. Random chance of creation of a new cell at an
     available adjacent site.
+
+    See also: :ref:`Cell Dynamics - Proliferation & Apoptosis`
 
     Parameters
     ----------
@@ -261,27 +219,16 @@ def proliferate(agent, grid):
     grid : myabm.AgentGrid
         Grid environment that the agent is in.
 
-    Requires
-    --------
-    agent.parameters['ProlifRate'] : float
-        Proliferation rate, in proliferation events per day. 
-    grid.parameters['Mineral Walk Threshold'] : float
-        Mineral content threshold above which cells cannot migrate through
-        In units of mg/mm^3, ~0.8 corresponds to bone mineral content.  
-    grid.parameters['Tissue Threshold'] : float
-        Volume fraction of extracellular matrix above which cells can migrate
-        across. Below this threshold, the voxel is considered empty and 
-        cannot be crossed, in range [0, 1].
-    grid.ElemData['Mineral Density'] : np.ndarray(dtype=float)
-        Array of mineral content for each voxel in the grid, in units of mg/mm^3
-    grid.ElemData['Volume Fraction'] : np.ndarray(dtype=float)
-        Array of volume fractions for each voxel in the grid, in range [0, 1]
-
-    Returns
-    -------
-    None.
-
     """
+    for required in ['ProlifRate']:
+        assert required in agent.parameters, 'agent.parameters must contain "'+required+'"'
+    for required in ['Mineral Walk Threshold', 'Tissue Threshold', 'h']:
+        assert required in grid.parameters, 'agent_grid.parameters must contain "'+required+'"'
+    for required in ['Mineral Density', 'Volume Fraction']:
+        assert required in grid.ElemData, 'agent_grid.ElemData must contain "'+required+'"'
+    for required in ['Cells Allowed']:
+        assert required in grid.NodeData, 'agent_grid.NodeData must contain "'+required+'"'
+
     TimeStep = grid.TimeStep
     MineralWalkThreshold = grid.parameters['Mineral Walk Threshold']
     ECMWalkThreshold = grid.parameters['Tissue Threshold']
@@ -307,7 +254,7 @@ def proliferate(agent, grid):
             
     if len(edge_set) > 0:
         # neighbors that are reachable and not occupied
-        open_neighbors = np.array([n for n in np.unique(grid.Edges[np.array(list(edge_set))]) if (n not in grid.NodeAgents) and (grid.NodeData['CellsAllowed'][n] == 1)])
+        open_neighbors = np.array([n for n in np.unique(grid.Edges[np.array(list(edge_set))]) if (n not in grid.NodeAgents) and (grid.NodeData['Cells Allowed'][n] == 1)])
 
         open_neighbors = open_neighbors[open_neighbors != agent.node]
         if len(open_neighbors) == 0:
@@ -315,7 +262,7 @@ def proliferate(agent, grid):
         
         if np.random.rand() < ProlifProb:
             step = np.random.choice(open_neighbors)
-            grid.add_agent(step, agent.state, agent.age, agent.parameters)
+            grid.add_agent(step, agent.state, agent.parameters)
 
 @numba.njit             
 def proliferate_calcium(agent, grid):
@@ -345,7 +292,7 @@ def proliferate_calcium(agent, grid):
             
     if len(edge_set) > 0:
         # neighbors that are reachable and not occupied
-        open_neighbors = np.array([n for n in np.unique(grid.Edges[np.array(list(edge_set))]) if (n not in grid.NodeAgents) and (grid.NodeData['CellsAllowed'][n] == 1)])
+        open_neighbors = np.array([n for n in np.unique(grid.Edges[np.array(list(edge_set))]) if (n not in grid.NodeAgents) and (grid.NodeData['Cells Allowed'][n] == 1)])
 
         open_neighbors = open_neighbors[open_neighbors != agent.node]
         if len(open_neighbors) == 0:
@@ -356,49 +303,12 @@ def proliferate_calcium(agent, grid):
             grid.add_agent(step, agent.state, agent.age, agent.parameters)
                 
 @numba.njit
-def proliferate_contactinhibited(agent, grid):
-    
-    TimeStep = grid.TimeStep
-    MineralWalkThreshold = grid.parameters['Mineral Walk Threshold']
-    ECMWalkThreshold = grid.parameters['Tissue Threshold']
-    ProlifProb = 1 - np.exp(-agent.parameters['ProlifRate'] * TimeStep)
-    
-    # NOTE: This is doing redundant work with walk
-    # Determine which edges are open 
-    edge_ids = grid.NodeEdgeConn[agent.node]
-    edge_ids = edge_ids[edge_ids!=-1]
-    edge_set = set(edge_ids)
-    for eid in np.copy(edge_ids):
-        elems = grid.EdgeElemConn[eid]
-        elems = elems[elems!=-1]
-        if np.all(grid.ElemData['Mineral Density'][elems] >= MineralWalkThreshold):
-            # edge pass through mineralized elements - can't be traversed 
-            edge_set.remove(eid)
-        elif np.all(grid.ElemData['Volume Fraction'][elems] <= ECMWalkThreshold):
-            # edge passes through space with insufficient material
-            edge_set.remove(eid)
-        elif agent.state == 'osteoblast' and np.all(grid.ElemData['Mineral Density'][elems] <= MineralWalkThreshold):
-            # edge pass through only unmineralized elements - can't be traversed by osteoblasts
-            edge_set.remove(eid)
-            
-    if len(edge_set) > 0:
-        # neighbors that are reachable and not occupied
-        open_neighbors = np.array([n for n in np.unique(grid.Edges[np.array(list(edge_set))]) if (n not in grid.NodeAgents) or (grid.NodeData['CellsAllowed'][n] == 0)])
-
-        open_neighbors = open_neighbors[open_neighbors != agent.node]
-        if len(open_neighbors) == 0:
-            return
-        
-        contact_inhibited_probability = len(open_neighbors)/6 * ProlifProb
-        if np.random.rand() < contact_inhibited_probability:
-            step = np.random.choice(open_neighbors)
-            grid.add_agent(step, agent.state, agent.age, agent.parameters)
-                
-@numba.njit
 def apoptose(agent, grid):
     """
     Cell apoptosis. Random change that the agent will undergo apoptosis and be
     removed from the grid. 
+
+    See also: :ref:`Cell Dynamics - Proliferation & Apoptosis`
 
     Parameters
     ----------
@@ -407,40 +317,56 @@ def apoptose(agent, grid):
     grid : myabm.AgentGrid
         Grid environment that the agent is in.
 
-    Returns
-    -------
-    None.
     """    
+    for required in ['ApopRate']:
+        assert required in agent.parameters, 'agent.parameters must contain "'+required+'"'
     TimeStep = grid.TimeStep
     ApopProb = 1 - np.exp(-agent.parameters['ApopRate'] * TimeStep)
     if (np.random.rand() < ApopProb):
-        grid.remove_agent(agent.node)
-            
-@numba.njit
-def differentiate(agent, grid):
-    TimeStep = grid.TimeStep
-    DiffProb = 1 - np.exp(-agent.parameters['DiffRate'] * TimeStep)
-    
-    if agent.state == 'msc':
-        if (agent.age > 6) & (np.random.rand() < DiffProb):
-            agent.state = 'osteoblast'
+        grid.remove_agent(agent)
             
 @numba.njit
 def differentiate_prendergast(agent, grid):
+    r"""
+    Mechanobiological cell differentiation based on :cite:`Prendergast1997a`. 
+    :code:`'Stimulus'` must be stored in :code:`grid.NodeData` and should be the 
+    stimulus value described by :cite:`Huiskes1997`:
+
+    .. math::
         
+        S = \frac{\gamma}{0.0375} + \frac{v}{0.003}
+    
+    where :math:`\gamma` is octahedral shear strain and :math:`v` is 
+    interstitial fluid flow velocity from a poroelastic material model.
+
+    See also: :ref:`Differentiation`
+
+    Parameters
+    ----------
+    agent : myabm.Agent
+        Cell agent to perform the action.
+    grid : myabm.AgentGrid
+        Grid environment that the agent is in.
+    """    
+
+    for required in ['DiffRate', 'DiffMaturity']:
+        assert required in agent.parameters, 'agent.parameters must contain "'+required+'"'
+    for required in ['Stimulus']:
+        assert required in grid.NodeData, 'agent_grid.NodeData must contain "'+required+'"'
+
     TimeStep = grid.TimeStep
     DiffProb = 1 - np.exp(-agent.parameters['DiffRate'] * TimeStep)
     
     S = grid.NodeData['Stimulus'][agent.node]
     if agent.state == 'msc':
         # stimulus should be "S" from the prendergast model
-        if (agent.age > 6) & (np.random.rand() < DiffProb):
+        if (agent.age > agent.parameters['DiffMaturity']) & (np.random.rand() < DiffProb):
             if 0.01 <= S <= 1:
                 agent.state = 'osteoblast'
                 agent.age = 0
                 agent.parameters['ProlifRate'] = 0.3 # Isaksson 2008
                 agent.parameters['ApopRate'] = 0.16 # Isaksson 2008
-                agent.parameters['MigrRate'] = 0.96/2 # Half MSCs - CURRENTLY ARBITRARY, NEED SUPPORT
+                agent.parameters['MigrRate'] = 0.167 # proportional to Isaksson 2008
                 agent.parameters['Production'] = 3e-6 # (mm^3/cell/day) Isaksson 2008
                 
             elif 1 < S <= 3:
@@ -456,7 +382,7 @@ def differentiate_prendergast(agent, grid):
                 agent.age = 0
                 agent.parameters['ProlifRate'] = 0.55 # Isaksson 2008
                 agent.parameters['ApopRate'] = 0.05 # Isaksson 2008
-                agent.parameters['MigrRate'] = 0.96 # Same as MSCs
+                agent.parameters['MigrRate'] = 0.667 # proportional to Isaksson 2008
                 agent.parameters['Production'] = 5e-6 # (mm^3/cell/day) Isaksson 2008
     elif agent.state == 'osteoblast':
         if 0.01 <= S <= 1:
@@ -482,6 +408,29 @@ def differentiate_prendergast(agent, grid):
 
 @numba.njit
 def produce(agent, grid):
+    """
+    Constant tissue production. Cells will fill surrounding elements with 
+    tissue. Once newly created tissue has reached 
+    :code:`grid.parameters['Tissue Threshold']`, the cell will move to the new
+    surface, as if the cell is creating tissue beneath it.
+
+    See also: :ref:`Tissue Production`
+
+    Parameters
+    ----------
+    agent : myabm.Agent
+        Cell agent to perform the action.
+    grid : myabm.AgentGrid
+        Grid environment that the agent is in.
+    """
+
+    for required in ['Production']:
+        assert required in agent.parameters, 'agent.parameters must contain "'+required+'"'
+    for required in ['Mineral Walk Threshold', 'Tissue Threshold', 'h']:
+        assert required in grid.parameters, 'agent_grid.parameters must contain "'+required+'"'
+    for required in ['Mineral Density', 'Volume Fraction', 'Fibrous Fraction', 'ECM Fraction', 'Cartilaginous Fraction', 'Osseous Fraction']:
+        assert required in grid.ElemData, 'agent_grid.ElemData must contain "'+required+'"'
+
     TimeStep = grid.TimeStep
     Production = TimeStep*agent.parameters['Production']
     
@@ -489,7 +438,7 @@ def produce(agent, grid):
     neighbor_elems = neighbor_elems[neighbor_elems >= 0]
     
     # ECM production
-    ProducedFraction = np.minimum(Production/grid.ElementVolume, 1) # Production can never exceed the total element volume
+    ProducedFraction = np.minimum(Production/grid.parameters['Volume'], 1) # Production can never exceed the total element volume
     
     if agent.state == 'msc':
         available = 1 - grid.ElemData['Volume Fraction'][neighbor_elems]
@@ -553,21 +502,55 @@ def produce(agent, grid):
     old_voxels = np.where((grid.ElemData['Volume Fraction'][neighbor_elems]-NewProduction > grid.parameters['Tissue Threshold'] ) | (grid.ElemData['Mineral Density'][neighbor_elems] > grid.parameters['Mineral Walk Threshold']))[0]
     if len(new_voxels) > 0:
         if len(old_voxels) > 0:
-            new_nodes = grid.NodeConn[neighbor_elems[new_voxels]].flatten()
-            old_nodes = grid.NodeConn[neighbor_elems[old_voxels]].flatten()
+            new_nodes = np.array([n for e in new_voxels for n in grid.NodeConn[neighbor_elems[e]]]).flatten()
+            old_nodes = np.array([n for e in old_voxels for n in grid.NodeConn[neighbor_elems[e]]]).flatten()#grid.NodeConn[neighbor_elems[old_voxels]].flatten()
             new_nodes = np.array([n for n in new_nodes if n not in old_nodes])
         else:
-            new_nodes = grid.NodeConn[neighbor_elems[new_voxels]].flatten()
-        new_nodes = np.array([n for n in new_nodes if n not in grid.NodeAgents and grid.NodeData['CellsAllowed'][n]])
+            new_nodes = np.array([n for e in new_voxels for n in grid.NodeConn[neighbor_elems[e]]]).flatten()# grid.NodeConn[neighbor_elems[new_voxels]].flatten()
+        new_nodes = np.array([n for n in new_nodes if n not in grid.NodeAgents and grid.NodeData['Cells Allowed'][n]])
         # print(new_nodes)
         if len(new_nodes) > 0:
-            step = np.random.choice(new_nodes)
-            del grid.NodeAgents[agent.node]          # Remove cell from old node
-            grid.NodeAgents[step] = agent            # Move cell to new node
-            agent.node = step                        # Update cell's node id
+            grid.move_agent(agent, np.random.choice(new_nodes))
+            # step = np.random.choice(new_nodes)
+            # del grid.NodeAgents[agent.node]          # Remove cell from old node
+            # grid.NodeAgents[step] = agent            # Move cell to new node
+            # agent.node = step                        # Update cell's node id
       
 @numba.njit
 def produce_oriented(agent, grid):
+    r"""
+    Curvature-dependent production of oriented tissue. 
+    Cells will fill surrounding elements with tissue oriented in the direction 
+    of minimum principal curvature. Tissue production is dependent on local mean 
+    curvature, according to the equation:
+    
+    .. math::
+
+        V_{prod.}(H_i) = k_{prod} \frac{|\min(0, H_i)|^{n_H}}{K_H^{n_H} + |\min(0, H_i)|^{n_H}}
+    
+    Where :math:`H_{i}` is the mean curvature of the surface at the location of 
+    the cell, :math:`k_{prod}` is a cell type-specific production rate constant 
+    (:code:`agent.parameters['Production']`), :math:`K_H`  is the mean curvature 
+    at which tissue production is half of the maximum rate 
+    (:code:`agent.parameters['Kcurve']`), and :math:`n_H` is the Hill coefficient 
+    (:code:`agent.parameters['ncurve']`).
+
+    This curvature-dependent tissue production results in tissue production 
+    consistent with the experimental observations of :cite:`Bidan2013`
+
+    Once newly created tissue has reached 
+    :code:`grid.parameters['Tissue Threshold']`, the cell will move to the new
+    surface, as if the cell is creating tissue beneath it.
+
+    See also: ref:`Tissue Growth`
+
+    Parameters
+    ----------
+    agent : myabm.Agent
+        Cell agent to perform the action.
+    grid : myabm.AgentGrid
+        Grid environment that the agent is in.
+    """
 
     for required in ['Production', 'Production Baseline', 'Kcurve', 'ncurve']:
         assert required in agent.parameters, 'agent.parameters must contain "'+required+'"'
@@ -575,7 +558,7 @@ def produce_oriented(agent, grid):
         assert required in grid.parameters, 'agent_grid.parameters must contain "'+required+'"'
     for required in ['Mineral Density', 'Volume Fraction', 'ECM Fraction', 'Fibrous Fraction', 'Cartilaginous Fraction', 'Osseous Fraction']:
         assert required in grid.ElemData, 'agent_grid.ElemData must contain "'+required+'"'
-    for required in ['Min Principal Curvature','Max Principal Curvature','Mean Curvature','CellsAllowed']:
+    for required in ['Min Principal Curvature','Max Principal Curvature','Mean Curvature','Cells Allowed']:
         assert required in grid.NodeData, 'agent_grid.NodeData must contain "'+required+'"'
     for required in ['Min Principal Direction','Max Principal Direction']:
         assert required in grid.NodeVectorData, 'agent_grid.NodeData must contain "'+required+'"'
@@ -588,13 +571,10 @@ def produce_oriented(agent, grid):
     neighbor_elems = grid.ElemConn[agent.node]
     neighbor_elems = neighbor_elems[neighbor_elems >= 0]
     
-    # ECM production
-    # Constant tissue production
-    # ProducedFraction = np.minimum(Production/grid.ElementVolume, 1) # Production can never exceed the total element volume
     # Mean Curvature-based tissue production
     a = np.abs(np.minimum(0, grid.NodeData['Mean Curvature'][agent.node]))
     CurvatureProduction = Production*a**ncurve / (Kcurve**ncurve + a**ncurve) + agent.parameters['Production Baseline']
-    ProducedFraction = np.minimum(CurvatureProduction/grid.ElementVolume, 1)
+    ProducedFraction = np.minimum(CurvatureProduction/grid.parameters['Volume'], 1)
     # 
     k2 = grid.NodeData['Min Principal Curvature'][agent.node]
     k2v = grid.NodeVectorData['Min Principal Direction'][agent.node]
@@ -694,18 +674,15 @@ def produce_oriented(agent, grid):
     old_voxels = np.where((grid.ElemData['Volume Fraction'][neighbor_elems]-NewProduction > grid.parameters['Tissue Threshold'] ) | (grid.ElemData['Mineral Density'][neighbor_elems] > grid.parameters['Mineral Walk Threshold']))[0]
     if len(new_voxels) > 0:
         if len(old_voxels) > 0:
-            new_nodes = grid.NodeConn[neighbor_elems[new_voxels]].flatten()
-            old_nodes = grid.NodeConn[neighbor_elems[old_voxels]].flatten()
+            new_nodes = np.array([n for e in new_voxels for n in grid.NodeConn[neighbor_elems[e]]]).flatten()
+            old_nodes = np.array([n for e in old_voxels for n in grid.NodeConn[neighbor_elems[e]]]).flatten()#grid.NodeConn[neighbor_elems[old_voxels]].flatten()
             new_nodes = np.array([n for n in new_nodes if n not in old_nodes])
         else:
-            new_nodes = grid.NodeConn[neighbor_elems[new_voxels]].flatten()
-        new_nodes = np.array([n for n in new_nodes if n not in grid.NodeAgents and grid.NodeData['CellsAllowed'][n]])
+            new_nodes = np.array([n for e in new_voxels for n in grid.NodeConn[neighbor_elems[e]]]).flatten()# grid.NodeConn[neighbor_elems[new_voxels]].flatten()
+        new_nodes = np.array([n for n in new_nodes if n not in grid.NodeAgents and grid.NodeData['Cells Allowed'][n]])
         # print(new_nodes)
         if len(new_nodes) > 0:
-            step = np.random.choice(new_nodes)
-            del grid.NodeAgents[agent.node]          # Remove cell from old node
-            grid.NodeAgents[step] = agent            # Move cell to new node
-            agent.node = step                        # Update cell's node id
+            grid.move_agent(agent, np.random.choice(new_nodes))
 
 # Grid Actions
 @numba.njit
@@ -725,115 +702,387 @@ def update_mineral(grid):
     dmineraldt = np.maximum(grid.parameters['Mineralization Rate'] * (grid.ElemData['Osseous Fraction'] - grid.ElemData['Mineral Density']/grid.parameters['Max Mineral']) * grid.parameters['Mineral Solute Concentration'], 0)
     grid.ElemData['Mineral Density'] += dmineraldt*grid.TimeStep
 
-
 # Model Actions
+def update_scaffold_curvature(model):
+    """
+    Calculate curvatures on a scaffold surface.
+
+    See also: ref:`Tissue Growth`
+
+    Parameters
+    ----------
+    model : myabm.ortho.OrthoModel
+        Initialized agent-based model
+
+    """
+
+    # This will only calculate the scaffold curvature if scaffold curvature hasn't been calculated yet, assuming the scaffold surface doesn't change
+
+    if np.max(model.agent_grid.ElemData['Scaffold Fraction']) == 0:
+        # No scaffold
+        return
+
+    Scaf = model.mesh.Threshold(model.agent_grid.ElemData['Scaffold Fraction'], 0, '>')
+    ScaffoldNodes = Scaf.SurfNodes
+    h = model.agent_grid.parameters['h']
+    if 'Scaffold Mean Curvature' in model.agent_grid.ElemData.keys() and not np.all(np.isnan(model.agent_grid.ElemData['Scaffold Mean Curvature'][ScaffoldNodes])):
+        # Curvature already computed on scaffold surface
+        return
+    
+    
+    maxxn = np.max(Scaf.NodeCoords[:,0])
+    minxn = np.min(Scaf.NodeCoords[:,0])
+    maxyn = np.max(Scaf.NodeCoords[:,1])
+    minyn = np.min(Scaf.NodeCoords[:,1])
+    maxzn = np.max(Scaf.NodeCoords[:,2])
+    minzn = np.min(Scaf.NodeCoords[:,2])
+    
+
+    if model.model_parameters['Periodic'] and model.model_parameters['Symmetric']:
+        raise ValueError('A model that is both Periodic and Symmetric is not supported.\n Change model.model_parameters["Periodic"] and/or model.model_parameters["Symmetric"] to False.')
+    
+    elif model.model_parameters['Periodic']:
+          
+        maxxe = np.max(Scaf.Centroids[:,0])
+        minxe = np.min(Scaf.Centroids[:,0])
+        maxye = np.max(Scaf.Centroids[:,1])
+        minye = np.min(Scaf.Centroids[:,1])
+        maxze = np.max(Scaf.Centroids[:,2])
+        minze = np.min(Scaf.Centroids[:,2])
+
+        maxx_pad = Scaf.Threshold(Scaf.Centroids[:,0], minxe, '==')
+        maxx_pad.NodeCoords[:,0] += (maxxe-minxe + h)
+        minx_pad = Scaf.Threshold(Scaf.Centroids[:,0], maxxe, '==') 
+        minx_pad.NodeCoords[:,0] -= (maxxe-minxe + h)
+        
+        maxy_pad = Scaf.Threshold(Scaf.Centroids[:,1], minye, '==')
+        maxy_pad.NodeCoords[:,1] += (maxye-minye + h)
+        miny_pad = Scaf.Threshold(Scaf.Centroids[:,1], maxye, '==') 
+        miny_pad.NodeCoords[:,1] -= (maxye-minye + h)
+        
+        maxz_pad = Scaf.Threshold(Scaf.Centroids[:,2], minze, '==')
+        maxz_pad.NodeCoords[:,2] += (maxze-minze + h)
+        minz_pad = Scaf.Threshold(Scaf.Centroids[:,2], maxze, '==') 
+        minz_pad.NodeCoords[:,2] -= (maxze-minze + h)
+                            
+        pad = mesh()
+        pad.merge([maxx_pad, minx_pad, maxy_pad, miny_pad, maxz_pad, minz_pad])
+        Scaf_copy = Scaf.copy()
+        Scaf.ElemData['original'] = np.ones(Scaf.NElem)
+        pad.ElemData['original'] = np.zeros(pad.NElem)
+        Scaf.merge(pad, cleanup=False)
+        # Scaf.cleanup(tol=1e-9)
+        Scaf.NodeCoords, Scaf.NodeConn, idx, inv = utils.DeleteDuplicateNodes(Scaf.NodeCoords, Scaf.NodeConn, return_inv=True, return_idx=True, tol=1e-9)
+        Scaf._Surface = None
+        Scaf.reset('SurfConn')
+        Scaf._SurfNodes = None
+
+        xnodes = np.where((np.isclose(Scaf.NodeCoords[:,0], minxn)) | (np.isclose(Scaf.NodeCoords[:,0], maxxn)))[0]
+        ynodes = np.where((np.isclose(Scaf.NodeCoords[:,1], minyn)) | (np.isclose(Scaf.NodeCoords[:,1], maxyn)))[0]
+        znodes = np.where((np.isclose(Scaf.NodeCoords[:,2], minzn)) | (np.isclose(Scaf.NodeCoords[:,2], maxzn)))[0]
+        
+        constraints = np.vstack([
+                np.column_stack((xnodes, np.repeat(0, len(xnodes)), np.zeros(len(xnodes)))),
+                np.column_stack((ynodes, np.repeat(1, len(ynodes)), np.zeros(len(ynodes)))),
+                np.column_stack((znodes, np.repeat(2, len(znodes)), np.zeros(len(znodes)))),
+                ])
+
+        boundaries = set(np.where(
+                    (Scaf.NodeCoords[:,0] == Scaf.NodeCoords[:,0].min()) |
+                    (Scaf.NodeCoords[:,0] == Scaf.NodeCoords[:,0].max()) |
+                    (Scaf.NodeCoords[:,1] == Scaf.NodeCoords[:,1].min()) |
+                    (Scaf.NodeCoords[:,1] == Scaf.NodeCoords[:,1].max()) |
+                    (Scaf.NodeCoords[:,2] == Scaf.NodeCoords[:,2].min()) |
+                    (Scaf.NodeCoords[:,2] == Scaf.NodeCoords[:,2].max())
+                )[0].tolist())
+
+    elif model.model_parameters['Symmetric']:
+          
+        maxxe = np.max(Scaf.Centroids[:,0])
+        maxye = np.max(Scaf.Centroids[:,1])
+        maxze = np.max(Scaf.Centroids[:,2])
+
+        pad_width = 2
+        pad_dist = (pad_width-1)*h
+
+        maxx_pad = Scaf.Threshold(Scaf.Centroids[:,0], Scaf.Centroids[:,0].max()-pad_dist, '>=', cleanup=True).Mirror(x=Grid.NodeCoords[:,0].max(), InPlace=True)
+        maxy_pad = Scaf.Threshold(Scaf.Centroids[:,1], Scaf.Centroids[:,1].max()-pad_dist, '>=', cleanup=True).Mirror(y=Grid.NodeCoords[:,1].max(), InPlace=True)
+        maxz_pad = Scaf.Threshold(Scaf.Centroids[:,2], Scaf.Centroids[:,2].max()-pad_dist, '>=', cleanup=True).Mirror(z=Scaf.NodeCoords[:,2].max(), InPlace=True)
+
+        pad = mesh()
+        pad.merge([maxx_pad, maxy_pad, maxz_pad])
+        Scaf_copy = Scaf.copy()
+        Scaf.ElemData['original'] = np.ones(Scaf.NElem)
+        pad.ElemData['original'] = np.zeros(pad.NElem)
+        Scaf.merge(pad, cleanup=False)
+        Scaf.NodeCoords, Scaf.NodeConn, idx, inv = utils.DeleteDuplicateNodes(Scaf.NodeCoords, Scaf.NodeConn, return_inv=True, return_idx=True, tol=1e-9)
+        Scaf._Surface = None
+        Scaf.reset('SurfConn')
+        Scaf._SurfNodes = None
+
+        
+        xnodes = np.where((np.isclose(Scaf.NodeCoords[:,0], maxxn)))[0]
+        ynodes = np.where((np.isclose(Scaf.NodeCoords[:,1], maxyn)))[0]
+        znodes = np.where((np.isclose(Scaf.NodeCoords[:,2], maxzn)))[0]
+        
+        constraints = np.vstack([
+                np.column_stack((xnodes, np.repeat(0, len(xnodes)), np.zeros(len(xnodes)))),
+                np.column_stack((ynodes, np.repeat(1, len(ynodes)), np.zeros(len(ynodes)))),
+                np.column_stack((znodes, np.repeat(2, len(znodes)), np.zeros(len(znodes)))),
+                ])
+
+        boundaries = set(np.where(
+                    (Scaf.NodeCoords[:,0] == Scaf.NodeCoords[:,0].max()) |
+                    (Scaf.NodeCoords[:,1] == Scaf.NodeCoords[:,1].max()) |
+                    (Scaf.NodeCoords[:,2] == Scaf.NodeCoords[:,2].max())
+                )[0].tolist())
+    
+    else:
+        constraints = np.empty((0,3))
+        boundaries = set()
+
+    if model.model_parameters['Smooth Scaffold']:
+        ScafSurf = improvement.LocalLaplacianSmoothing(Scaf.Surface, options=dict(limit=np.sqrt(3)/2*h,  FixedNodes=boundaries, constraint=constraints))
+        ScafSurf.verbose=False
+        Scaf.NodeCoords = ScafSurf.NodeCoords
+        model.agent_grid.NodeVectorData['Scaffold Coordinates'] = ScafSurf.NodeCoords
+    else:
+        ScafSurf = Scaf.Surface
+    model.agent_grid.NodeVectorData['Scaffold Coordinates'] = ScafSurf.NodeCoords
+
+    # Compute Curvature
+    k1, k2, k1v, k2v = curvature.CubicFit(ScafSurf.NodeCoords, ScafSurf.SurfConn, utils.getNodeNeighborhood(*converter.surf2tris(*ScafSurf), 1), ScafSurf.NodeNormals, return_directions=True)
+
+    if model.model_parameters['Periodic'] or model.model_parameters['Symmetric']:
+        # remove padding
+        k1 = k1[inv[:Scaf_copy.NNode]]
+        k2 = k2[inv[:Scaf_copy.NNode]]
+        k1v = k1v[inv[:Scaf_copy.NNode],:]
+        k2v = k2v[inv[:Scaf_copy.NNode],:]
+        Scaf_copy.NodeCoords = Scaf.NodeCoords[inv[:Scaf_copy.NNode]]
+        Scaf = Scaf_copy
+        ScafSurf = Scaf.Surface
+    
+    model.agent_grid.NodeData['Scaffold Max Principal Curvature'] = k1
+    model.agent_grid.NodeData['Scaffold Min Principal Curvature'] = k2
+    model.agent_grid.NodeVectorData['Scaffold Max Principal Direction'] = k1v
+    model.agent_grid.NodeVectorData['Scaffold Min Principal Direction'] = k2v
+    model.agent_grid.NodeData['Scaffold Mean Curvature'] = curvature.MeanCurvature(k1, k2)
+    model.agent_grid.NodeData['Scaffold Gaussian Curvature'] = curvature.GaussianCurvature(k1, k2)
+
 def update_curvature(model):
+    """
+    Calculate curvatures on the tissue boundary and within the tissue.
+
+    See also: ref:`Tissue Growth`
+
+    Parameters
+    ----------
+    model : myabm.ortho.OrthoModel
+        Initialized agent-based model
+
+    """
+
+    Grid = model.mesh
+    Grid.ElemData['Volume Fraction'] = model.agent_grid.ElemData['Volume Fraction']
+    Grid.ElemData['Scaffold Fraction'] = model.agent_grid.ElemData['Scaffold Fraction']
+    h = model.agent_grid.parameters['h']
+    maxxn = np.max(Grid.NodeCoords[:,0])
+    minxn = np.min(Grid.NodeCoords[:,0])
+    maxyn = np.max(Grid.NodeCoords[:,1])
+    minyn = np.min(Grid.NodeCoords[:,1])
+    maxzn = np.max(Grid.NodeCoords[:,2])
+    minzn = np.min(Grid.NodeCoords[:,2])
+    
+    if model.model_parameters['Periodic'] and model.model_parameters['Symmetric']:
+        raise ValueError('A model that is both Periodic and Symmetric is not supported.\n Change model.model_parameters["Periodic"] and/or model.model_parameters["Symmetric"] to False.')
+    
+    elif model.model_parameters['Periodic']:
+        maxxe = np.max(Grid.Centroids[:,0])
+        minxe = np.min(Grid.Centroids[:,0])
+        maxye = np.max(Grid.Centroids[:,1])
+        minye = np.min(Grid.Centroids[:,1])
+        maxze = np.max(Grid.Centroids[:,2])
+        minze = np.min(Grid.Centroids[:,2])
+
+        maxx_pad = Grid.Threshold(Grid.Centroids[:,0], minxe, '==')
+        maxx_pad.NodeCoords[:,0] += (maxxe-minxe + h)
+        minx_pad = Grid.Threshold(Grid.Centroids[:,0], maxxe, '==') 
+        minx_pad.NodeCoords[:,0] -= (maxxe-minxe + h)
+        
+        maxy_pad = Grid.Threshold(Grid.Centroids[:,1], minye, '==')
+        maxy_pad.NodeCoords[:,1] += (maxye-minye + h)
+        miny_pad = Grid.Threshold(Grid.Centroids[:,1], maxye, '==') 
+        miny_pad.NodeCoords[:,1] -= (maxye-minye + h)
+        
+        maxz_pad = Grid.Threshold(Grid.Centroids[:,2], minze, '==')
+        maxz_pad.NodeCoords[:,2] += (maxze-minze + h)
+        minz_pad = Grid.Threshold(Grid.Centroids[:,2], maxze, '==') 
+        minz_pad.NodeCoords[:,2] -= (maxze-minze + h)
+                            
+        pad = mesh()
+        pad.merge([maxx_pad, minx_pad, maxy_pad, miny_pad, maxz_pad, minz_pad])
+        Grid_copy = Grid.copy()
+        Grid.ElemData['original'] = np.ones(Grid.NElem)
+        pad.ElemData['original'] = np.zeros(pad.NElem)
+        Grid.merge(pad, cleanup=False)
+        Grid.NodeCoords, Grid.NodeConn, idx, inv = utils.DeleteDuplicateNodes(Grid.NodeCoords, Grid.NodeConn, return_inv=True, return_idx=True, tol=1e-9)
+        Grid._Surface = None
+        Grid.reset('SurfConn')
+        Grid._SurfNodes = None
+
+        xnodes = np.where((np.isclose(Grid.NodeCoords[:,0], minxn)) | (np.isclose(Grid.NodeCoords[:,0], maxxn)))[0]
+        ynodes = np.where((np.isclose(Grid.NodeCoords[:,1], minyn)) | (np.isclose(Grid.NodeCoords[:,1], maxyn)))[0]
+        znodes = np.where((np.isclose(Grid.NodeCoords[:,2], minzn)) | (np.isclose(Grid.NodeCoords[:,2], maxzn)))[0]
+        
+        constraints = np.vstack([
+                np.column_stack((xnodes, np.repeat(0, len(xnodes)), np.zeros(len(xnodes)))),
+                np.column_stack((ynodes, np.repeat(1, len(ynodes)), np.zeros(len(ynodes)))),
+                np.column_stack((znodes, np.repeat(2, len(znodes)), np.zeros(len(znodes)))),
+                ])
+
+        boundaries = set(np.where(
+                    (Grid.NodeCoords[:,0] == Grid.NodeCoords[:,0].min()) |
+                    (Grid.NodeCoords[:,0] == Grid.NodeCoords[:,0].max()) |
+                    (Grid.NodeCoords[:,1] == Grid.NodeCoords[:,1].min()) |
+                    (Grid.NodeCoords[:,1] == Grid.NodeCoords[:,1].max()) |
+                    (Grid.NodeCoords[:,2] == Grid.NodeCoords[:,2].min()) |
+                    (Grid.NodeCoords[:,2] == Grid.NodeCoords[:,2].max())
+                )[0].tolist())
+
+    elif model.model_parameters['Symmetric']:
+          
+        maxxe = np.max(Grid.Centroids[:,0])
+        maxye = np.max(Grid.Centroids[:,1])
+        maxze = np.max(Grid.Centroids[:,2])
+
+        pad_width = 2
+        pad_dist = (pad_width-1)*h
+
+        maxx_pad = Grid.Threshold(Grid.Centroids[:,0], Grid.Centroids[:,0].max()-pad_dist, '>=', cleanup=True).Mirror(x=Grid.NodeCoords[:,0].max(), InPlace=True)
+        maxy_pad = Grid.Threshold(Grid.Centroids[:,1], Grid.Centroids[:,1].max()-pad_dist, '>=', cleanup=True).Mirror(y=Grid.NodeCoords[:,1].max(), InPlace=True)
+        maxz_pad = Grid.Threshold(Grid.Centroids[:,2], Grid.Centroids[:,2].max()-pad_dist, '>=', cleanup=True).Mirror(z=Grid.NodeCoords[:,2].max(), InPlace=True)
+
+        pad = mesh()
+        pad.merge([maxx_pad, maxy_pad, maxz_pad])
+        Grid_copy = Grid.copy()
+        Grid.ElemData['original'] = np.ones(Grid.NElem)
+        pad.ElemData['original'] = np.zeros(pad.NElem)
+        Grid.merge(pad, cleanup=False)
+        Grid.NodeCoords, Grid.NodeConn, idx, inv = utils.DeleteDuplicateNodes(Grid.NodeCoords, Grid.NodeConn, return_inv=True, return_idx=True, tol=1e-9)
+        Grid._Surface = None
+        Grid.reset('SurfConn')
+        Grid._SurfNodes = None
+
+        
+        xnodes = np.where((np.isclose(Grid.NodeCoords[:,0], maxxn)))[0]
+        ynodes = np.where((np.isclose(Grid.NodeCoords[:,1], maxyn)))[0]
+        znodes = np.where((np.isclose(Grid.NodeCoords[:,2], maxzn)))[0]
+        
+        constraints = np.vstack([
+                np.column_stack((xnodes, np.repeat(0, len(xnodes)), np.zeros(len(xnodes)))),
+                np.column_stack((ynodes, np.repeat(1, len(ynodes)), np.zeros(len(ynodes)))),
+                np.column_stack((znodes, np.repeat(2, len(znodes)), np.zeros(len(znodes)))),
+                ])
+
+        boundaries = set(np.where(
+                    (Grid.NodeCoords[:,0] == Grid.NodeCoords[:,0].max()) |
+                    (Grid.NodeCoords[:,1] == Grid.NodeCoords[:,1].max()) |
+                    (Grid.NodeCoords[:,2] == Grid.NodeCoords[:,2].max())
+                )[0].tolist())
+    
+    else:
+        constraints = np.empty((0,3))
+        boundaries = set()
 
     # Surface Curvature
-    Tissue = model.mesh.Threshold(model.agent_grid.ElemData['Volume Fraction'], model.agent_grid.parameters['Tissue Threshold'])
-    Tissue.ElemData['material'] = np.array([x for i,x in enumerate(model.agent_grid.ElemData['material']) if model.agent_grid.ElemData['Volume Fraction'][i] > model.agent_grid.parameters['Tissue Threshold']])
+    Tissue = Grid.Threshold('Volume Fraction', model.agent_grid.parameters['Tissue Threshold'])
+    
     Surf = Tissue.Surface
 
-    FixedNodes = set()
-    constraints = np.empty((0,3))
-
-    Surf = improvement.LocalLaplacianSmoothing(Surf, options=dict(FixedNodes=FixedNodes, limit=np.sqrt(3)/2*model.agent_grid.h, constraint=constraints))
+    Surf = improvement.LocalLaplacianSmoothing(Surf, options=dict(FixedNodes=boundaries, limit=np.sqrt(3)/2*h, constraint=constraints))
+    Surf.verbose = False
 
     TissueNodes =  np.zeros(Tissue.NNode,dtype=int)
-    TissueNodes[np.intersect1d(np.unique(Tissue.NodeConn[Tissue.ElemData['material'] !=8]),Tissue.SurfNodes)] = 1
+    TissueNodes[np.intersect1d(np.unique(Tissue.NodeConn[Tissue.ElemData['Scaffold Fraction'] == 0]), Tissue.SurfNodes)] = 1
     NonTissueNodes = np.where(TissueNodes == 0)[0]
     TissueNodesPlus = np.unique(Surf.NodeConn[np.any(TissueNodes[Surf.NodeConn],axis=1)])
-    # Surf.NodeCoords[NonTissueNodes] = Scaf.NodeCoords[NonTissueNodes]
-    SurfNodeNeighbors =  mymesh.utils.getNodeNeighborhood(*mymesh.converter.surf2tris(*Surf), 2)
+    
+    if 'Scaffold Coordinates' not in model.agent_grid.NodeVectorData and np.max(model.agent_grid.ElemData['Scaffold Fraction']) > 0:
+        update_scaffold_curvature(model)
+
+    if 'Scaffold Coordinates' in model.agent_grid.NodeVectorData:
+        Surf.NodeCoords[NonTissueNodes] = model.agent_grid.NodeVectorData['Scaffold Coordinates'][NonTissueNodes]
+
+    SurfNodeNeighbors =  mymesh.utils.getNodeNeighborhood(*mymesh.converter.surf2tris(*Surf), 1)
     k1, k2, k1v, k2v = mymesh.curvature.CubicFit(Surf.NodeCoords, Surf.NodeConn, SurfNodeNeighbors, Surf.NodeNormals, return_directions=True)
 
-    Surf.NodeData['Max Principal Curvature'] = k1
-    Surf.NodeData['Min Principal Curvature'] = k2
-    Surf.NodeData['Max Principal Direction'] = k1v
-    Surf.NodeData['Min Principal Direction'] = k2v
-    Surf.NodeData['Mean Curvature'] = mymesh.curvature.MeanCurvature(Surf.NodeData['Max Principal Curvature'], Surf.NodeData['Min Principal Curvature'])
-    Surf.NodeData['Gaussian Curvature'] = mymesh.curvature.GaussianCurvature(Surf.NodeData['Max Principal Curvature'], Surf.NodeData['Min Principal Curvature'])
-    SurfIdx = ~np.isnan(Surf.NodeData['Mean Curvature'])
+    if np.max(model.agent_grid.ElemData['Scaffold Fraction']) > 0:
 
-    # Tissue Curvature
-    
-    O1norm = np.linalg.norm(model.agent_grid.ElemVectorData['Tissue Orientation'],axis=1)[:,None]
-    O1 = np.divide(model.agent_grid.ElemVectorData['Tissue Orientation'], O1norm, where=O1norm != 0, out=np.zeros_like(model.agent_grid.ElemVectorData['Tissue Orientation']))
-    O2norm = np.linalg.norm(model.agent_grid.ElemVectorData['Tissue Orientation Orthogonal'],axis=1)[:,None]
-    O2 = np.divide(model.agent_grid.ElemVectorData['Tissue Orientation Orthogonal'], O2norm, where=O2norm != 0, out=np.zeros_like(model.agent_grid.ElemVectorData['Tissue Orientation Orthogonal']))
+        # Pull scaffold data
+        model.agent_grid.NodeData['Max Principal Curvature'] = model.agent_grid.NodeData['Scaffold Max Principal Curvature']
+        model.agent_grid.NodeVectorData['Max Principal Direction'] = model.agent_grid.NodeVectorData['Scaffold Max Principal Direction']
+        model.agent_grid.NodeData['Min Principal Curvature'] = model.agent_grid.NodeData['Scaffold Min Principal Curvature']
+        model.agent_grid.NodeVectorData['Min Principal Direction'] = model.agent_grid.NodeVectorData['Scaffold Min Principal Direction']
+        model.agent_grid.NodeData['Mean Curvature'] = model.agent_grid.NodeData['Scaffold Mean Curvature']
+        model.agent_grid.NodeData['Gaussian Curvature'] = model.agent_grid.NodeData['Scaffold Gaussian Curvature']
+    if 'Smoothed Surface Coordinates' not in model.agent_grid.NodeVectorData:
+        model.agent_grid.NodeVectorData['Smoothed Surface Coordinates'] = Surf.NodeCoords
+    else:
+        model.agent_grid.NodeVectorData['Smoothed Surface Coordinates'][TissueNodesPlus] = Surf.NodeCoords[TissueNodesPlus]
+    model.agent_grid.NodeData['Max Principal Curvature'][TissueNodesPlus] = k1[TissueNodesPlus]
+    model.agent_grid.NodeData['Min Principal Curvature'][TissueNodesPlus] = k2[TissueNodesPlus]
+    model.agent_grid.NodeVectorData['Max Principal Direction'][TissueNodesPlus] = k1v[TissueNodesPlus]
+    model.agent_grid.NodeVectorData['Min Principal Direction'][TissueNodesPlus] = k2v[TissueNodesPlus]
+    model.agent_grid.NodeData['Mean Curvature'][TissueNodesPlus] = mymesh.curvature.MeanCurvature(k1[TissueNodesPlus], k2[TissueNodesPlus])
+    model.agent_grid.NodeData['Gaussian Curvature'][TissueNodesPlus] = mymesh.curvature.GaussianCurvature(k1[TissueNodesPlus], k2[TissueNodesPlus])
 
-    
+    # if normalize:
+    #     O1norm = np.linalg.norm(Grid.ElemData['Tissue Orientation'],axis=1)[:,None]
+    #     O1 = np.divide(Grid.ElemData['Tissue Orientation'], O1norm, where=O1norm != 0, out=np.zeros_like(Grid.ElemData['Tissue Orientation']))
+    #     O2norm = np.linalg.norm(Grid.ElemData['Tissue Orientation Orthogonal'],axis=1)[:,None]
+    #     O2 = np.divide(Grid.ElemData['Tissue Orientation Orthogonal'], O2norm, where=O2norm != 0, out=np.zeros_like(Grid.ElemData['Tissue Orientation Orthogonal']))
+    # else:
+    O1 = model.agent_grid.ElemVectorData['Tissue Orientation']
+    O2 = model.agent_grid.ElemVectorData['Tissue Orientation Orthogonal']
+        
     normals = np.cross(O2, O1)
+    # NOTE: not sure if TissueThreshold should just be 0 here
     normals[model.agent_grid.ElemData['Volume Fraction'] < model.agent_grid.parameters['Tissue Threshold']] = np.nan     # This leads to nan values in mean curvature for in areas of no tissue
     model.agent_grid.ElemVectorData['n'] = normals
+    # Grid.write('temp.vtu')
     
-    nx = np.pad(mymesh.converter.voxel2im(*model.mesh, normals[:,0]),1)
-    ny = np.pad(mymesh.converter.voxel2im(*model.mesh, normals[:,1]),1)
-    nz = np.pad(mymesh.converter.voxel2im(*model.mesh, normals[:,2]),1)
+    nx = np.pad(converter.voxel2im(*Grid, normals[:,0]),1)
+    ny = np.pad(converter.voxel2im(*Grid, normals[:,1]),1)
+    nz = np.pad(converter.voxel2im(*Grid, normals[:,2]),1)
+    
     
     dnxdx = ((nx[:-1,:-1,1:] - nx[:-1,:-1,:-1]) +  # f[i+1] - f[i]
             (nx[:-1,1:,1:] - nx[:-1,1:,:-1]) + 
             (nx[1:,:-1,1:] - nx[1:,:-1,:-1]) + 
             (nx[1:,1:,1:] - nx[1:,1:,:-1]))
-    dnxdx[~np.isnan(dnxdx)] /= 4*model.agent_grid.h
+    dnxdx[~np.isnan(dnxdx)] /= 4*h
     
     dnydy = ((ny[:-1,1:,:-1] - ny[:-1,:-1,:-1]) + 
             (ny[:-1,1:,:1] - ny[:-1,:-1,:1]) + 
             (ny[1:,1:,:-1] - ny[1:,:-1,:-1]) + 
             (ny[1:,1:,1:] - ny[1:,:-1,1:]))
-    dnydy[~np.isnan(dnydy)] /= 4*model.agent_grid.h
+    dnydy[~np.isnan(dnydy)] /= 4*h
     
     dnzdz = ((nz[1:,:-1,:-1] - nz[:-1,:-1,:-1]) + 
             (nz[1:,1:,:-1] - nz[:-1,1:,:-1]) + 
             (nz[1:,:-1,1:] - nz[:-1,:-1,1:]) + 
             (nz[1:,1:,1:] - nz[:-1,1:,1:]))
-    dnzdz[~np.isnan(dnzdz)] /= 4*model.agent_grid.h
+    dnzdz[~np.isnan(dnzdz)] /= 4*h
     
     MeanCurvature = ((dnxdx + dnydy + dnzdz)).flatten(order='F')
     MeanCurvature[~np.isnan(MeanCurvature)] /= 2
 
-    MeanCurvature[SurfIdx] = Surf.NodeData['Mean Curvature'][SurfIdx]
-
-    model.agent_grid.NodeData['Max Principal Curvature'] = np.full(len(MeanCurvature),  np.nan)
-    model.agent_grid.NodeVectorData['Max Principal Direction'] = np.full((len(MeanCurvature),3),  np.nan)
-    model.agent_grid.NodeData['Min Principal Curvature'] = np.full(len(MeanCurvature),  np.nan)
-    model.agent_grid.NodeVectorData['Min Principal Direction'] = np.full((len(MeanCurvature),3),  np.nan)
-
-    model.agent_grid.NodeData['Max Principal Curvature'][SurfIdx] = Surf.NodeData['Max Principal Curvature'][SurfIdx] 
-    model.agent_grid.NodeVectorData['Max Principal Direction'][SurfIdx] = Surf.NodeData['Max Principal Direction'][SurfIdx] 
-    model.agent_grid.NodeData['Min Principal Curvature'][SurfIdx] = Surf.NodeData['Min Principal Curvature'][SurfIdx] 
-    model.agent_grid.NodeVectorData['Min Principal Direction'][SurfIdx] = Surf.NodeData['Min Principal Direction'][SurfIdx] 
+    model.agent_grid.NodeData['Mean Curvature'][np.isnan(model.agent_grid.NodeData['Mean Curvature'])] = MeanCurvature[np.isnan(model.agent_grid.NodeData['Mean Curvature'])]
 
     MeanCurvature[np.isnan(MeanCurvature)] = sys.float_info.max
-
+    # TODO: iteratively fill NaNs    
     
-    NodeNeighbors = utils.PadRagged(model.mesh.NodeNeighbors)
-    NodeNeighbors = np.vstack([NodeNeighbors, np.zeros(len(NodeNeighbors[0]),dtype=int)])
-    MeanCurvature = np.append(MeanCurvature,np.inf)
-    mask = MeanCurvature == sys.float_info.max
-    i = 0
-    while np.any(mask):
-        i += 1
-        MeanCurvature[mask] = sys.float_info.max
-        minfilt = np.take_along_axis(NodeNeighbors, np.argmin(MeanCurvature[NodeNeighbors],axis=1)[:,None], 1).flatten()
-        MeanCurvature[mask] = MeanCurvature[minfilt][mask]
-        model.agent_grid.NodeData['Max Principal Curvature'][mask[:-1]] = model.agent_grid.NodeData['Max Principal Curvature'][minfilt[:-1]][mask[:-1]]
-        model.agent_grid.NodeVectorData['Max Principal Direction'][mask[:-1]] = model.agent_grid.NodeVectorData['Max Principal Direction'][minfilt[:-1]][mask[:-1]]
-        model.agent_grid.NodeData['Min Principal Curvature'][mask[:-1]] = model.agent_grid.NodeData['Min Principal Curvature'][minfilt[:-1]][mask[:-1]]
-        model.agent_grid.NodeVectorData['Min Principal Direction'][mask[:-1]] = model.agent_grid.NodeVectorData['Min Principal Direction'][minfilt[:-1]][mask[:-1]]
-        mask = MeanCurvature == sys.float_info.max
-        if i == 100:
-            warnings.warn('Iteration limit reached for mean curvature calculation.\nThis could indicate unexpected values or a significantly larger than expected grid size.')
-            break
-    
-    model.agent_grid.NodeData['Mean Curvature'] = MeanCurvature[:-1]
-
-def update_curvature_symmetric(model):
-    pass
-
-def update_curvature_periodic(model):
-    pass
-
 def run_compression(model):
 
     matprop = (self.agent_grid.ElemData['modulus'],
@@ -850,7 +1099,6 @@ def run_compression(model):
     except:
         apdl = pyAnsysSolvers.Launch(ansys_path, nproc=nproc, smp=True, port=port)
         M = pyAnsysSolvers.PoroelasticUniaxial(M, *matprop, timestep, disp, axis=2, boundary_eps=0, SurfacePressure=0, nsubsteps=1, constrained=False, mode='disp', mapdl=apdl)
-
 
 def update_properties(model):
     

@@ -1,23 +1,34 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# Created on Fri Jun 13 19:18:28 2025
+# @author: toj
 """
-Created on Fri Jun 13 19:18:28 2025
+Predefined Model Geometries
+===========================
+.. autosummary::
+    :toctree: submodules/
 
-@author: toj
+    square_channel
+    cross_channel
+    sinusoidal_surface
+    wellplate
+    demo_block
+    strut
+
 """
 from mymesh import implicit
 import numpy as np
 
 def square_channel(size, height=2):
     """
-    A square pore channel, based on Bidan et al. 2013
+    A square pore channel, based on :cite:t:`Bidan2013`.
 
     Parameters
     ----------
     size : str, float
-        Size of the pore, either 'medium'/'large' for the sizes used by Bidan
-        et al. (perimeter = 4.71 mm,  6.28 mm), or a float for a custom 
-        perimeter
+        Size of the pore, either 'medium'/'large' for the sizes used by 
+        :cite:t:`Bidan2013` (perimeter = 4.71 mm,  6.28 mm), or a float for a 
+        custom perimeter
     height : int, optional
         Height of the channel, by default 2.
 
@@ -51,14 +62,14 @@ def square_channel(size, height=2):
 
 def cross_channel(size, height=2):
     """
-    A cross-shaped pore channel, based on Bidan et al. 2013
+    A cross-shaped pore channel, based on :cite:t:`Bidan2013`.
 
     Parameters
     ----------
     size : str, float
-        Size of the pore, either 'medium'/'large' for the sizes used by Bidan
-        et al. (perimeter = 4.71 mm,  6.28 mm), or a float for a custom 
-        perimeter
+        Size of the pore, either 'medium'/'large' for the sizes used by 
+        :cite:t:`Bidan2013` (perimeter = 4.71 mm,  6.28 mm), or a float for a 
+        custom perimeter
     height : int, optional
         Height of the channel, by default 2.
 
@@ -97,15 +108,39 @@ def cross_channel(size, height=2):
     
     return func, bounds
 
+def sinusoidal_surface(amplitude, period):
+    """
+    Sinusoidal substrates based on :cite:t:`Pieuchot2018a`.
+
+    Parameters
+    ----------
+    amplitude : float
+        Distance between the max and min heights of the sinusoids
+    period : float
+        Period of osscilation 
+
+    Returns
+    -------
+    func : callable
+        implicit function of the form f(x,y,z)
+    bounds : list
+        Outer bounds of the grid, formatted as [xmin, xmax, ymin, ymax, zmin, zmax]
+    """    
+
+    func = lambda x,y,z : z - amplitude*np.sin(2*np.pi/period*x)/4 + amplitude*np.sin(2*np.pi/period*y)/4
+    bounds = [0, 0.6, 0, 0.6, -0.04, 0.04]
+
+    return func, bounds
+
 def wellplate(size, media_volume=None):
     """
-    _summary_
+    Cell culture well plate geometries.
     Well plate specifications based on: https://www.thermofisher.com/us/en/home/references/gibco-cell-culture-basics/cell-culture-protocols/cell-culture-useful-numbers.html
 
     +============+====================+===========================+==========================================+
     | Well Plate | Surface Area (mm2) | Growth Medium Volume (mL) | Recommended Seeding Density              |
     +============+====================+===========================+==========================================+
-    | 6-well     | 960                | 2                         | 0.3e6 cells/well, 313 cells/mm2          |      |
+    | 6-well     | 960                | 2                         | 0.3e6 cells/well, 313 cells/mm2          |
     +------------+--------------------+---------------------------+------------------------------------------+
     | 12-well    | 350                | 1                         | 0.1e6 cells/well, 285 cells/mm2          |
     +------------+--------------------+---------------------------+------------------------------------------+
@@ -166,14 +201,27 @@ def wellplate(size, media_volume=None):
     return func, bounds
 
 def demo_block(h):
-    
+    """
+    A small block of scaffold for demonstrating agent behaviors.
+
+    Parameters
+    ----------
+    h : float
+        Grid spacing
+
+    Returns
+    -------
+    func : callable
+        implicit function of the form f(x,y,z)
+    bounds : list
+        Outer bounds of the grid, formatted as [xmin, xmax, ymin, ymax, zmin, zmax]
+    """    
     bounds = [0, 2*h, 0, 2*h, 0, 6*h]
     func = implicit.box(0, 2*h, 0, 2*h, 0, h)
     
     return func, bounds
     
-
-def Strut(L, d):
+def strut(L, d):
     """
     Strut lattice
 
