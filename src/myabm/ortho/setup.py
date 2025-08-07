@@ -101,82 +101,85 @@ def demo_block(h, ncells=1, agent_parameters=None):
             model.agent_grid.move_agent(model.agents[0], 29)
     return model
 
-# def setup_wellplate(size, h, zstep=None, media_volume=True, seeding_density=None, parameters=None):
-#     """
-#     Well plate specifications based on: 
-#     `Useful Numbers for Cell Culture<https://www.thermofisher.com/us/en/home/references/gibco-cell-culture-basics/cell-culture-protocols/cell-culture-useful-numbers.html>_`
+def wellplate(size, h, zstep=None, media_volume=True, seeding_density=None, parameters=None):
+    """
+    Well plate specifications based on: 
+    `Useful Numbers for Cell Culture<https://www.thermofisher.com/us/en/home/references/gibco-cell-culture-basics/cell-culture-protocols/cell-culture-useful-numbers.html>_`
 
-#     +============+====================+===========================+==========================================+
-#     | Well Plate | Surface Area (mm2) | Growth Medium Volume (mL) | Recommended Seeding Density              |
-#     +============+====================+===========================+==========================================+
-#     | 6-well     | 960                | 2                         | 0.3e6 cells/well, 313 cells/mm2          |      |
-#     +------------+--------------------+---------------------------+------------------------------------------+
-#     | 12-well    | 350                | 1                         | 0.1e6 cells/well, 285 cells/mm2          |
-#     +------------+--------------------+---------------------------+------------------------------------------+
-#     | 24-well    | 190                | 0.75                      | 0.05e6 cells/well, 263 cells/mm2         |
-#     +------------+--------------------+---------------------------+------------------------------------------+
-#     | 48-well    | 110                | 0.3                       | 0.03e6 cells/well, 273 cells/mm2         |
-#     +------------+--------------------+---------------------------+------------------------------------------+
-#     | 96-well    | 32                 | 0.15                      | 0.01e6 cells/well, 313 cells/mm2         | 
-#     +------------+--------------------+---------------------------+------------------------------------------+
-#     """
-#     func, bounds = geometries.wellplate(size, media_volume=media_volume)
-#     # Create mesh grid
-#     if zstep is None:
-#         zstep = h
-#     Grid = primitives.Grid(bounds, (h, h, zstep))
-#     Grid2 = primitives.Grid([bounds[0], bounds[1], bounds[2], bounds[3], -h, bounds[4]], h)
-#     Grid.merge(Grid2)
-#     if size == 6:
-#         r = np.sqrt(960/np.pi)
-#         if seeding_density is None:
-#             seeding_density = 313
-#     elif size == 12:
-#         r = np.sqrt(350/np.pi)
-#         if seeding_density is None:
-#             seeding_density = 285
-#     elif size == 24:
-#         r = np.sqrt(190/np.pi)
-#         if seeding_density is None:
-#             seeding_density = 263
-#     elif size == 48:
-#         r = np.sqrt(110/np.pi)
-#         if seeding_density is None:
-#             seeding_density = 273
-#     elif size == 96:
-#         r = np.sqrt(32/np.pi)
-#         if seeding_density is None:
-#             seeding_density = 313
-#     else:
-#         raise ValueError('Invalid well plate size, must be one of: 96, 48, 24, 12, 6.')
-#     Grid.verbose = False
-#     Grid = Grid.Threshold(implicit.cylinder([0,0,0], r)(*Grid.Centroids.T), 0, '<', InPlace=True, cleanup=True)
+    +============+====================+===========================+==========================================+
+    | Well Plate | Surface Area (mm2) | Growth Medium Volume (mL) | Recommended Seeding Density              |
+    +============+====================+===========================+==========================================+
+    | 6-well     | 960                | 2                         | 0.3e6 cells/well, 313 cells/mm2          |      |
+    +------------+--------------------+---------------------------+------------------------------------------+
+    | 12-well    | 350                | 1                         | 0.1e6 cells/well, 285 cells/mm2          |
+    +------------+--------------------+---------------------------+------------------------------------------+
+    | 24-well    | 190                | 0.75                      | 0.05e6 cells/well, 263 cells/mm2         |
+    +------------+--------------------+---------------------------+------------------------------------------+
+    | 48-well    | 110                | 0.3                       | 0.03e6 cells/well, 273 cells/mm2         |
+    +------------+--------------------+---------------------------+------------------------------------------+
+    | 96-well    | 32                 | 0.15                      | 0.01e6 cells/well, 313 cells/mm2         | 
+    +------------+--------------------+---------------------------+------------------------------------------+
+    """
+    func, bounds = geometries.wellplate(size, media_volume=media_volume)
+    # Create mesh grid
+    if zstep is None:
+        zstep = h
+    Grid = primitives.Grid(bounds, (h, h, zstep))
+    Grid2 = primitives.Grid([bounds[0], bounds[1], bounds[2], bounds[3], -h, bounds[4]], h)
+    Grid.merge(Grid2)
+    if size == 6:
+        r = np.sqrt(960/np.pi)
+        if seeding_density is None:
+            seeding_density = 313
+    elif size == 12:
+        r = np.sqrt(350/np.pi)
+        if seeding_density is None:
+            seeding_density = 285
+    elif size == 24:
+        r = np.sqrt(190/np.pi)
+        if seeding_density is None:
+            seeding_density = 263
+    elif size == 48:
+        r = np.sqrt(110/np.pi)
+        if seeding_density is None:
+            seeding_density = 273
+    elif size == 96:
+        r = np.sqrt(32/np.pi)
+        if seeding_density is None:
+            seeding_density = 313
+    else:
+        raise ValueError('Invalid well plate size, must be one of: 96, 48, 24, 12, 6.')
+    Grid.verbose = False
+    Grid = Grid.Threshold(implicit.cylinder([0,0,0], r)(*Grid.Centroids.T), 0, '<', InPlace=True, cleanup=True)
+
+    model = OrthoModel(Grid)
+    model.agent_grid.parameters['h'] = h
+
+    # initialize properties
+    model.agent_grid.ElemData['material'] = np.zeros(Grid.NElem)
+    model.agent_grid.ElemData['material'][func(*Grid.Centroids.T) < 0] = 8 # Scaffold
     
-#     # initialize properties
-#     agent_grid.ElemData['material'] = np.zeros(Grid.NElem)
-#     agent_grid.ElemData['material'][func(*Grid.Centroids.T) < 0] = 8 # Scaffold
-#     # Grid.ElemData['age'] = np.zeros(Grid.NElem)
+    # Create agent grid
+    # agent_grid = abm.initialize(Grid)
+    model.agent_grid.parameters['Volume'] = h*h*zstep
+    model.agent_grid.NodeData['Cells Allowed'][model.mesh.SurfNodes] = 0     # TODO: Should make this an option
+    model.agent_grid.ElemData['Scaffold Fraction'][model.agent_grid.ElemData['material'] == 8] = 1
+    model.agent_grid.ElemData['Volume Fraction'][model.agent_grid.ElemData['material'] == 8] = 1
+    model.agent_grid.ElemData['Mineral Density'][model.agent_grid.ElemData['material'] == 8] = 3 # mg/mm^3
     
-#     # Create agent grid
-#     agent_grid = abm.initialize(Grid)
-#     agent_grid.ElementVolume = h*h*zstep
-#     agent_grid.NodeData['Cells Allowed'][agent_grid.SurfNodes] = 0     # TODO: Should make this an option
-#     agent_grid.ElemData['Scaffold Fraction'][agent_grid.ElemData['material'] == 8] = 1
-#     agent_grid.ElemData['Volume Fraction'][agent_grid.ElemData['material'] == 8] = 1
-#     agent_grid.ElemData['Mineral Density'][agent_grid.ElemData['material'] == 8] = 3 # mg/mm^3
+    model.agent_grid.ElemData['Volume Fraction'] = model.agent_grid.ElemData['Volume Fraction']
+    # Seed scaffold
+    Scaffold = Grid.Threshold(model.agent_grid.ElemData['material'], 8, '==')
+    Scaffold.verbose=False
     
-#     agent_grid.ElemData['Volume Fraction'] = agent_grid.ElemData['Volume Fraction']
-#     # Seed scaffold
-#     Scaffold = Grid.Threshold(agent_grid.ElemData['material'], 8, '==')
-#     Scaffold.verbose=False
+    SeedNodes = np.setdiff1d(Scaffold.SurfNodes, Grid.SurfNodes)
+    nSurfElems = np.sum(np.all(np.isin(Scaffold.SurfConn, SeedNodes),axis=1))
+    SurfArea = nSurfElems * h**2
+    ncells = int(np.round(seeding_density*SurfArea))
     
-#     SeedNodes = np.setdiff1d(Scaffold.SurfNodes, Grid.SurfNodes)
-#     nSurfElems = np.sum(np.all(np.isin(Scaffold.SurfConn, SeedNodes),axis=1))
-#     SurfArea = nSurfElems * h**2
-#     ncells = int(np.round(seeding_density*SurfArea))
-    
-#     agent_grid.seed(ncells, 'msc', SeedNodes, 'random', parameters)
-#     return Grid, agent_grid
+    model.seed(ncells, 'msc', SeedNodes, parameters=parameters)
+
+    return model
 
 # def CalculateSurfaceCurvature(Grid, h, TissueThreshold=0.2, smooth_scaffold=False, func=None, symmetric=False, periodic=False, nrings=2, Scaf=None):
     
