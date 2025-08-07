@@ -120,12 +120,12 @@ Model actions can be stored as :code:`model.model_actions = (action1, action2, .
 Schedule Templates
 ------------------
 
-Schedules orchestrate the actions of the model, agent grid, and agents. The
-default schedule is shown below. Importantly, the schedule is where model 
-history can be updated, which is necessary to have in order to use 
-:meth:`myabm.Model.export` or :meth:`myabm.Model.animate`. Custom schedules may 
-rearrange the order of actions, perform other functions in between actions, 
-introduce a sub-stepping loop, or introduce other functionality.
+Schedules are special model actions that orchestrate the actions of the model, 
+agent grid, and agents. The default schedule is shown below. Importantly, the 
+schedule is where model history can be updated, which is necessary to have in 
+order to use :meth:`myabm.Model.export` or :meth:`myabm.Model.animate`. Custom 
+schedules may rearrange the order of actions, perform other functions in between 
+actions, introduce a sub-stepping loop, or introduce other functionality.
 
 A custom schedule can be used when calling :meth:`myabm.Model.act` or 
 :meth:`myabm.Model.iterate`.

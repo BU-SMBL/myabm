@@ -2,7 +2,7 @@
 Conway's Game of Life
 =====================
 
-John Conway's Game of Life (or just "Life") is a cellular automaton where agents are created
+John Conway's Game of Life (or just "Life") :cite:`Gardner1970` is a cellular automaton where agents are created
 or die based on interactions with nearby agents, according to four rules:
 
     1. An agent with fewer than two neighbors dies (under-population)

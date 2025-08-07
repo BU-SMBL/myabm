@@ -5,9 +5,14 @@ Models contain three main components, the mesh, the agent grid, and the agents
 
 .. image:: ../_static/myabm_schematic.png
 
+The Model
+---------
+The :class:`~myabm.Model` is the top-level container and primary interface to all model 
+components. 
+
 The Mesh
 --------
-The mesh defines the geometry and connectivity of the model. A key benefit
+The :class:`~mymesh.mesh` defines the geometry and connectivity of the model. A key benefit
 of MyABM is that models can be easily defined on arbitrary meshes, not just
 uniform grids. 
 
@@ -21,6 +26,10 @@ Meshes can also easily be loaded from a variety of file types using
 
 The Agent Grid
 --------------
-The agent grid (:class:`myabm.AgentGrid`) constitutes the environment that 
+The :class:`~myabm.AgentGrid` constitutes the environment that 
 agents operate within. It contains key :ref:`connectivity <Connectivity Information>` information from the 
 mesh to enable agent migration, neighboring agent interactions, and more. 
+
+Agents
+------
+:class:`~myabm.Agent` s can perform actions within their environment

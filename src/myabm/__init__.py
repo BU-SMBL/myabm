@@ -25,7 +25,7 @@ Submodules
 """
 
 #%%
-import copy, itertools
+import os, copy, itertools, warnings
 import numpy as np
 import numba
 from numba.experimental import jitclass
@@ -37,6 +37,7 @@ import pyvista as pv
 import mymesh
 import scipy
 from . import actions, utils
+warnings.simplefilter('ignore', numba.core.errors.NumbaExperimentalFeatureWarning)
 
 @jitclass({
     'id' : int64,
@@ -118,6 +119,8 @@ DelayedType = DelayedAgentAction()._numba_type_
     'ElemConn' : DictType(int64, int64[:]),
     'NodeNeighbors' : DictType(int64, int64[:]),
     'NodeMooreNeighbors' : DictType(int64, int64[:]),
+    'parameters' : DictType(string, float64),
+    'vector_parameters' : DictType(string, float64[:]),
     'Agents' : DictType(int64, AgentValue),
     'NodeAgents' : DictType(int64, int64),
     '_next_id' : int64,
@@ -125,8 +128,6 @@ DelayedType = DelayedAgentAction()._numba_type_
     'NodeData' : DictType(string, float64[:]),
     'ElemVectorData' : DictType(string, float64[:,:]),
     'NodeVectorData' : DictType(string, float64[:,:]),
-    'parameters' : DictType(string, float64),
-    'vector_parameters' : DictType(string, float64[:]),
     'queue' : ListType(DelayedType),
 })
 class AgentGrid():
@@ -141,16 +142,49 @@ class AgentGrid():
     TimeStep : float
         Time step size for the model
     NodeConn : dict
-        Node connectivity
-        
+        Dictionary containing nodes that define each element
+    Edges : np.ndarray(dtype=np.int64)
+        Node connectivity of edges
+    EdgeElemConn : numba.typed.Dict
+        Dictionary containing element IDs connected to an edge
+    NodeEdgeConn : numba.typed.Dict
+        Dictionary containing edge IDs connected to a node
+    ElemConn : numba.typed.Dict
+        Dictionary containing element IDs connected to a node
+    NodeNeighbors : numba.typed.Dict
+        Dictionary containing node ids connected to a node
+    NodeMooreNeighbors : numba.typed.Dict
+        Dictionary containing node ids in the Moore neighborhood of a node
+    parameters : numba.typed.Dict
+        Dictionary containing scalar model parameters for the agent grid, keyed 
+        by strings.
+    parameters : numba.typed.Dict
+        Dictionary containing vector model parameters for the agent grid, keyed 
+        by strings.
+    
+    Attributes
+    ----------
+    Agents : numba.typed.Dict
+        Dictionary of agents keyed by agent ID
+    NodeAgents : numba.typed.Dict
+        Dictionary of agent ids keyed by node
+    ElemData : numba.typed.Dict
+        Dictionary containing scalar data associated with elements
+    NodeData : numba.typed.Dict
+        Dictionary containing scalar data associated with nodes
+    ElemVectorData : numba.typed.Dict
+        Dictionary containing vector data associated with elements
+    NodeVectorData : numba.typed.Dict
+        Dictionary containing vector data associated with nodes
+
+    
+
     
 
     """
 
-    def __init__(self, NNode, NElem, TimeStep, NodeConn, Edges, EdgeElemConn, NodeEdgeConn, ElemConn, NodeNeighbors, NodeMooreNeighbors, parameters=None):
+    def __init__(self, NNode, NElem, TimeStep, NodeConn, Edges, EdgeElemConn, NodeEdgeConn, ElemConn, NodeNeighbors, NodeMooreNeighbors, parameters=None, vector_parameters=None):
 
-        
-        
         self.NNode = NNode
         self.NElem = NElem
         self.TimeStep = TimeStep 
@@ -181,6 +215,11 @@ class AgentGrid():
         if parameters is not None:
             for key in parameters:
                 self.parameters[key] = parameters[key]
+
+        self.vector_parameters = Dict.empty(key_type=string,value_type=float64[:])
+        if vector_parameters is not None:
+            for key in vector_parameters:
+                self.vector_parameters[key] = vector_parameters[key]
         
     def seed(self, N, state='', nodes=np.empty(0,dtype=np.int64), method='random', parameters=None):
         """
@@ -231,13 +270,15 @@ class AgentGrid():
 
     def remove_agent(self, agent, delay=False):
         """
-        Remove a agent from the mesh at the specified node
+        Remove an agent from the mesh at the specified node
 
         Parameters
         ----------
-        node : int
-            Node ID within the grid that contains the agent to be removed.
-            This can also be obtained from `agent.node`
+        agent : myabm.Agent
+            Agent to be removed
+        delay : bool
+            If True, this action won't occur immediately but will be added to 
+            :attr:`myabm.AgentGrid.queue` to be processed later.
         """        
         if agent.node in self.NodeAgents:
             if delay:
@@ -248,7 +289,7 @@ class AgentGrid():
 
     def add_agent(self, node, state='', parameters=None, delay=False):
         """
-        Add a agent to the mesh
+        Add an agent to the mesh
 
         Parameters
         ----------
@@ -258,6 +299,9 @@ class AgentGrid():
             Agent state descriptor, by default ''
         parameters : DictType[unicode_type,float64] or NoneType, optional
             Numba Dict of agent parameters, by default None
+        delay : bool
+            If True, this action won't occur immediately but will be added to 
+            :attr:`myabm.AgentGrid.queue` to be processed later.
         """        
         if delay:
             self.queue.append(DelayedAgentAction(1, -1, node, state, parameters))
@@ -267,7 +311,19 @@ class AgentGrid():
             self.NodeAgents[node] = agent.id
 
     def move_agent(self, agent, node, delay=False):
-        # Update data structure
+        """
+        Move an agent from it's current location to a new node.
+
+        Parameters
+        ----------
+        agent : myabm.Agent
+            Agent to be moved
+        node : int
+            Node ID that the agent will be moved to
+        delay : bool
+            If True, this action won't occur immediately but will be added to 
+            :attr:`myabm.AgentGrid.queue` to be processed later.
+        """        
         if delay:
             self.queue.append(DelayedAgentAction(2, agent.id, agent.node, '', None))
         else:
@@ -277,6 +333,20 @@ class AgentGrid():
             self.NodeAgents[node] = agent.id        # Move cell to new node
 
     def change_agent(self, agent, state, delay=False):
+        """
+        Change the agent's state
+
+        Parameters
+        ----------
+        agent : myabm.Agent
+            Agent that will have its state (:attr:`myabm.Agent.state`) changed
+        state : str
+            New agent state
+        delay : bool
+            If True, this action won't occur immediately but will be added to 
+            :attr:`myabm.AgentGrid.queue` to be processed later.
+        
+        """        
         if delay:
             self.queue.append(DelayedAgentAction(3, agent.id, -1, state, None))
         else:
@@ -318,7 +388,12 @@ class AgentGrid():
                 action(self)
 
     def run_delayed(self):
-
+        """
+        Run all delayed actions stored in :attr:`myabm.AgentGrid.queue`. 
+        Used when :code:`delay=True` is given to 
+        :meth:`myabm.AgentGrid.remove_agent`, :meth:`myabm.AgentGrid.add_agent`,
+        :meth:`myabm.AgentGrid.move_agent`, or :meth:`myabm.AgentGrid.change_agent`.
+        """        
         for delayed in self.queue:
             if delayed.action_id == 0:
                 self.remove_agent(self.Agents[delayed.agent_id])
@@ -339,10 +414,25 @@ class AgentGrid():
 class Model():
     """
     Model class, containing :class:`~mymesh.mesh`, :class:`AgentGrid`, and :class:`Agent`
+
+    Parameters
+    ----------
+    Mesh : mymesh.mesh
+        Mesh object defining the geometry of the model
+    agent_grid : myabm.AgentGrid
+        Agent grid of the model
+    model_parameters : dict
+        Dictionary containing model parameters
+    grid_parameters : dict
+        Parameters passed to the :class:`myabm.AgentGrid`. 
+    agent_parameters : dict
+        Parameters passed to :class:`myabm.Agent` instances seeded in the model by
+        :meth:`myabm.Model.seed`. Note that this doesn't change the parameters 
+        of agents already in the model.
+
     """
     def __init__(self, Mesh=None, agent_grid=None, 
         model_parameters=None, grid_parameters=None, agent_parameters=None):
-        
         
         self.mesh = Mesh
         self.mesh.verbose=False
@@ -380,7 +470,9 @@ class Model():
         self.history['Time'] = []
 
     def initialize_grid(self):
-        
+        """
+        Initialize the :class:`myabm.AgentGrid` from the mesh
+        """        
         self.agent_grid = initialize(self.mesh)
 
     def seed(self, N=None, state='none', nodes=None, method='random', parameters=None):
@@ -439,8 +531,8 @@ class Model():
     def default_schedule(self):
         """
         Default scheduler that performs agent actions, grid actions, and model
-        actions. Actions must be defined in model.agent_actions, 
-        model.grid_actions, and model.model_actions
+        actions. Actions must be defined in :attr:`myabm.Model.agent_actions`, 
+        :attr:`myabm.Model.grid_actions`, and :attr:`myabm.Model.model_actions`
 
         Parameters
         ----------
@@ -461,13 +553,35 @@ class Model():
         self.history['Time'].append(self.history['Time'][-1]+self.agent_grid.TimeStep)
 
     def act(self, schedule=None):
+        """
+        Execute a :ref:`model action <Model Action Template>` action or a 
+        :ref:`schedule <Schedule Templates>`
+
+        Parameters
+        ----------
+        schedule : callable, optional
+            A function directing execution of model actions, by default 
+            :meth:`myabm.Model.default_schedule`. A single model action 
+            can also be provided.
+        """        
         if schedule is None:
             self.default_schedule()
         else:
             schedule(self)
 
     def iterate(self, n, schedule=None):
+        """
+        Repeatedly run a schedule for a specified number of steps
 
+        Parameters
+        ----------
+        n : int
+            Number of iterations
+        schedule : callable, optional
+            A function directing execution of model actions, by default 
+            :meth:`myabm.Model.default_schedule`. A single model action 
+            can also be provided.
+        """        
         # Set initial history
         self.history['Agent Nodes'].append(self.agent_nodes)
         self.history['Agent States'].append(self.agent_states)
@@ -481,7 +595,7 @@ class Model():
         for i in range(n):
             self.act(schedule)
 
-    def export(self, filename, time=None, agent_lookup=None, noagent_value=-1):
+    def export_history(self, filename, time=None, agent_lookup=None, noagent_value=-1):
         """
         Export model history to an XDMF file.
         XDMF files can be visualized in ParaView.
@@ -542,7 +656,24 @@ class Model():
 
                 writer.write_data(t, point_data=m.mymesh2meshio().point_data, cell_data=m.mymesh2meshio().cell_data)
             
-    def animate(self, filename, view='isometric', show_mesh=True, show_mesh_edges=True, mesh_kwargs={}, agent_kwargs={}, state_color=None, show_timer=True):
+    def export_mesh(self, filename):
+        """
+        Export the mesh with NodeData and ElemData at the current state.
+
+        Parameters
+        ----------
+        filename : str
+            File name/path to write the mesh file to. Any mesh file types 
+            supported by `meshio <https://github.com/nschloe/meshio>`_ are 
+            allowed.
+        """        
+        m = self.mesh.copy()
+        m.ElemData = self.ElemData
+        m.NodeData = self.NodeData
+
+        m.write(filename)
+    
+    def animate(self, filename, fps=10, timestep=None, view='isometric', show_mesh=True, show_mesh_edges=True, mesh_kwargs={}, agent_kwargs={}, state_color=None, show_timer=True):
         """
         Create an animated gif of the model.
         Model should have already been run with agent history stored in 
@@ -560,6 +691,13 @@ class Model():
         filename : str
             Name of the file to be written. If the name does not contain a 
             .gif extension, one will be added.
+        fps : int
+            Frames per second for the animation
+        timestep : float, NoneType
+            Time increment at which frames will be rendered in the animation.
+            This must be a value that lines up with the time data in 
+            :code:`model.history['Time']`. Frames will be rendered if 
+            :code:`np.isclose(model.history['Time'] % timestep, 0)`.
         view : str, NoneType, array_like, optional
             Specify how to view the model, by default isometric.
             If given as a string, options are:
@@ -598,9 +736,6 @@ class Model():
             If True, attach a timer to display the current model time in each 
             frame, by default True.
         """        
-
-        if '.gif' not in filename:
-            filename += '.gif'
 
         # Set default color mapping
         if state_color is None:
@@ -655,11 +790,17 @@ class Model():
             else:
                 warnings.warn('Invalid view option')
 
-        # Open gif
-        plotter.open_gif(filename)
+        if os.path.splitext(filename)[-1].lower() == '.gif' or '':
+            # Open gif
+            plotter.open_gif(filename, fps=fps)
+        else:
+            plotter.open_movie(filename, framerate=fps)
 
         # Iterate through history
-        for i in range(len(self.history['Agent Nodes'])):
+        for i,t in enumerate(self.history['Time']):
+            if timestep is not None:
+                if not np.isclose(t % timestep, 0):
+                    continue
 
             for actor in point_actors:
                 plotter.remove_actor(actor)
@@ -679,14 +820,20 @@ class Model():
 
     @property
     def NNode(self):
+        """
+        Number of nodes in the mesh.
+        """        
         return self.mesh.NNode
     @property
     def NElem(self):
+        """
+        Number of elements in the mesh.
+        """  
         return self.mesh.NElem
     @property
     def agents(self):
         """
-        Get a list of all agents currently in the agent_grid.
+        Get a list of all agents currently in the :class:`myabm.AgentGrid`.
 
         Returns
         -------
@@ -700,7 +847,7 @@ class Model():
     @property
     def agent_nodes(self):
         """
-        Get a list of all nodes that agents are occupying
+        Get a list of all nodes that agents are occupying.
 
         Returns
         -------
@@ -713,7 +860,7 @@ class Model():
     @property
     def agent_states(self):
         """
-        Get a list of all nodes states
+        Get a list of all nodes states.
 
         Returns
         -------

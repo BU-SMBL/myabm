@@ -3,6 +3,7 @@
 .pytest_cache/
 __pycache__/
 *.vtu
+*.gif
 docs/make.bat
 docs/Makefile
 docs/source/generated/

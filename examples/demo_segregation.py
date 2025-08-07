@@ -2,7 +2,8 @@
 Schelling's Model of Segregation
 ================================
 
-Implementation of an agent-based model of segregation by Thomas Schelling.
+Implementation of an agent-based model of segregation by Thomas Schelling 
+:cite:`Schelling1971`.
 This model was one of the earliest agent-based model, and was initially 
 implemented using coins and graph paper. 
 
@@ -15,9 +16,9 @@ based on a single parameter, `'B'`. A second agent parameter `'happy'` is used
 to track whether the agent is happy with its current neighbors
 
 Migration is implemented as two actions: one agent action and one grid action.
-The agent action `decide` determines whether the agent is happy or wants to move.
+The agent action :code:`decide` determines whether the agent is happy or wants to move.
 Once all the agents have decided whether they want to move in a particular time
-step, the grid action `relocate` finds them all a new location to move to.
+step, the grid action :code:`relocate` finds them all a new location to move to.
 Note that in the :ref:`default schedule <Schedule Templates>`, the agent actions
 are performed before the grid actions.
 """

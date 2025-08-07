@@ -14,28 +14,11 @@ Examples highlighting the capabilities of MyABM
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="pass">
+    <div class="sphx-glr-thumbcontainer" tooltip="John Conway&#x27;s Game of Life (or just &quot;Life&quot;) Gardner1970 is a cellular automaton where agents are created or die based on interactions with nearby agents, according to four rules:">
 
 .. only:: html
 
-  .. image:: /examples/images/thumb/sphx_glr_ortho_thumb.png
-    :alt:
-
-  :ref:`sphx_glr_examples_ortho.py`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">Ortho Model</div>
-    </div>
-
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="John Conway&#x27;s Game of Life (or just &quot;Life&quot;) is a cellular automaton where agents are created or die based on interactions with nearby agents, according to four rules:">
-
-.. only:: html
-
-  .. image:: /examples/images/thumb/sphx_glr_demo_life_thumb.png
+  .. image:: /examples/images/thumb/sphx_glr_demo_life_thumb.gif
     :alt:
 
   :ref:`sphx_glr_examples_demo_life.py`
@@ -48,7 +31,7 @@ Examples highlighting the capabilities of MyABM
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Implementation of an agent-based model of segregation by Thomas Schelling. This model was one of the earliest agent-based model, and was initially  implemented using coins and graph paper. ">
+    <div class="sphx-glr-thumbcontainer" tooltip="Implementation of an agent-based model of segregation by Thomas Schelling  Schelling1971. This model was one of the earliest agent-based model, and was initially  implemented using coins and graph paper. ">
 
 .. only:: html
 
@@ -73,9 +56,85 @@ Examples highlighting the capabilities of MyABM
 .. toctree::
    :hidden:
 
-   /examples/ortho
    /examples/demo_life
    /examples/demo_segregation
+
+Ortho Examples
+==============
+
+Examples highlighting the ortho model
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Tissue has been shown to grow in a curvature-dependent manner, with faster growth in regions of higher concave curvatures while being suppressed in  regions of convex curvature. Curvature dependent tissue growth is implemented through the myabm.ortho.actions.produce_oriented cell action, and  requires the model action: myabm.ortho.actions.update_curvature to  calculate the local curvatures.">
+
+.. only:: html
+
+  .. image:: /examples/ortho/images/thumb/sphx_glr_demo_tissue_growth_thumb.gif
+    :alt:
+
+  :ref:`sphx_glr_examples_ortho_demo_tissue_growth.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Tissue Growth</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="These demos illustrate the basic behaviors of skeletal cells in the ortho model, proliferation, apoptosis, migration, tissue production, and differentiation. ">
+
+.. only:: html
+
+  .. image:: /examples/ortho/images/thumb/sphx_glr_demo_skeletal_cells_thumb.gif
+    :alt:
+
+  :ref:`sphx_glr_examples_ortho_demo_skeletal_cells.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Skeletal Cell Behaviors</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Cells have been shown to migrate in response to a variety of cues, including  chemical signaling (&quot;chemotaxis&quot;) and substrate/ECM stiffness (&quot;durotaxis&quot;).  Pieuchot2018a demonstrated that cells also exhibit &quot;curvotaxis&quot;, or  curvature-dependent migration. Both migration rate and preferential migration direction were demonstrated to be curvature dependent, which can be implemented in the model by weighting the probability of migration by the curvature at  the cells current location and the probabilities of which site to move to by  the curvatures at the surrounding sites. ">
+
+.. only:: html
+
+  .. image:: /examples/ortho/images/thumb/sphx_glr_demo_curvotaxis_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_ortho_demo_curvotaxis.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Curvotaxis</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+   :includehidden:
+
+
+   /examples/ortho/index.rst
 
 
 

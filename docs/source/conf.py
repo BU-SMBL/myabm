@@ -76,7 +76,7 @@ html_theme_options = dict(collapse_navigation=True,
                                  "type": "fontawesome",
                               },],
                            pygments_light_style=pygments_light_style, 
-                           pygments_dark_style=pygments_dark_style
+                           pygments_dark_style=pygments_dark_style,
                         )
 
 
