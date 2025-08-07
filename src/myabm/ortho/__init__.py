@@ -163,6 +163,292 @@ class OrthoModel(Model):
             self.history['NodeData'].append(copy.deepcopy(self.NodeData))
             self.history['Time'].append(self.history['Time'][-1] + self.model_parameters['SubStep'])
         
+    # def animate(self, filename, fps=10, timestep=None, view='isometric', show_agents=True, show_mesh=True, show_mesh_edges=True, mesh_kwargs={}, agent_kwargs={}, state_color=None, show_timer=True, tissue_threshold=True, tissue_opacity=False, scale_colors=False, scalars=None, clim=None, cmap=None):
+    #     """
+    #     Create an animated gif of the model.
+    #     Model should have already been run with agent history stored in 
+    #     model.history['Agent Nodes'] and model.history['Agent States'].
+
+    #     .. note::
+
+    #         While this method provides a reasonable amount of flexibility,
+    #         some models may require custom visualization. This method uses
+    #         pyvista to visualize the model; the source of this method can
+    #         be used as a starting point for custom visualization methods.
+
+    #     Parameters
+    #     ----------
+    #     filename : str
+    #         Name of the file to be written. If the name does not contain a 
+    #         .gif extension, one will be added.
+    #     fps : int
+    #         Frames per second for the animation
+    #     timestep : float, NoneType
+    #         Time increment at which frames will be rendered in the animation.
+    #         This must be a value that lines up with the time data in 
+    #         :code:`model.history['Time']`. Frames will be rendered if 
+    #         :code:`np.isclose(model.history['Time'] % timestep, 0)`.
+    #     view : str, NoneType, array_like, optional
+    #         Specify how to view the model, by default isometric.
+    #         If given as a string, options are:
+
+    #             - 'isometric'
+    #             - 'xy'
+    #             - 'xz'
+    #             - 'yx'
+    #             - 'yz'
+    #             - 'zx'
+    #             - 'zy'
+
+    #         If given as an three element list, tuple, or np.ndarray, this
+    #         will be passed to :func:`pyvista.Plotter.view_vector`
+
+    #     show_mesh : bool, optional
+    #         Option to display the model's mesh, by default True
+    #     show_mesh_edges : bool, optional
+    #         Option to display the model mesh's edges, by default True
+    #     mesh_kwargs : dict, optional
+    #         Optional keyword arguments passed to :func:`pyvista.Plotter.add_mesh`
+    #         when plotting the mesh, by default {}.
+    #     agent_kwargs : dict, optional
+    #         Optional keyword arguments passed to :func:`pyvista.Plotter.add_points` 
+    #         when plotting the agents, by default {}.
+    #     state_color : dict, NoneType, optional
+    #         Dictionary to map agent states to colors, by default None.
+    #         If None, default colors will be assigned - only 6 colors are in
+    #         the default color scheme, so if there are more than 6 agent states,
+    #         colors will be repeated. To hide a particular state, assign it 
+    #         `None`.
+
+    #         Example:
+    #             :code:`state_color = {'state 1' : 'blue', 'state 2' : 'red'}`
+    #     show_timer : bool
+    #         If True, attach a timer to display the current model time in each 
+    #         frame, by default True.
+    #     tissue_threshold : bool, float
+    #         If True, only elements with volume 
+    #         fraction > self.agent_grid.parameters['Tissue Threshold']. If a 
+    #         float, the float will be used as the threshold for visualization, by
+    #         default, True.
+    #     tissue_opacity : bool
+    #         If True, element opacity will be scaled by volume fraction, by 
+    #         default, False.
+
+    #     """        
+
+    #     neotissue = np.array([141/255, 211/255, 199/255, 1])# np.array([255/255, 176/255, 0/255, 1])  # 1
+    #     fibrous = np.array([254/255, 97/255, 0/255, 1])     # 2 
+    #     cartilage = np.array([220/255, 38/255, 127/255, 1]) # 3
+    #     bone = np.array([100/255, 143/255, 255/255, 1])     # 5
+    #     scaffold = np.array([238/255, 238/255, 238/255, 1]) # 7
+    #     understim = np.array([102/255, 102/255, 102/255, 1])# 8
+
+    #     if type(tissue_threshold) is bool:
+    #         if tissue_threshold:
+    #             tissue_threshold = self.agent_grid.parameters['Tissue Threshold']
+
+    #     # Set default color mapping
+    #     if state_color is None:
+    #         state_color = dict(
+    #             msc = neotissue,
+    #             fibroblast = fibrous,
+    #             chondrocyte = cartilage,
+    #             osteoblast = bone,
+    #         )
+        
+    #     neotissue_soft = (neotissue + 2*np.array([1, 1, 1, 1]))/3
+    #     neotissue_stiff = (neotissue + np.array([0, 0, 0, 1]))/2
+    #     neotissue_cmap = matplotlib.colors.LinearSegmentedColormap.from_list('neotissue', [neotissue_soft, neotissue_stiff], N=5)
+        
+    #     fibrous_soft = (fibrous + 2*np.array([1, 1, 1, 1]))/3
+    #     fibrous_stiff = (fibrous + np.array([0, 0, 0, 1]))/2
+    #     fibrous_cmap = matplotlib.colors.LinearSegmentedColormap.from_list('fibrous', [fibrous_soft, fibrous_stiff], N=5)
+        
+    #     cartilage_soft = (cartilage + 2*np.array([1, 1, 1, 1]))/3
+    #     cartilage_stiff = (cartilage + np.array([0, 0, 0, 1]))/2
+    #     cartilage_cmap = matplotlib.colors.LinearSegmentedColormap.from_list('cartilage', [cartilage_soft, cartilage_stiff], N=5)
+        
+    #     bone_soft = (bone + 2*np.array([1, 1, 1, 1]))/3
+    #     bone_stiff = (bone + np.array([0, 0, 0, 1]))/2
+    #     bone_cmap = matplotlib.colors.LinearSegmentedColormap.from_list('bone', [bone_soft, bone_stiff], N=5)
+        
+
+    #     # Create plotter
+    #     plotter = pv.Plotter(notebook=False, off_screen=True)
+    #     mesh_actors = []
+    #     if show_mesh:
+    #         if scalars is None:
+    #             ids = np.argmax(np.column_stack((np.zeros(self.NElem),self.history['ElemData'][0]['Fibrous Fraction'], self.history['ElemData'][0]['Cartilaginous Fraction'], self.history['ElemData'][0]['Osseous Fraction'], self.history['ElemData'][0]['Scaffold Fraction'])), axis=1)
+    #             if tissue_threshold is not False:
+    #                 ids[self.history['ElemData'][0]['Volume Fraction'] < tissue_threshold] = -1
+    #             m = self.mesh.copy()
+    #             if 'Smoothed Surface Coordinates' in self.history['NodeData'][0]:
+    #                 m.NodeCoords = self.history['NodeData'][0]['Smoothed Surface Coordinates']
+    #             Neotissue = m.Threshold(ids, 0, '==')
+    #             Fibrous = m.Threshold(ids, 1, '==')
+    #             Cartilage = m.Threshold(ids, 2, '==')
+    #             Bone = m.Threshold(ids, 3, '==')
+    #             Scaffold = m.Threshold(ids, 4, '==')
+
+    #             if scale_colors:
+    #                 Neotissue.ElemData['ECM Fraction'] = self.history['ElemData'][0]['ECM Fraction'][ids == 0]
+    #                 Fibrous.ElemData['Fibrous Fraction'] = self.history['ElemData'][0]['Fibrous Fraction'][ids == 1]
+    #                 Cartilage.ElemData['Cartilaginous Fraction'] = self.history['ElemData'][0]['Cartilaginous Fraction'][ids == 2]
+    #                 Bone.ElemData['Osseous Fraction'] = self.history['ElemData'][0]['Osseous Fraction'][ids == 3]
+    #             else:
+    #                 Neotissue.ElemData['ECM Fraction'] = np.repeat(0.4, Neotissue.NElem)
+    #                 Fibrous.ElemData['Fibrous Fraction'] = np.repeat(0.4, Fibrous.NElem)
+    #                 Cartilage.ElemData['Cartilaginous Fraction'] = np.repeat(0.4, Cartilage.NElem)
+    #                 Bone.ElemData['Osseous Fraction'] = np.repeat(0.4, Bone.NElem)
+
+    #             # Understim = M.Threshold(ids, 8, '==')
+    #             if tissue_opacity:
+    #                 neo_opacity = 1 - Neotissue.ElemData['ECM Fraction']
+    #                 fib_opacity = 1 - Fibrous.ElemData['Fibrous Fraction']
+    #                 cart_opacity = 1 - Cartilage.ElemData['Cartilaginous Fraction']
+    #                 bone_opacity = 1 - Bone.ElemData['Osseous Fraction']
+    #             else:
+    #                 neo_opacity = None
+    #                 fib_opacity = None
+    #                 cart_opacity = None
+    #                 bone_opacity = None
+
+    #             if Neotissue.NElem > 0 : 
+    #                 mesh_actors.append(plotter.add_mesh(pv.wrap(Neotissue.mymesh2meshio()), show_edges=show_mesh_edges, scalars='ECM Fraction', cmap=neotissue_cmap, clim=(0,1), scalar_bar_args=dict(title='Neotissue'), show_scalar_bar=False, log_scale=False, opacity=neo_opacity))
+    #             if Fibrous.NElem > 0 : 
+    #                 mesh_actors.append(plotter.add_mesh(pv.wrap(Fibrous.mymesh2meshio()), show_edges=show_mesh_edges, scalars='Fibrous Fraction', cmap=fibrous_cmap, clim=(0,1), scalar_bar_args=dict(title='Fibrous'), show_scalar_bar=False, log_scale=False, opacity=fib_opacity))
+    #             if Cartilage.NElem > 0 : 
+    #                 mesh_actors.append(plotter.add_mesh(pv.wrap(Cartilage.mymesh2meshio()), show_edges=show_mesh_edges, scalars='Cartilaginous Fraction', cmap=cartilage_cmap, clim=(0,1), scalar_bar_args=dict(title='Cartilage'), show_scalar_bar=False, log_scale=False, opacity=cart_opacity))
+    #             if Bone.NElem > 0 :
+    #                 mesh_actors.append(plotter.add_mesh(pv.wrap(Bone.mymesh2meshio()),show_edges=show_mesh_edges,  cmap=bone_cmap, scalars='Osseous Fraction', scalar_bar_args=dict(title='Bone'), show_scalar_bar=False, clim=(0,1), log_scale=False, opacity=bone_opacity))
+    #             if Scaffold.NElem > 0 : 
+    #                 mesh_actors.append(plotter.add_mesh(pv.wrap(Scaffold.mymesh2meshio()), show_edges=show_mesh_edges, color=scaffold, opacity=1))
+    #         else:
+    #             m = self.mesh.copy()
+    #             m.NodeData = self.history['NodeData'][0]
+    #             thresh = m.Threshold(self.ElemData['Volume Fraction'], tissue_threshold, '>')
+                
+    #             mesh_actors.append(plotter.add_mesh(pv.wrap(thresh.mymesh2meshio()),      show_edges=show_mesh_edges, cmap=cmap, scalars=scalars, show_scalar_bar=True, clim=clim))
+    #     # Add agents
+    #     point_actors = []
+    #     if show_agents:
+    #         for state in np.unique(self.history['Agent States'][0]):
+    #             if state_color[state] is not None:
+    #                 nodes = self.history['Agent Nodes'][0][self.history['Agent States'][0] == state]
+    #                 point_actors.append(plotter.add_points(self.mesh.NodeCoords[nodes], color=state_color[state], **agent_kwargs))
+    #     if show_timer and len(self.history['Time'])==len(self.history['Agent States']):
+    #         text_actor = plotter.add_text(f"Time = {self.history['Time'][0]:.2f}", position='upper_edge')
+
+    #     # Set view
+    #     if view is not None:
+    #         if type(view) is str:
+    #             if view == 'xy':
+    #                 plotter.view_xy()
+    #             elif view == 'xz':
+    #                 plotter.view_xz()
+    #             elif view == 'yx':
+    #                 plotter.view_yx()
+    #             elif view == 'yz':
+    #                 plotter.view_yz()
+    #             elif view == 'zx':
+    #                 plotter.view_zx()
+    #             elif view == 'zy':
+    #                 plotter.view_zy()
+    #             elif view == 'isometric' or view == 'iso':
+    #                 plotter.view_isometric()
+    #         elif isinstance(view, (list, tuple, np.ndarray)):
+    #             plotter.view_vector(view)
+    #         else:
+    #             warnings.warn('Invalid view option')
+
+    #     if os.path.splitext(filename)[-1].lower() == '.gif' or '':
+    #         # Open gif
+    #         plotter.open_gif(filename, fps=fps)
+    #     else:
+    #         plotter.open_movie(filename, framerate=fps)
+
+    #     # Iterate through history
+    #     for i,t in enumerate(self.history['Time']):
+    #         if timestep is not None:
+    #             if not np.isclose(t % timestep, 0):
+    #                 continue
+    #         for actor in point_actors:
+    #             plotter.remove_actor(actor)
+    #         for actor in mesh_actors:
+    #             plotter.remove_actor(actor)
+            
+    #         point_actors = []
+    #         mesh_actors = []
+            
+    #         ###
+    #         if show_mesh:
+    #             if scalars is None:
+    #                 ids = np.argmax(np.column_stack((np.zeros(self.NElem),self.history['ElemData'][i]['Fibrous Fraction'], self.history['ElemData'][i]['Cartilaginous Fraction'], self.history['ElemData'][i]['Osseous Fraction'], self.history['ElemData'][i]['Scaffold Fraction'])), axis=1)
+    #                 if tissue_threshold is not False:
+    #                     ids[self.history['ElemData'][i]['Volume Fraction'] < tissue_threshold] = -1
+    #                 # ids[self.ElemData['modulus'] > 1000] = 3
+    #                 # ids[self.ElemData['material'] == 8] = 4
+    #                 m = self.mesh.copy()
+    #                 if 'Smoothed Surface Coordinates' in self.history['NodeData'][i]:
+    #                     m.NodeCoords = self.history['NodeData'][i]['Smoothed Surface Coordinates']
+    #                 Neotissue = m.Threshold(ids, 0, '==')
+    #                 Fibrous = m.Threshold(ids, 1, '==')
+    #                 Cartilage = m.Threshold(ids, 2, '==')
+    #                 Bone = m.Threshold(ids, 3, '==')
+    #                 Scaffold = m.Threshold(ids, 4, '==')
+    #                 # Understim = M.Threshold(ids, 8, '==')
+
+    #                 if scale_colors:
+    #                     Neotissue.ElemData['ECM Fraction'] = self.history['ElemData'][i]['ECM Fraction'][ids == 0]
+    #                     Fibrous.ElemData['Fibrous Fraction'] = self.history['ElemData'][i]['Fibrous Fraction'][ids == 1]
+    #                     Cartilage.ElemData['Cartilaginous Fraction'] = self.history['ElemData'][i]['Cartilaginous Fraction'][ids == 2]
+    #                     Bone.ElemData['Osseous Fraction'] = self.history['ElemData'][i]['Osseous Fraction'][ids == 3]
+    #                 else:
+    #                     Neotissue.ElemData['ECM Fraction'] = np.repeat(0.4, Neotissue.NElem)
+    #                     Fibrous.ElemData['Fibrous Fraction'] = np.repeat(0.4, Fibrous.NElem)
+    #                     Cartilage.ElemData['Cartilaginous Fraction'] = np.repeat(0.4, Cartilage.NElem)
+    #                     Bone.ElemData['Osseous Fraction'] = np.repeat(0.4, Bone.NElem)
+
+    #                 if tissue_opacity:
+    #                     neo_opacity = Neotissue.ElemData['ECM Fraction']
+    #                     fib_opacity = Fibrous.ElemData['Fibrous Fraction']
+    #                     cart_opacity = Cartilage.ElemData['Cartilaginous Fraction']
+    #                     bone_opacity = Bone.ElemData['Osseous Fraction']
+    #                 else:
+    #                     neo_opacity = None
+    #                     fib_opacity = None
+    #                     cart_opacity = None
+    #                     bone_opacity = None
+
+    #                 if Neotissue.NElem > 0 : 
+    #                     mesh_actors.append(plotter.add_mesh(pv.wrap(Neotissue.mymesh2meshio()), show_edges=show_mesh_edges, scalars='ECM Fraction', cmap=neotissue_cmap, clim=(0,1), scalar_bar_args=dict(title='Neotissue'), show_scalar_bar=False, log_scale=False, opacity=neo_opacity))
+    #                 if Fibrous.NElem > 0 : 
+    #                     mesh_actors.append(plotter.add_mesh(pv.wrap(Fibrous.mymesh2meshio()), show_edges=show_mesh_edges, scalars='Fibrous Fraction', cmap=fibrous_cmap, clim=(0,1), scalar_bar_args=dict(title='Fibrous'), show_scalar_bar=False, log_scale=False, opacity=fib_opacity))
+    #                 if Cartilage.NElem > 0 : 
+    #                     mesh_actors.append(plotter.add_mesh(pv.wrap(Cartilage.mymesh2meshio()), show_edges=show_mesh_edges, scalars='Cartilaginous Fraction', cmap=cartilage_cmap, clim=(0,1), scalar_bar_args=dict(title='Cartilage'), show_scalar_bar=False, log_scale=False, opacity=cart_opacity))
+    #                 if Bone.NElem > 0 :
+    #                     mesh_actors.append(plotter.add_mesh(pv.wrap(Bone.mymesh2meshio()), show_edges=show_mesh_edges, cmap=bone_cmap, scalars='Osseous Fraction', scalar_bar_args=dict(title='Bone'), show_scalar_bar=False, clim=(0,1), log_scale=False, opacity=bone_opacity))
+    #                 if Scaffold.NElem > 0 : 
+    #                     mesh_actors.append(plotter.add_mesh(pv.wrap(Scaffold.mymesh2meshio()), show_edges=show_mesh_edges, color=scaffold, opacity=1))
+    #             else:
+    #                 m = self.mesh.copy()
+    #                 m.NodeData = self.history['NodeData'][i]
+    #                 thresh = m.Threshold(self.ElemData['Volume Fraction'], tissue_threshold, '>')
+                    
+    #                 mesh_actors.append(plotter.add_mesh(pv.wrap(thresh.mymesh2meshio()),      show_edges=show_mesh_edges, cmap=cmap, scalars=scalars, show_scalar_bar=True, clim=clim, lighting=False))
+    #         if show_agents:
+    #             for state in np.unique(self.history['Agent States'][i]):
+    #                 if state_color[state] is not None:
+    #                     nodes = self.history['Agent Nodes'][i][self.history['Agent States'][i] == state]
+    #                     point_actors.append(plotter.add_points(self.mesh.NodeCoords[nodes], color=state_color[state], **agent_kwargs))
+
+    #         if show_timer:
+    #             plotter.remove_actor(text_actor)
+    #             text_actor = plotter.add_text(f"Time = {self.history['Time'][i]:.2f}", position='upper_edge')
+
+    #         plotter.write_frame()
+    #     plotter.close()
+
     def animate(self, filename, fps=10, timestep=None, view='isometric', show_agents=True, show_mesh=True, show_mesh_edges=True, mesh_kwargs={}, agent_kwargs={}, state_color=None, show_timer=True, tissue_threshold=True, tissue_opacity=False, scale_colors=False, scalars=None, clim=None, cmap=None):
         """
         Create an animated gif of the model.
@@ -236,7 +522,49 @@ class OrthoModel(Model):
 
         """        
 
-        neotissue = np.array([141/255, 211/255, 199/255, 1])# np.array([255/255, 176/255, 0/255, 1])  # 1
+        plotter = pv.Plotter(notebook=False, off_screen=True)
+        
+        plotter = self.plotter(frame=0, plotter=plotter, view=view, show_agents=show_agents, show_mesh=show_mesh, show_mesh_edges=show_mesh_edges, mesh_kwargs=mesh_kwargs, agent_kwargs=agent_kwargs, state_color=state_color, show_timer=show_timer, tissue_threshold=tissue_threshold, tissue_opacity=tissue_opacity, scale_colors=scale_colors, scalars=scalars, clim=clim, cmap=cmap)
+
+        
+        if os.path.splitext(filename)[-1].lower() == '.gif' or '':
+            # Open gif
+            plotter.open_gif(filename, fps=fps)
+        else:
+            plotter.open_movie(filename, framerate=fps)
+
+        # Iterate through history
+        for i,t in enumerate(self.history['Time']):
+            if timestep is not None:
+                if not np.isclose(t % timestep, 0):
+                    continue
+            for actor in plotter.actors:
+                plotter.remove_actor(actor)
+
+            plotter = self.plotter(frame=i, plotter=plotter, view=view, show_agents=show_agents, show_mesh=show_mesh, show_mesh_edges=show_mesh_edges, mesh_kwargs=mesh_kwargs, agent_kwargs=agent_kwargs, state_color=state_color, show_timer=show_timer, tissue_threshold=tissue_threshold, tissue_opacity=tissue_opacity, scale_colors=scale_colors, scalars=scalars, clim=clim, cmap=cmap)
+
+            plotter.write_frame()
+        plotter.close()
+    
+    def plotter(self, frame=-1, view='isometric', show_agents=True, show_mesh=True, show_mesh_edges=True, mesh_kwargs={}, agent_kwargs={}, state_color=None, show_timer=False, tissue_threshold=True, tissue_opacity=False, scale_colors=False, scalars=None, clim=None, cmap=None, plotter=None):
+        
+        if plotter is None:
+            plotter = pv.Plotter()
+
+        if frame == -1:
+            # Current state, rather than using history
+            ElemData = self.ElemData
+            NodeData = self.NodeData
+            AgentStates = self.agent_states
+            AgentNodes = self.agent_nodes
+        else:
+            ElemData = self.history['ElemData'][frame]
+            NodeData = self.history['NodeData'][frame]
+            AgentStates = self.history['Agent States'][frame]
+            AgentNodes = self.history['Agent Nodes'][frame]
+
+
+        neotissue = np.array([141/255, 211/255, 199/255, 1])# 1
         fibrous = np.array([254/255, 97/255, 0/255, 1])     # 2 
         cartilage = np.array([220/255, 38/255, 127/255, 1]) # 3
         bone = np.array([100/255, 143/255, 255/255, 1])     # 5
@@ -272,18 +600,15 @@ class OrthoModel(Model):
         bone_stiff = (bone + np.array([0, 0, 0, 1]))/2
         bone_cmap = matplotlib.colors.LinearSegmentedColormap.from_list('bone', [bone_soft, bone_stiff], N=5)
         
-
-        # Create plotter
-        plotter = pv.Plotter(notebook=False, off_screen=True)
         mesh_actors = []
         if show_mesh:
             if scalars is None:
-                ids = np.argmax(np.column_stack((np.zeros(self.NElem),self.history['ElemData'][0]['Fibrous Fraction'], self.history['ElemData'][0]['Cartilaginous Fraction'], self.history['ElemData'][0]['Osseous Fraction'], self.history['ElemData'][0]['Scaffold Fraction'])), axis=1)
+                ids = np.argmax(np.column_stack((np.zeros(self.NElem),ElemData['Fibrous Fraction'], ElemData['Cartilaginous Fraction'], ElemData['Osseous Fraction'], ElemData['Scaffold Fraction'])), axis=1)
                 if tissue_threshold is not False:
-                    ids[self.history['ElemData'][0]['Volume Fraction'] < tissue_threshold] = -1
+                    ids[ElemData['Volume Fraction'] < tissue_threshold] = -1
                 m = self.mesh.copy()
-                if 'Smoothed Surface Coordinates' in self.history['NodeData'][0]:
-                    m.NodeCoords = self.history['NodeData'][0]['Smoothed Surface Coordinates']
+                if 'Smoothed Surface Coordinates' in NodeData:
+                    m.NodeCoords = NodeData['Smoothed Surface Coordinates']
                 Neotissue = m.Threshold(ids, 0, '==')
                 Fibrous = m.Threshold(ids, 1, '==')
                 Cartilage = m.Threshold(ids, 2, '==')
@@ -291,10 +616,10 @@ class OrthoModel(Model):
                 Scaffold = m.Threshold(ids, 4, '==')
 
                 if scale_colors:
-                    Neotissue.ElemData['ECM Fraction'] = self.history['ElemData'][0]['ECM Fraction'][ids == 0]
-                    Fibrous.ElemData['Fibrous Fraction'] = self.history['ElemData'][0]['Fibrous Fraction'][ids == 1]
-                    Cartilage.ElemData['Cartilaginous Fraction'] = self.history['ElemData'][0]['Cartilaginous Fraction'][ids == 2]
-                    Bone.ElemData['Osseous Fraction'] = self.history['ElemData'][0]['Osseous Fraction'][ids == 3]
+                    Neotissue.ElemData['ECM Fraction'] = ElemData['ECM Fraction'][ids == 0]
+                    Fibrous.ElemData['Fibrous Fraction'] = ElemData['Fibrous Fraction'][ids == 1]
+                    Cartilage.ElemData['Cartilaginous Fraction'] = ElemData['Cartilaginous Fraction'][ids == 2]
+                    Bone.ElemData['Osseous Fraction'] = ElemData['Osseous Fraction'][ids == 3]
                 else:
                     Neotissue.ElemData['ECM Fraction'] = np.repeat(0.4, Neotissue.NElem)
                     Fibrous.ElemData['Fibrous Fraction'] = np.repeat(0.4, Fibrous.NElem)
@@ -314,30 +639,34 @@ class OrthoModel(Model):
                     bone_opacity = None
 
                 if Neotissue.NElem > 0 : 
-                    mesh_actors.append(plotter.add_mesh(pv.wrap(Neotissue.mymesh2meshio()), show_edges=show_mesh_edges, scalars='ECM Fraction', cmap=neotissue_cmap, clim=(0,1), scalar_bar_args=dict(title='Neotissue'), show_scalar_bar=False, log_scale=False, opacity=neo_opacity))
+                    mesh_actors.append(plotter.add_mesh(pv.wrap(Neotissue.mymesh2meshio()), show_edges=show_mesh_edges, scalars='ECM Fraction', cmap=neotissue_cmap, clim=(0,1), scalar_bar_args=dict(title='Neotissue'), show_scalar_bar=False, log_scale=False, opacity=neo_opacity, **mesh_kwargs))
                 if Fibrous.NElem > 0 : 
-                    mesh_actors.append(plotter.add_mesh(pv.wrap(Fibrous.mymesh2meshio()), show_edges=show_mesh_edges, scalars='Fibrous Fraction', cmap=fibrous_cmap, clim=(0,1), scalar_bar_args=dict(title='Fibrous'), show_scalar_bar=False, log_scale=False, opacity=fib_opacity))
+                    mesh_actors.append(plotter.add_mesh(pv.wrap(Fibrous.mymesh2meshio()), show_edges=show_mesh_edges, scalars='Fibrous Fraction', cmap=fibrous_cmap, clim=(0,1), scalar_bar_args=dict(title='Fibrous'), show_scalar_bar=False, log_scale=False, opacity=fib_opacity, **mesh_kwargs))
                 if Cartilage.NElem > 0 : 
-                    mesh_actors.append(plotter.add_mesh(pv.wrap(Cartilage.mymesh2meshio()), show_edges=show_mesh_edges, scalars='Cartilaginous Fraction', cmap=cartilage_cmap, clim=(0,1), scalar_bar_args=dict(title='Cartilage'), show_scalar_bar=False, log_scale=False, opacity=cart_opacity))
+                    mesh_actors.append(plotter.add_mesh(pv.wrap(Cartilage.mymesh2meshio()), show_edges=show_mesh_edges, scalars='Cartilaginous Fraction', cmap=cartilage_cmap, clim=(0,1), scalar_bar_args=dict(title='Cartilage'), show_scalar_bar=False, log_scale=False, opacity=cart_opacity, **mesh_kwargs))
                 if Bone.NElem > 0 :
                     mesh_actors.append(plotter.add_mesh(pv.wrap(Bone.mymesh2meshio()),show_edges=show_mesh_edges,  cmap=bone_cmap, scalars='Osseous Fraction', scalar_bar_args=dict(title='Bone'), show_scalar_bar=False, clim=(0,1), log_scale=False, opacity=bone_opacity))
                 if Scaffold.NElem > 0 : 
-                    mesh_actors.append(plotter.add_mesh(pv.wrap(Scaffold.mymesh2meshio()), show_edges=show_mesh_edges, color=scaffold, opacity=1))
+                    mesh_actors.append(plotter.add_mesh(pv.wrap(Scaffold.mymesh2meshio()), show_edges=show_mesh_edges, color=scaffold, opacity=1, **mesh_kwargs))
             else:
                 m = self.mesh.copy()
-                m.NodeData = self.history['NodeData'][0]
+                m.NodeData = NodeData
                 thresh = m.Threshold(self.ElemData['Volume Fraction'], tissue_threshold, '>')
                 
-                mesh_actors.append(plotter.add_mesh(pv.wrap(thresh.mymesh2meshio()),      show_edges=show_mesh_edges, cmap=cmap, scalars=scalars, show_scalar_bar=True, clim=clim))
+                mesh_actors.append(plotter.add_mesh(pv.wrap(thresh.mymesh2meshio()),      show_edges=show_mesh_edges, cmap=cmap, scalars=scalars, show_scalar_bar=True, clim=clim, **mesh_kwargs))
         # Add agents
         point_actors = []
         if show_agents:
-            for state in np.unique(self.history['Agent States'][0]):
+            for state in np.unique(AgentStates):
                 if state_color[state] is not None:
-                    nodes = self.history['Agent Nodes'][0][self.history['Agent States'][0] == state]
+                    nodes = AgentNodes[AgentStates == state]
                     point_actors.append(plotter.add_points(self.mesh.NodeCoords[nodes], color=state_color[state], **agent_kwargs))
-        if show_timer and len(self.history['Time'])==len(self.history['Agent States']):
-            text_actor = plotter.add_text(f"Time = {self.history['Time'][0]:.2f}", position='upper_edge')
+        if show_timer and 'Time' in self.history:
+            if len(self.history['Time']) > 0:
+                time = self.history['Time'][frame]
+            else:
+                time = 0
+            text_actor = plotter.add_text(f"Time = {time:.2f}", position='upper_edge')
 
         # Set view
         if view is not None:
@@ -360,91 +689,5 @@ class OrthoModel(Model):
                 plotter.view_vector(view)
             else:
                 warnings.warn('Invalid view option')
-
-        if os.path.splitext(filename)[-1].lower() == '.gif' or '':
-            # Open gif
-            plotter.open_gif(filename, fps=fps)
-        else:
-            plotter.open_movie(filename, framerate=fps)
-
-        # Iterate through history
-        for i,t in enumerate(self.history['Time']):
-            if timestep is not None:
-                if not np.isclose(t % timestep, 0):
-                    continue
-            for actor in point_actors:
-                plotter.remove_actor(actor)
-            for actor in mesh_actors:
-                plotter.remove_actor(actor)
-            
-            point_actors = []
-            mesh_actors = []
-            
-            ###
-            if show_mesh:
-                if scalars is None:
-                    ids = np.argmax(np.column_stack((np.zeros(self.NElem),self.history['ElemData'][i]['Fibrous Fraction'], self.history['ElemData'][i]['Cartilaginous Fraction'], self.history['ElemData'][i]['Osseous Fraction'], self.history['ElemData'][i]['Scaffold Fraction'])), axis=1)
-                    if tissue_threshold is not False:
-                        ids[self.history['ElemData'][i]['Volume Fraction'] < tissue_threshold] = -1
-                    # ids[self.ElemData['modulus'] > 1000] = 3
-                    # ids[self.ElemData['material'] == 8] = 4
-                    m = self.mesh.copy()
-                    if 'Smoothed Surface Coordinates' in self.history['NodeData'][i]:
-                        m.NodeCoords = self.history['NodeData'][i]['Smoothed Surface Coordinates']
-                    Neotissue = m.Threshold(ids, 0, '==')
-                    Fibrous = m.Threshold(ids, 1, '==')
-                    Cartilage = m.Threshold(ids, 2, '==')
-                    Bone = m.Threshold(ids, 3, '==')
-                    Scaffold = m.Threshold(ids, 4, '==')
-                    # Understim = M.Threshold(ids, 8, '==')
-
-                    if scale_colors:
-                        Neotissue.ElemData['ECM Fraction'] = self.history['ElemData'][i]['ECM Fraction'][ids == 0]
-                        Fibrous.ElemData['Fibrous Fraction'] = self.history['ElemData'][i]['Fibrous Fraction'][ids == 1]
-                        Cartilage.ElemData['Cartilaginous Fraction'] = self.history['ElemData'][i]['Cartilaginous Fraction'][ids == 2]
-                        Bone.ElemData['Osseous Fraction'] = self.history['ElemData'][i]['Osseous Fraction'][ids == 3]
-                    else:
-                        Neotissue.ElemData['ECM Fraction'] = np.repeat(0.4, Neotissue.NElem)
-                        Fibrous.ElemData['Fibrous Fraction'] = np.repeat(0.4, Fibrous.NElem)
-                        Cartilage.ElemData['Cartilaginous Fraction'] = np.repeat(0.4, Cartilage.NElem)
-                        Bone.ElemData['Osseous Fraction'] = np.repeat(0.4, Bone.NElem)
-
-                    if tissue_opacity:
-                        neo_opacity = Neotissue.ElemData['ECM Fraction']
-                        fib_opacity = Fibrous.ElemData['Fibrous Fraction']
-                        cart_opacity = Cartilage.ElemData['Cartilaginous Fraction']
-                        bone_opacity = Bone.ElemData['Osseous Fraction']
-                    else:
-                        neo_opacity = None
-                        fib_opacity = None
-                        cart_opacity = None
-                        bone_opacity = None
-
-                    if Neotissue.NElem > 0 : 
-                        mesh_actors.append(plotter.add_mesh(pv.wrap(Neotissue.mymesh2meshio()), show_edges=show_mesh_edges, scalars='ECM Fraction', cmap=neotissue_cmap, clim=(0,1), scalar_bar_args=dict(title='Neotissue'), show_scalar_bar=False, log_scale=False, opacity=neo_opacity))
-                    if Fibrous.NElem > 0 : 
-                        mesh_actors.append(plotter.add_mesh(pv.wrap(Fibrous.mymesh2meshio()), show_edges=show_mesh_edges, scalars='Fibrous Fraction', cmap=fibrous_cmap, clim=(0,1), scalar_bar_args=dict(title='Fibrous'), show_scalar_bar=False, log_scale=False, opacity=fib_opacity))
-                    if Cartilage.NElem > 0 : 
-                        mesh_actors.append(plotter.add_mesh(pv.wrap(Cartilage.mymesh2meshio()), show_edges=show_mesh_edges, scalars='Cartilaginous Fraction', cmap=cartilage_cmap, clim=(0,1), scalar_bar_args=dict(title='Cartilage'), show_scalar_bar=False, log_scale=False, opacity=cart_opacity))
-                    if Bone.NElem > 0 :
-                        mesh_actors.append(plotter.add_mesh(pv.wrap(Bone.mymesh2meshio()), show_edges=show_mesh_edges, cmap=bone_cmap, scalars='Osseous Fraction', scalar_bar_args=dict(title='Bone'), show_scalar_bar=False, clim=(0,1), log_scale=False, opacity=bone_opacity))
-                    if Scaffold.NElem > 0 : 
-                        mesh_actors.append(plotter.add_mesh(pv.wrap(Scaffold.mymesh2meshio()), show_edges=show_mesh_edges, color=scaffold, opacity=1))
-                else:
-                    m = self.mesh.copy()
-                    m.NodeData = self.history['NodeData'][i]
-                    thresh = m.Threshold(self.ElemData['Volume Fraction'], tissue_threshold, '>')
-                    
-                    mesh_actors.append(plotter.add_mesh(pv.wrap(thresh.mymesh2meshio()),      show_edges=show_mesh_edges, cmap=cmap, scalars=scalars, show_scalar_bar=True, clim=clim, lighting=False))
-            if show_agents:
-                for state in np.unique(self.history['Agent States'][i]):
-                    if state_color[state] is not None:
-                        nodes = self.history['Agent Nodes'][i][self.history['Agent States'][i] == state]
-                        point_actors.append(plotter.add_points(self.mesh.NodeCoords[nodes], color=state_color[state], **agent_kwargs))
-
-            if show_timer:
-                plotter.remove_actor(text_actor)
-                text_actor = plotter.add_text(f"Time = {self.history['Time'][i]:.2f}", position='upper_edge')
-
-            plotter.write_frame()
-        plotter.close()
+        
+        return plotter
