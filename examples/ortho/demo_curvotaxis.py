@@ -41,10 +41,8 @@ dt = 0.02 * (h/.025)
 surf = mymesh.primitives.Grid2D(bounds[:4],h)
 
 # Shape the surface
-xnodes = np.where((surf.NodeCoords[:,0] == bounds[0]) | 
-                        (surf.NodeCoords[:,0] == bounds[1]))[0]
-ynodes = np.where((surf.NodeCoords[:,1] == bounds[2]) | 
-                        (surf.NodeCoords[:,1] == bounds[3]))[0]
+xnodes = np.arange(surf.NNode)
+ynodes = np.arange(surf.NNode)
 constraints = np.vstack((np.column_stack(( # Constrain the boundaries to 
         xnodes, # nodes
         np.repeat(0, len(xnodes)), # axis

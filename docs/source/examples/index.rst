@@ -62,7 +62,7 @@ Examples highlighting the capabilities of MyABM
 Ortho Examples
 ==============
 
-Examples highlighting the ortho model
+Examples highlighting the ortho model for skeletal tissue formation
 
 
 .. raw:: html
@@ -128,7 +128,7 @@ Examples highlighting the ortho model
 
 .. only:: html
 
-  .. image:: /examples/ortho/images/thumb/sphx_glr_demo_curvotaxis_thumb.png
+  .. image:: /examples/ortho/images/thumb/sphx_glr_demo_curvotaxis_thumb.gif
     :alt:
 
   :ref:`sphx_glr_examples_ortho_demo_curvotaxis.py`
