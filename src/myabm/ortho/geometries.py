@@ -135,22 +135,22 @@ def sinusoidal_surface(amplitude, period):
 def wellplate(size, media_volume=None):
     """
     Cell culture well plate geometries.
-    Well plate specifications based on: https://www.thermofisher.com/us/en/home/references/gibco-cell-culture-basics/cell-culture-protocols/cell-culture-useful-numbers.html
+    Well plate specifications based on: `Useful Numbers for Cell Culture <https://www.thermofisher.com/us/en/home/references/gibco-cell-culture-basics/cell-culture-protocols/cell-culture-useful-numbers.html>`_
 
-    +============+====================+===========================+==========================================+
-    | Well Plate | Surface Area (mm2) | Growth Medium Volume (mL) | Recommended Seeding Density              |
-    +============+====================+===========================+==========================================+
-    | 6-well     | 960                | 2                         | 0.3e6 cells/well, 313 cells/mm2          |
-    +------------+--------------------+---------------------------+------------------------------------------+
-    | 12-well    | 350                | 1                         | 0.1e6 cells/well, 285 cells/mm2          |
-    +------------+--------------------+---------------------------+------------------------------------------+
-    | 24-well    | 190                | 0.75                      | 0.05e6 cells/well, 263 cells/mm2         |
-    +------------+--------------------+---------------------------+------------------------------------------+
-    | 48-well    | 110                | 0.3                       | 0.03e6 cells/well, 273 cells/mm2         |
-    +------------+--------------------+---------------------------+------------------------------------------+
-    | 96-well    | 32                 | 0.15                      | 0.01e6 cells/well, 313 cells/mm2         | 
-    +------------+--------------------+---------------------------+------------------------------------------+
-
+    +------------+-------------------------------------+---------------------------+---------------------------------------------------+
+    | Well Plate | Surface Area (mm\ :superscript:`2`) | Growth Medium Volume (mL) | Recommended Seeding Density                       |
+    +============+=====================================+===========================+===================================================+
+    | 6-well     | 960                                 | 2                         | 0.3e6 cells/well, 313 cells/mm\ :superscript:`2`  |
+    +------------+-------------------------------------+---------------------------+---------------------------------------------------+
+    | 12-well    | 350                                 | 1                         | 0.1e6 cells/well, 285 cells/mm\ :superscript:`2`  |
+    +------------+-------------------------------------+---------------------------+---------------------------------------------------+
+    | 24-well    | 190                                 | 0.75                      | 0.05e6 cells/well, 263 cells/mm\ :superscript:`2` |
+    +------------+-------------------------------------+---------------------------+---------------------------------------------------+
+    | 48-well    | 110                                 | 0.3                       | 0.03e6 cells/well, 273 cells/mm\ :superscript:`2` |
+    +------------+-------------------------------------+---------------------------+---------------------------------------------------+
+    | 96-well    | 32                                  | 0.15                      | 0.01e6 cells/well, 313 cells/mm\ :superscript:`2` | 
+    +------------+-------------------------------------+---------------------------+---------------------------------------------------+
+    
     Parameters
     ----------
     size : int
@@ -161,8 +161,10 @@ def wellplate(size, media_volume=None):
 
     Returns
     -------
-    _type_
-        _description_
+    func : callable
+        implicit function of the form f(x,y,z)
+    bounds : list
+        Outer bounds of the grid, formatted as [xmin, xmax, ymin, ymax, zmin, zmax]
 
     """    
     if size == 96: 

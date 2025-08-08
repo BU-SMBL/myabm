@@ -89,14 +89,14 @@ surf = mymesh.implicit.SurfaceNodeOptimization(surf, func, h, iterate=200,
 #
 # .. math::
 #   
-#    p(H_n) = 1 - (\frac{1}{1 + \exp(m_d(H_n - m_e))})
+#    p(H_n) = 1 - \left(\frac{1}{1 + \exp(m_d(H_n - m_e))}\right)
 #
 # where :math:`m_d` and :math:`m_e` are migration weights 
 # (:code:`agent.parameters['MigrationWeight3']`, 
 # :code:`agent.parameters['MigrationWeight4']`).  The default values were
 # determined by Bayesian optimization fitting the result of  simulations on
 # multiple different sinusoidal substrates to the experimental data of 
-# :cite:`Pieuchot2018a`: :math:`m_a = 0.232 \ mm`, # :math:`m_b = -19.975 \ mm^{-1}`
+# :cite:`Pieuchot2018a`: :math:`m_d = 0.232 \ mm`, :math:`m_e = -19.975 \ mm^{-1}`
 #
 #
 # Since this example is only studying migration over a 1-day period, other 
@@ -119,7 +119,7 @@ k1, k2 = mymesh.curvature.CubicFit(model.mesh.NodeCoords,
 model.agent_grid.NodeData['Mean Curvature'] = mymesh.curvature.MeanCurvature(k1, k2)
 
 # Set actions
-model.agent_actions = (actions.migrate_curvotaxis,) # Set cell actions
+model.agent_actions = (actions.migrate_curvotaxis, ) # Set cell actions
 
 # Run the model
 model.iterate(1, schedule=OrthoModel.substep_saver_schedule) 
@@ -143,7 +143,7 @@ model.animate('curvotaxis.gif', fps=20, show_mesh_edges=False,
 #       
 #       Due to the randomness of the model, the results can vary, but typically
 #       averaging the results of a few repeated runs gives good agreement with
-#       the experimental data
+#       the experimental data.
 
 
 # Plot histogram to compare to experimental data
@@ -183,6 +183,7 @@ ax.set_xlabel('Height (μm)')
 ax.set_ylabel('% of nuclei')
 ax.set_ylim(0, 100)
 ax.legend()
+ax.spines[['right', 'top']].set_visible(False)
 plt.tight_layout()
 plt.show()
 # %%

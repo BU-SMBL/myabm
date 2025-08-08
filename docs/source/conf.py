@@ -50,7 +50,9 @@ sphinx_gallery_conf = {
      'capture_repr': (),
      'image_scrapers': ('matplotlib', DynamicScraper()),
      'abort_on_example_error': True,
-     'doc_module': 'myabm'
+     'doc_module': 'myabm',
+     'run_stale_examples': False,
+     
 }  
 
 # -- Options for HTML output -------------------------------------------------

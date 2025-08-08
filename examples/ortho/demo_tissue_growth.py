@@ -26,8 +26,10 @@ func, bounds = geometries.cross_channel('medium')
 h = 0.025 # Grid spacing
 model = setup.implicit_scaffold(func, bounds, h, seeding_density=1e3) 
 
+# Scaffold surfaces are smoothed by default, but in this case the geometry has 
+# flat walls/sharp edges
+model.model_parameters['Smooth Scaffold'] = False 
 # Set actions
-model.model_parameters['Smooth Scaffold'] = False
 model.agent_actions = (actions.proliferate, actions.migrate_curvotaxis, actions.produce_oriented, actions.apoptose) # Set cell actions
 model.model_actions = (actions.update_curvature,)
 

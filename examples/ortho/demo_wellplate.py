@@ -1,19 +1,40 @@
+"""
+*in vitro* cell culture
+=======================
+
+
+
+"""
 #%%
 from myabm.ortho import OrthoModel, actions, setup, geometries
 import mymesh
 import numpy as np
-
+import matplotlib.pyplot as plt
+import matplotlib
 #%%
-# Cell Dynamics - Proliferation & Apoptosis
-# -----------------------------------------
-# 
-# At each time step, cells have a random chance of proliferating or undergoing
-# apoptosis. The probabilities are determined based on the parameters
-# :code:`agent.parameters['ProlifRate']` and 
-# :code:`agent.parameters['ApopRate']`, which are defined with units of 
-# events/day. 
 
-h = 0.025 # Grid spacing
-model = setup.wellplate(96, h, media_volume=1) # Create the demo block scaffold
-model.plotter().show()
+h = 0.025 # Grid spacing (mm)
+# Setup a well of a 96 well plate
+model = setup.wellplate(96, h, media_volume=False) 
+
+model.agent_actions = (actions.proliferate, actions.migrate, actions.apoptose)
+
+model.iterate(5, schedule=OrthoModel.substep_saver_schedule)
+
+model.animate('wellplate.gif', timestep=0.1, show_mesh_edges=False, agent_kwargs=dict(render_points_as_spheres=True, point_size=4))
+
+# %%
+# 
+t = model.history['Time']
+ncells = np.array([len(model.history['Agent Nodes'][i]) for i in range(len(model.history['Agent Nodes']))])
+
+fig, ax = plt.subplots(figsize=(6,4))
+ax.plot(t, ncells, color='black')
+ax.set_xlabel('Time (days)')
+ax.set_ylabel('Number of Cells')
+ax.yaxis.set_major_formatter(matplotlib.ticker.ScalarFormatter(useMathText=True))
+ax.ticklabel_format(style='sci', axis='y', scilimits=(4,4))
+ax.spines[['right', 'top']].set_visible(False)
+plt.rcParams['font.family'] = 'arial'
+plt.show()
 # %%

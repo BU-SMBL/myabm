@@ -90,6 +90,23 @@ Examples highlighting the ortho model
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="in vitro cell culture">
+
+.. only:: html
+
+  .. image:: /examples/ortho/images/thumb/sphx_glr_demo_wellplate_thumb.gif
+    :alt:
+
+  :ref:`sphx_glr_examples_ortho_demo_wellplate.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">in vitro cell culture</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="These demos illustrate the basic behaviors of skeletal cells in the ortho model, proliferation, apoptosis, migration, tissue production, and differentiation. ">
 
 .. only:: html
