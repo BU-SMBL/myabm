@@ -538,7 +538,7 @@ class OrthoModel(Model):
             if timestep is not None:
                 if not np.isclose(t % timestep, 0):
                     continue
-            for actor in plotter.actors:
+            for actor in list(plotter.actors.keys()):
                 plotter.remove_actor(actor)
 
             plotter = self.plotter(frame=i, plotter=plotter, view=view, show_agents=show_agents, show_mesh=show_mesh, show_mesh_edges=show_mesh_edges, mesh_kwargs=mesh_kwargs, agent_kwargs=agent_kwargs, state_color=state_color, show_timer=show_timer, tissue_threshold=tissue_threshold, tissue_opacity=tissue_opacity, scale_colors=scale_colors, scalars=scalars, clim=clim, cmap=cmap)
