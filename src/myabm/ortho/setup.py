@@ -154,7 +154,7 @@ def demo_block(h, ncells=1, agent_parameters=None):
             model.agent_grid.move_agent(model.agents[0], 29)
     return model
 
-def wellplate(size, h, media_volume=True, zstep=None, seeding_density=None, parameters=None):
+def wellplate(size, h, media_volume=False, zstep=None, ncells=None, parameters=None):
     """
     Generate a model of the well of a tissue culture well plate
 
@@ -162,19 +162,21 @@ def wellplate(size, h, media_volume=True, zstep=None, seeding_density=None, para
     Well plate specifications based on: 
     `Useful Numbers for Cell Culture <https://www.thermofisher.com/us/en/home/references/gibco-cell-culture-basics/cell-culture-protocols/cell-culture-useful-numbers.html>`_
 
-    +------------+-------------------------------------+---------------------------+---------------------------------------------------+
-    | Well Plate | Surface Area (mm\ :superscript:`2`) | Growth Medium Volume (mL) | Recommended Seeding Density                       |
-    +============+=====================================+===========================+===================================================+
-    | 6-well     | 960                                 | 2                         | 0.3e6 cells/well, 313 cells/mm\ :superscript:`2`  |
-    +------------+-------------------------------------+---------------------------+---------------------------------------------------+
-    | 12-well    | 350                                 | 1                         | 0.1e6 cells/well, 285 cells/mm\ :superscript:`2`  |
-    +------------+-------------------------------------+---------------------------+---------------------------------------------------+
-    | 24-well    | 190                                 | 0.75                      | 0.05e6 cells/well, 263 cells/mm\ :superscript:`2` |
-    +------------+-------------------------------------+---------------------------+---------------------------------------------------+
-    | 48-well    | 110                                 | 0.3                       | 0.03e6 cells/well, 273 cells/mm\ :superscript:`2` |
-    +------------+-------------------------------------+---------------------------+---------------------------------------------------+
-    | 96-well    | 32                                  | 0.15                      | 0.01e6 cells/well, 313 cells/mm\ :superscript:`2` | 
-    +------------+-------------------------------------+---------------------------+---------------------------------------------------+
+    +------------+-------------------------------------+---------------------------+-----------------------------+
+    | Well Plate | Surface Area (mm\ :superscript:`2`) | Growth Medium Volume (mL) | Recommended Seeding Density |
+    +============+=====================================+===========================+=============================+
+    | 6-well     | 960                                 | 2                         | 0.3e6 cells/well            |
+    +------------+-------------------------------------+---------------------------+-----------------------------+
+    | 12-well    | 350                                 | 1                         | 0.1e6 cells/well            |
+    +------------+-------------------------------------+---------------------------+-----------------------------+
+    | 24-well    | 190                                 | 0.75                      | 0.05e6 cells/well,          |
+    +------------+-------------------------------------+---------------------------+-----------------------------+
+    | 48-well    | 110                                 | 0.3                       | 0.03e6 cells/well           |
+    +------------+-------------------------------------+---------------------------+-----------------------------+
+    | 96-well    | 32                                  | 0.15                      | 0.01e6 cells/well           | 
+    +------------+-------------------------------------+---------------------------+-----------------------------+
+    | 384-well   | 8.4                                 | 0.15                      | 0.0018e6 cells/well         | 
+    +------------+-------------------------------------+---------------------------+-----------------------------+
 
 
     Parameters
@@ -186,11 +188,11 @@ def wellplate(size, h, media_volume=True, zstep=None, seeding_density=None, para
         grid spacing
     media_volume : bool
         Volume of media in the well, used to set a height of empty space in 
-        the mesh grid above the plate
+        the mesh grid above the plate, by default False.
     zstep : float
         Grid spacing in the z direction, used if media_volume is True. By default, equal to h.
-    seeding_density : float
-        Density of cells to seed in the plate, in cells/mm\ :superscript:`3`
+    ncells : float
+        Number of cells to seed in the well
     parameters : dict, optional
         Dictionary of parameters to use for the seeded cells, by default None.
         If None are provided, default parameters for MSCs are used
@@ -210,26 +212,30 @@ def wellplate(size, h, media_volume=True, zstep=None, seeding_density=None, para
     Grid.merge(Grid2)
     if size == 6:
         r = np.sqrt(960/np.pi)
-        if seeding_density is None:
-            seeding_density = 313
+        if ncells is None:
+            ncells = 0.3e6
     elif size == 12:
         r = np.sqrt(350/np.pi)
-        if seeding_density is None:
-            seeding_density = 285
+        if ncells is None:
+            ncells = 0.1e6
     elif size == 24:
         r = np.sqrt(190/np.pi)
-        if seeding_density is None:
-            seeding_density = 263
+        if ncells is None:
+            ncells = 0.05e6
     elif size == 48:
         r = np.sqrt(110/np.pi)
-        if seeding_density is None:
-            seeding_density = 273
+        if ncells is None:
+            ncells = 0.03e6
     elif size == 96:
         r = np.sqrt(32/np.pi)
-        if seeding_density is None:
-            seeding_density = 313
+        if ncells is None:
+            ncells = 0.01e6
+    elif size == 384:
+        r = np.sqrt(.084/np.pi)
+        if ncells is None:
+            ncells = 0.0018e6
     else:
-        raise ValueError('Invalid well plate size, must be one of: 96, 48, 24, 12, 6.')
+        raise ValueError('Invalid well plate size, must be one of: 384, 96, 48, 24, 12, 6.')
     Grid.verbose = False
     Grid = Grid.Threshold(implicit.cylinder([0,0,0], r)(*Grid.Centroids.T), 0, '<', InPlace=True, cleanup=True)
 
@@ -256,7 +262,7 @@ def wellplate(size, h, media_volume=True, zstep=None, seeding_density=None, para
     SeedNodes = np.setdiff1d(Scaffold.SurfNodes, Grid.SurfNodes)
     nSurfElems = np.sum(np.all(np.isin(Scaffold.SurfConn, SeedNodes),axis=1))
     SurfArea = nSurfElems * h**2
-    ncells = int(np.round(seeding_density*SurfArea))
+    # ncells = int(np.round(seeding_density*SurfArea))
     
     model.seed(ncells, 'msc', SeedNodes, parameters=parameters)
 

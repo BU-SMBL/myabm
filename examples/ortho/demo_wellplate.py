@@ -2,6 +2,22 @@
 *in vitro* cell culture
 =======================
 
+Cell culture are often performed by seeding cells in well plates, which come in 
+a few standard sizes (6, 12, 24, 38, 96, 384 wells/plate). Simulating cell 
+behavior in a culture plate well can be a convenient way to see if the 
+population of cells follows experimental expectations.
+
+A function for generating standard well plate geometries is available in 
+:func:`myabm.ortho.geometries.wellplate` and convenient setup function is 
+available to easily create a well plate simulation 
+(:func:`myabm.ortho.setup.wellplate`).
+
+By default, the well plate geometry is essentially just a platform that cells
+exist on, however a volume of space above the bottom of the well can be added
+with the :code:`media_volume` optional input, which can either by set to
+:code:`True` for a standard recommended media volume, or can be given a float
+for a custom media volume. This can be useful if performing a simulation that 
+considers nutrient availability or other biochemical factors.
 
 
 """
@@ -24,7 +40,9 @@ model.iterate(5, schedule=OrthoModel.substep_saver_schedule)
 model.animate('wellplate.gif', timestep=0.1, show_mesh_edges=False, agent_kwargs=dict(render_points_as_spheres=True, point_size=4))
 
 # %%
-# 
+# Analysis
+# --------
+# The model history can be examined to see the population dynamics over time
 t = model.history['Time']
 ncells = np.array([len(model.history['Agent Nodes'][i]) for i in range(len(model.history['Agent Nodes']))])
 
