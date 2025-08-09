@@ -668,8 +668,12 @@ class Model():
             allowed.
         """        
         m = self.mesh.copy()
-        m.ElemData = self.ElemData
-        m.NodeData = self.NodeData
+        for key in self.ElemData:
+            if len(self.ElemData[key]) == m.NElem:
+                m.ElemData[key] = self.ElemData[key]
+        for key in self.NodeData:
+            if len(self.NodeData[key]) == m.NNode:
+                m.NodeData[key] = self.NodeData[key]    
 
         m.write(filename)
     
