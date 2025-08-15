@@ -50,8 +50,8 @@ class OrthoModel(Model):
         self.grid_parameters['Mineral Walk Threshold'] = 0.4  # mg/mm^3
         self.grid_parameters['Tissue Threshold'] = 0.2 # volume fraction
         self.grid_parameters['Max Mineral'] = 0.8 # mg/mm^3
-        self.grid_parameters['Mineralization Rate'] = 669.25 # mg/mm^3/day?
-        self.grid_parameters['Mineral Solute Concentration'] = 18.08e-5 # mg/mm^3?
+        self.grid_parameters['Mineralization Rate'] = 1680.56 # mg/mm^3/day?
+        self.grid_parameters['Mineral Solute Concentration'] = 7.2e-5 # mg/mm^3 (based on αMEM)
         if grid_parameters is not None:
             for key in grid_parameters:
                 self.grid_parameters[key] = grid_parameters[key]
