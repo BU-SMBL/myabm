@@ -652,9 +652,10 @@ class Model():
 
                 # Add agent state info into node data
                 m.NodeData['Agent State'] = np.repeat(-1, m.NNode)
-                m.NodeData['Agent State'][self.history['Agent Nodes'][i]] = [agent_lookup[state] for state in self.history['Agent States'][i]]
-
-                writer.write_data(t, point_data=m.mymesh2meshio().point_data, cell_data=m.mymesh2meshio().cell_data)
+                if len(self.history['Agent Nodes'][i]) > 0:
+                    m.NodeData['Agent State'][self.history['Agent Nodes'][i]] = [agent_lookup[state] for state in self.history['Agent States'][i]]
+                meshio_mesh = m.mymesh2meshio()
+                writer.write_data(t, point_data=meshio_mesh.point_data, cell_data=meshio_mesh.cell_data)
             
     def export_mesh(self, filename):
         """

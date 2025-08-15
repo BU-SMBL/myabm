@@ -47,6 +47,7 @@ from numba.types import string, DictType
 import mymesh
 from mymesh import *
 import scipy
+from . import mechanobiology
 
 @numba.njit
 def null(agent, grid):
@@ -730,116 +731,6 @@ def update_scaffold_curvature(model):
     Grid, constraints, boundaries, inv = _grid_padding(model)
     Scaf = Grid.Threshold('Scaffold Fraction', 0, '>')
     ScaffoldNodes = Scaf.SurfNodes
-    # maxxn = np.max(Scaf.NodeCoords[:,0])
-    # minxn = np.min(Scaf.NodeCoords[:,0])
-    # maxyn = np.max(Scaf.NodeCoords[:,1])
-    # minyn = np.min(Scaf.NodeCoords[:,1])
-    # maxzn = np.max(Scaf.NodeCoords[:,2])
-    # minzn = np.min(Scaf.NodeCoords[:,2])
-    
-
-    # if model.model_parameters['Periodic'] and model.model_parameters['Symmetric']:
-    #     raise ValueError('A model that is both Periodic and Symmetric is not supported.\n Change model.model_parameters["Periodic"] and/or model.model_parameters["Symmetric"] to False.')
-    
-    # elif model.model_parameters['Periodic']:
-          
-    #     maxxe = np.max(Scaf.Centroids[:,0])
-    #     minxe = np.min(Scaf.Centroids[:,0])
-    #     maxye = np.max(Scaf.Centroids[:,1])
-    #     minye = np.min(Scaf.Centroids[:,1])
-    #     maxze = np.max(Scaf.Centroids[:,2])
-    #     minze = np.min(Scaf.Centroids[:,2])
-
-    #     maxx_pad = Scaf.Threshold(Scaf.Centroids[:,0], minxe, '==')
-    #     maxx_pad.NodeCoords[:,0] += (maxxe-minxe + h)
-    #     minx_pad = Scaf.Threshold(Scaf.Centroids[:,0], maxxe, '==') 
-    #     minx_pad.NodeCoords[:,0] -= (maxxe-minxe + h)
-        
-    #     maxy_pad = Scaf.Threshold(Scaf.Centroids[:,1], minye, '==')
-    #     maxy_pad.NodeCoords[:,1] += (maxye-minye + h)
-    #     miny_pad = Scaf.Threshold(Scaf.Centroids[:,1], maxye, '==') 
-    #     miny_pad.NodeCoords[:,1] -= (maxye-minye + h)
-        
-    #     maxz_pad = Scaf.Threshold(Scaf.Centroids[:,2], minze, '==')
-    #     maxz_pad.NodeCoords[:,2] += (maxze-minze + h)
-    #     minz_pad = Scaf.Threshold(Scaf.Centroids[:,2], maxze, '==') 
-    #     minz_pad.NodeCoords[:,2] -= (maxze-minze + h)
-                            
-    #     pad = mesh()
-    #     pad.merge([maxx_pad, minx_pad, maxy_pad, miny_pad, maxz_pad, minz_pad])
-    #     Scaf_copy = Scaf.copy()
-    #     Scaf.ElemData['original'] = np.ones(Scaf.NElem)
-    #     pad.ElemData['original'] = np.zeros(pad.NElem)
-    #     Scaf.merge(pad, cleanup=False)
-    #     # Scaf.cleanup(tol=1e-9)
-    #     Scaf.NodeCoords, Scaf.NodeConn, idx, inv = utils.DeleteDuplicateNodes(Scaf.NodeCoords, Scaf.NodeConn, return_inv=True, return_idx=True, tol=1e-9)
-    #     Scaf._Surface = None
-    #     Scaf.reset('SurfConn')
-    #     Scaf._SurfNodes = None
-
-    #     xnodes = np.where((np.isclose(Scaf.NodeCoords[:,0], minxn)) | (np.isclose(Scaf.NodeCoords[:,0], maxxn)))[0]
-    #     ynodes = np.where((np.isclose(Scaf.NodeCoords[:,1], minyn)) | (np.isclose(Scaf.NodeCoords[:,1], maxyn)))[0]
-    #     znodes = np.where((np.isclose(Scaf.NodeCoords[:,2], minzn)) | (np.isclose(Scaf.NodeCoords[:,2], maxzn)))[0]
-        
-    #     constraints = np.vstack([
-    #             np.column_stack((xnodes, np.repeat(0, len(xnodes)), np.zeros(len(xnodes)))),
-    #             np.column_stack((ynodes, np.repeat(1, len(ynodes)), np.zeros(len(ynodes)))),
-    #             np.column_stack((znodes, np.repeat(2, len(znodes)), np.zeros(len(znodes)))),
-    #             ])
-
-    #     boundaries = set(np.where(
-    #                 (Scaf.NodeCoords[:,0] == Scaf.NodeCoords[:,0].min()) |
-    #                 (Scaf.NodeCoords[:,0] == Scaf.NodeCoords[:,0].max()) |
-    #                 (Scaf.NodeCoords[:,1] == Scaf.NodeCoords[:,1].min()) |
-    #                 (Scaf.NodeCoords[:,1] == Scaf.NodeCoords[:,1].max()) |
-    #                 (Scaf.NodeCoords[:,2] == Scaf.NodeCoords[:,2].min()) |
-    #                 (Scaf.NodeCoords[:,2] == Scaf.NodeCoords[:,2].max())
-    #             )[0].tolist())
-
-    # elif model.model_parameters['Symmetric']:
-          
-    #     maxxe = np.max(Scaf.Centroids[:,0])
-    #     maxye = np.max(Scaf.Centroids[:,1])
-    #     maxze = np.max(Scaf.Centroids[:,2])
-
-    #     pad_width = 2
-    #     pad_dist = (pad_width-1)*h
-
-    #     maxx_pad = Scaf.Threshold(Scaf.Centroids[:,0], Scaf.Centroids[:,0].max()-pad_dist, '>=', cleanup=True).Mirror(x=Grid.NodeCoords[:,0].max(), InPlace=True)
-    #     maxy_pad = Scaf.Threshold(Scaf.Centroids[:,1], Scaf.Centroids[:,1].max()-pad_dist, '>=', cleanup=True).Mirror(y=Grid.NodeCoords[:,1].max(), InPlace=True)
-    #     maxz_pad = Scaf.Threshold(Scaf.Centroids[:,2], Scaf.Centroids[:,2].max()-pad_dist, '>=', cleanup=True).Mirror(z=Scaf.NodeCoords[:,2].max(), InPlace=True)
-
-    #     pad = mesh()
-    #     pad.merge([maxx_pad, maxy_pad, maxz_pad])
-    #     Scaf_copy = Scaf.copy()
-    #     Scaf.ElemData['original'] = np.ones(Scaf.NElem)
-    #     pad.ElemData['original'] = np.zeros(pad.NElem)
-    #     Scaf.merge(pad, cleanup=False)
-    #     Scaf.NodeCoords, Scaf.NodeConn, idx, inv = utils.DeleteDuplicateNodes(Scaf.NodeCoords, Scaf.NodeConn, return_inv=True, return_idx=True, tol=1e-9)
-    #     Scaf._Surface = None
-    #     Scaf.reset('SurfConn')
-    #     Scaf._SurfNodes = None
-
-        
-    #     xnodes = np.where((np.isclose(Scaf.NodeCoords[:,0], maxxn)))[0]
-    #     ynodes = np.where((np.isclose(Scaf.NodeCoords[:,1], maxyn)))[0]
-    #     znodes = np.where((np.isclose(Scaf.NodeCoords[:,2], maxzn)))[0]
-        
-    #     constraints = np.vstack([
-    #             np.column_stack((xnodes, np.repeat(0, len(xnodes)), np.zeros(len(xnodes)))),
-    #             np.column_stack((ynodes, np.repeat(1, len(ynodes)), np.zeros(len(ynodes)))),
-    #             np.column_stack((znodes, np.repeat(2, len(znodes)), np.zeros(len(znodes)))),
-    #             ])
-
-    #     boundaries = set(np.where(
-    #                 (Scaf.NodeCoords[:,0] == Scaf.NodeCoords[:,0].max()) |
-    #                 (Scaf.NodeCoords[:,1] == Scaf.NodeCoords[:,1].max()) |
-    #                 (Scaf.NodeCoords[:,2] == Scaf.NodeCoords[:,2].max())
-    #             )[0].tolist())
-    
-    # else:
-    #     constraints = np.empty((0,3))
-    #     boundaries = set()
     
     if model.model_parameters['Smooth Scaffold']:
         ScafSurf = improvement.LocalLaplacianSmoothing(Scaf.Surface, options=dict(limit=np.sqrt(3)/2*h,  FixedNodes=boundaries, constraint=constraints))
@@ -913,8 +804,8 @@ def _grid_padding(model):
         minz_pad = Grid.Threshold(Grid.Centroids[:,2], maxze, '==') 
         minz_pad.NodeCoords[:,2] -= (maxze-minze + h)
                             
-        pad = mesh()
-        pad.merge([maxx_pad, minx_pad, maxy_pad, miny_pad, maxz_pad, minz_pad])
+        pad = maxx_pad
+        pad.merge([minx_pad, maxy_pad, miny_pad, maxz_pad, minz_pad])
         # Grid_copy = Grid.copy()
         Grid.ElemData['original'] = np.ones(Grid.NElem)
         pad.ElemData['original'] = np.zeros(pad.NElem)
@@ -944,20 +835,35 @@ def _grid_padding(model):
                 )[0].tolist())
 
     elif model.model_parameters['Symmetric']:
-          
-        maxxe = np.max(Grid.Centroids[:,0])
-        maxye = np.max(Grid.Centroids[:,1])
-        maxze = np.max(Grid.Centroids[:,2])
-
+        
         pad_width = 2
-        pad_dist = (pad_width-1)*h
+        pad_dist = (pad_width)*h
+        
+        if model.model_parameters['Symmetric'] is True or model.model_parameters['Symmetric'] == 1:
+          
+            # maxxe = np.max(Grid.Centroids[:,0])
+            # maxye = np.max(Grid.Centroids[:,1])
+            # maxze = np.max(Grid.Centroids[:,2])
+            xn = maxxn
+            yn = maxyn
+            zn = maxzn
 
-        maxx_pad = Grid.Threshold(Grid.Centroids[:,0], Grid.Centroids[:,0].max()-pad_dist, '>=', cleanup=True).Mirror(x=Grid.NodeCoords[:,0].max(), InPlace=True)
-        maxy_pad = Grid.Threshold(Grid.Centroids[:,1], Grid.Centroids[:,1].max()-pad_dist, '>=', cleanup=True).Mirror(y=Grid.NodeCoords[:,1].max(), InPlace=True)
-        maxz_pad = Grid.Threshold(Grid.Centroids[:,2], Grid.Centroids[:,2].max()-pad_dist, '>=', cleanup=True).Mirror(z=Grid.NodeCoords[:,2].max(), InPlace=True)
+            x_pad = Grid.Threshold(Grid.Centroids[:,0], Grid.Centroids[:,0].max()-pad_dist, '>', cleanup=True).Mirror(x=Grid.NodeCoords[:,0].max(), InPlace=True)
+            y_pad = Grid.Threshold(Grid.Centroids[:,1], Grid.Centroids[:,1].max()-pad_dist, '>', cleanup=True).Mirror(y=Grid.NodeCoords[:,1].max(), InPlace=True)
+            z_pad = Grid.Threshold(Grid.Centroids[:,2], Grid.Centroids[:,2].max()-pad_dist, '>', cleanup=True).Mirror(z=Grid.NodeCoords[:,2].max(), InPlace=True)
+        
+        elif model.model_parameters['Symmetric'] == -1:
+            xn = minxn
+            yn = minyn
+            zn = minzn
 
-        pad = mesh()
-        pad.merge([maxx_pad, maxy_pad, maxz_pad])
+            x_pad = Grid.Threshold(Grid.Centroids[:,0], Grid.Centroids[:,0].min()+pad_dist, '<', cleanup=True).Mirror(x=Grid.NodeCoords[:,0].min(), InPlace=True)
+            y_pad = Grid.Threshold(Grid.Centroids[:,1], Grid.Centroids[:,1].min()+pad_dist, '<', cleanup=True).Mirror(y=Grid.NodeCoords[:,1].min(), InPlace=True)
+            z_pad = Grid.Threshold(Grid.Centroids[:,2], Grid.Centroids[:,2].min()+pad_dist, '<', cleanup=True).Mirror(z=Grid.NodeCoords[:,2].min(), InPlace=True)
+        
+        
+        pad = x_pad
+        pad.merge([y_pad, z_pad])
         # Grid_copy = Grid.copy()
         Grid.ElemData['original'] = np.ones(Grid.NElem)
         pad.ElemData['original'] = np.zeros(pad.NElem)
@@ -968,21 +874,27 @@ def _grid_padding(model):
         Grid._SurfNodes = None
 
         
-        xnodes = np.where((np.isclose(Grid.NodeCoords[:,0], maxxn)))[0]
-        ynodes = np.where((np.isclose(Grid.NodeCoords[:,1], maxyn)))[0]
-        znodes = np.where((np.isclose(Grid.NodeCoords[:,2], maxzn)))[0]
+        xnodes = np.where((np.isclose(Grid.NodeCoords[:,0], xn)))[0]
+        ynodes = np.where((np.isclose(Grid.NodeCoords[:,1], yn)))[0]
+        znodes = np.where((np.isclose(Grid.NodeCoords[:,2], zn)))[0]
         
         constraints = np.vstack([
                 np.column_stack((xnodes, np.repeat(0, len(xnodes)), np.zeros(len(xnodes)))),
                 np.column_stack((ynodes, np.repeat(1, len(ynodes)), np.zeros(len(ynodes)))),
                 np.column_stack((znodes, np.repeat(2, len(znodes)), np.zeros(len(znodes)))),
                 ])
-
-        boundaries = set(np.where(
-                    (Grid.NodeCoords[:,0] == Grid.NodeCoords[:,0].max()) |
-                    (Grid.NodeCoords[:,1] == Grid.NodeCoords[:,1].max()) |
-                    (Grid.NodeCoords[:,2] == Grid.NodeCoords[:,2].max())
-                )[0].tolist())
+        if model.model_parameters['Symmetric'] == 1:
+            boundaries = set(np.where(
+                        (Grid.NodeCoords[:,0] == Grid.NodeCoords[:,0].max()) |
+                        (Grid.NodeCoords[:,1] == Grid.NodeCoords[:,1].max()) |
+                        (Grid.NodeCoords[:,2] == Grid.NodeCoords[:,2].max())
+                    )[0].tolist())
+        elif model.model_parameters['Symmetric'] == -1:
+            boundaries = set(np.where(
+                        (Grid.NodeCoords[:,0] == Grid.NodeCoords[:,0].min()) |
+                        (Grid.NodeCoords[:,1] == Grid.NodeCoords[:,1].min()) |
+                        (Grid.NodeCoords[:,2] == Grid.NodeCoords[:,2].min())
+                    )[0].tolist())
     
     else:
         constraints = np.empty((0,3))
@@ -1156,6 +1068,14 @@ def update_curvature(model):
         model.agent_grid.NodeVectorData['Min Principal Direction'] = model.agent_grid.NodeVectorData['Scaffold Min Principal Direction']
         model.agent_grid.NodeData['Mean Curvature'] = model.agent_grid.NodeData['Scaffold Mean Curvature']
         model.agent_grid.NodeData['Gaussian Curvature'] = model.agent_grid.NodeData['Scaffold Gaussian Curvature']
+        
+    else:
+        for curve in ['Max Principal Curvature', 'Min Principal Curvature', 'Mean Curvature', 'Gaussian Curvature']:
+            if curve not in model.agent_grid.NodeData:
+                model.agent_grid.NodeData[curve] = np.repeat(sys.float_info.max, model.NNode)
+        for curve in ['Max Principal Direction', 'Min Principal Direction']:
+            if curve not in model.agent_grid.NodeData:
+                model.agent_grid.NodeVectorData[curve] = np.zeros((model.NNode,3), dtype=np.float64)
     if 'Smoothed Surface Coordinates' not in model.agent_grid.NodeVectorData:
         model.agent_grid.NodeVectorData['Smoothed Surface Coordinates'] = Surf.NodeCoords[inv[:model.NNode]]
     else:
@@ -1238,33 +1158,32 @@ def update_curvature(model):
                 break
         model.agent_grid.NodeData['Mean Curvature'] = MeanCurvature[:-1]
     
-def run_compression(model):
+# def run_compression(model):
 
-    matprop = (self.agent_grid.ElemData['modulus'],
-                self.agent_grid.ElemData['poisson'],
-                self.agent_grid.ElemData['permeability'],
-                self.agent_grid.ElemData['solid bulk modulus'],
-                self.agent_grid.ElemData['fluid bulk modulus'],
-                self.agent_grid.ElemData['fluid specific weight'],
-                self.agent_grid.ElemData['porosity'])
-    disp = model.parameters['displacement']
-    try:
-        apdl = pyAnsysSolvers.Launch(ansys_path, nproc=nproc, smp=True, port=port)
-        M = pyAnsysSolvers.PoroelasticUniaxial(M, *matprop, timestep, disp, axis=2, boundary_eps=0, SurfacePressure=0, nsubsteps=1, constrained=False, mode='disp', mapdl=apdl)
-    except:
-        apdl = pyAnsysSolvers.Launch(ansys_path, nproc=nproc, smp=True, port=port)
-        M = pyAnsysSolvers.PoroelasticUniaxial(M, *matprop, timestep, disp, axis=2, boundary_eps=0, SurfacePressure=0, nsubsteps=1, constrained=False, mode='disp', mapdl=apdl)
+#     matprop = (self.agent_grid.ElemData['modulus'],
+#                 self.agent_grid.ElemData['poisson'],
+#                 self.agent_grid.ElemData['permeability'],
+#                 self.agent_grid.ElemData['solid bulk modulus'],
+#                 self.agent_grid.ElemData['fluid bulk modulus'],
+#                 self.agent_grid.ElemData['fluid specific weight'],
+#                 self.agent_grid.ElemData['porosity'])
+#     disp = model.model_parameters['displacement']
+#     try:
+#         apdl = pyAnsysSolvers.Launch(ansys_path, nproc=nproc, smp=True, port=port)
+#         M = pyAnsysSolvers.PoroelasticUniaxial(M, *matprop, timestep, disp, axis=2, boundary_eps=0, SurfacePressure=0, nsubsteps=1, constrained=False, mode='disp', mapdl=apdl)
+#     except:
+#         apdl = pyAnsysSolvers.Launch(ansys_path, nproc=nproc, smp=True, port=port)
+#         M = pyAnsysSolvers.PoroelasticUniaxial(M, *matprop, timestep, disp, axis=2, boundary_eps=0, SurfacePressure=0, nsubsteps=1, constrained=False, mode='disp', mapdl=apdl)
 
 def update_properties(model):
-    
-    WaterProps = mechanobiology.prendergast_mat(np.repeat(0, agent_grid.NElem))
-    NeoProps = mechanobiology.prendergast_mat(np.repeat(1, agent_grid.NElem))
-    FibProps = mechanobiology.prendergast_mat(np.repeat(2, agent_grid.NElem))
-    CartProps = mechanobiology.prendergast_mat(np.repeat(3, agent_grid.NElem))
-    MarrowProps = mechanobiology.prendergast_mat(np.repeat(4, agent_grid.NElem))
-    IboneProps = mechanobiology.prendergast_mat(np.repeat(5, agent_grid.NElem))     # Immature bone
-    LboneProps = mechanobiology.prendergast_mat(np.repeat(7, agent_grid.NElem))     # Lamellar bone
-    ScaffProps = mechanobiology.prendergast_mat(np.repeat(8, agent_grid.NElem))
+    WaterProps = mechanobiology.prendergast_mat(np.repeat(0, model.agent_grid.NElem))
+    NeoProps = mechanobiology.prendergast_mat(np.repeat(1, model.agent_grid.NElem))
+    FibProps = mechanobiology.prendergast_mat(np.repeat(2, model.agent_grid.NElem))
+    CartProps = mechanobiology.prendergast_mat(np.repeat(3, model.agent_grid.NElem))
+    MarrowProps = mechanobiology.prendergast_mat(np.repeat(4, model.agent_grid.NElem))
+    IboneProps = mechanobiology.prendergast_mat(np.repeat(5, model.agent_grid.NElem))     # Immature bone
+    LboneProps = mechanobiology.prendergast_mat(np.repeat(7, model.agent_grid.NElem))     # Lamellar bone
+    ScaffProps = mechanobiology.prendergast_mat(np.repeat(8, model.agent_grid.NElem))
     
     
     def modulus_mineral(mineral_density): 
@@ -1279,6 +1198,7 @@ def update_properties(model):
         return modulus
     
     # Calculate properties of mineralized tissue
+    agent_grid = model.agent_grid
     mineral_density = np.divide(agent_grid.ElemData['Mineral Density'], agent_grid.ElemData['Osseous Fraction'], where=agent_grid.ElemData['Osseous Fraction']>0, out=np.zeros(agent_grid.NElem))
     max_modulus = modulus_mineral(np.array([0.8])) # max mineralization .8 mg/mm^3
     min_modulus = modulus_mineral(np.array([0.0]))
@@ -1350,10 +1270,10 @@ def update_properties(model):
         WaterProps[6] * (1-agent_grid.ElemData['Volume Fraction']))
 
 
-    self.agent_grid.ElemData['modulus'] = E
-    self.agent_grid.ElemData['poisson'] = nu
-    self.agent_grid.ElemData['permeability'] = L
-    self.agent_grid.ElemData['solid bulk modulus'] = SolidBulk
-    self.agent_grid.ElemData['fluid bulk modulus'] = FluidBulk
-    self.agent_grid.ElemData['fluid specific weight'] = FluidSpecWeight
-    self.agent_grid.ElemData['porosity'] = Porosity
+    model.agent_grid.ElemData['modulus'] = E
+    model.agent_grid.ElemData['poisson'] = nu
+    model.agent_grid.ElemData['permeability'] = K
+    model.agent_grid.ElemData['solid bulk modulus'] = SolidBulk
+    model.agent_grid.ElemData['fluid bulk modulus'] = FluidBulk
+    model.agent_grid.ElemData['fluid specific weight'] = FluidSpecWeight
+    model.agent_grid.ElemData['porosity'] = Porosity
