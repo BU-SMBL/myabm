@@ -39,6 +39,17 @@ def square_channel(size, height=2):
     bounds : list
         Outer bounds of the grid, formatted as [xmin, xmax, ymin, ymax, zmin, zmax]
 
+    Examples
+    --------
+
+    .. plot::
+
+        from myabm.ortho import geometries, setup
+
+        func, bounds = geometries.square_channel('medium')
+        model = setup.implicit_scaffold(func, bounds, 0.025)
+        model.plotter().show() 
+
     """    
     if type(size) is str:
         if size == 'medium':
@@ -79,6 +90,17 @@ def cross_channel(size, height=2):
         implicit function of the form f(x,y,z)
     bounds : list
         Outer bounds of the grid, formatted as [xmin, xmax, ymin, ymax, zmin, zmax]
+
+    Examples
+    --------
+
+    .. plot::
+    
+        from myabm.ortho import geometries, setup
+
+        func, bounds = geometries.cross_channel('medium')
+        model = setup.implicit_scaffold(func, bounds, 0.025)
+        model.plotter().show() 
 
     """    
 
@@ -247,6 +269,32 @@ def strut(L, d):
         periodic, different bounds can be used to get a larger multi-unit
         structure.
 
+    Examples
+    --------
+
+    .. plot::
+    
+        from myabm.ortho import geometries, setup
+
+        func, bounds = geometries.strut(1, 0.5)
+        model = setup.implicit_scaffold(func, bounds, 0.025)
+        model.plotter().show() 
+
+    .. plot::
+    
+        from myabm.ortho import geometries, setup
+
+        func, bounds = geometries.strut(1, 0.25)
+        model = setup.implicit_scaffold(func, bounds, 0.025)
+        model.plotter().show() 
+
+    .. plot::
+    
+        from myabm.ortho import geometries, setup
+
+        func, bounds = geometries.strut(1, 0.75)
+        model = setup.implicit_scaffold(func, bounds, 0.025)
+        model.plotter().show() 
     """
     
     # L = period, d=duty cycle

@@ -10,6 +10,7 @@ User Guide
     guide/templates
     guide/connectivity
     guide/ref
+    guide/ortho
 
 
 Package Overview

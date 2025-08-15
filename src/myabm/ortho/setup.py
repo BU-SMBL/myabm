@@ -46,7 +46,7 @@ def implicit_scaffold(func, bounds, h, seeding_density=1e3, agent_parameters=Non
 
     Returns
     -------
-    modek_description_ : myabm.ortho.OrthoModel
+    model : myabm.ortho.OrthoModel
         Initialized model seeded with cells
     """
 

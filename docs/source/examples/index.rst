@@ -90,7 +90,7 @@ Examples highlighting the ortho model for skeletal tissue formation
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="in vitro cell culture">
+    <div class="sphx-glr-thumbcontainer" tooltip="Cell culture are often performed by seeding cells in well plates, which come in  a few standard sizes (6, 12, 24, 38, 96, 384 wells/plate). Simulating cell  behavior in a culture plate well can be a convenient way to see if the  population of cells follows experimental expectations.">
 
 .. only:: html
 

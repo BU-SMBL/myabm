@@ -57,7 +57,6 @@ def life_action(agent, grid):
 Grid = primitives.Grid2D([0,1,0,1],0.025)
 
 model = Model(Grid)
-# model.grid_actions = (game_of_life,)
 model.agent_actions = (life_action,)
 model.seed(500, state='live')
 model.seed(Grid.NNode-500, state='dead')
@@ -94,4 +93,4 @@ color = dict(live='black', dead=None)
 model.animate('gosper_gun.gif', view='xy', show_mesh=False, state_color=color)
 
 
-# %%
+
