@@ -475,7 +475,7 @@ class Model():
         """        
         self.agent_grid = initialize(self.mesh)
 
-    def seed(self, N=None, state='none', nodes=None, method='random', parameters=None):
+    def seed(self, N=None, state='', nodes=None, method='random', parameters=None):
         """
         Seed the grid with agents. 
         This passes through arguments to :func:`AgentGrid.seed`, but is more 
@@ -527,6 +527,37 @@ class Model():
         parameters = utils.dict_to_Dict(parameters, numba.types.string, numba.types.float64)
 
         self.agent_grid.seed(N, state, nodes, method, parameters)
+    
+    def seed_interactive(self, state='', parameters=None, **plotter_kwargs):
+        
+        point_actors = dict()
+        plotter = self.plotter(**plotter_kwargs)
+
+        self.agent_grid.NodeData['picked'] = np.zeros(self.NNode)
+        def callback(point): 
+            try:
+                node = np.where(np.all(np.isclose(self.mesh.NodeCoords,point), axis=1))[0][0]
+                if node in point_actors:
+                    # remove from plot
+                    plotter.remove_actor(point_actors[node])
+                    # remove from agent_grid
+                    self.agent_grid.remove_agent(self.agent_grid.Agents[self.agent_grid.NodeAgents[node]])
+                    # remove from dict
+                    del point_actors[node]
+
+                else:
+                    # add agent
+                    self.agent_grid.add_agent(node, state, parameters)
+                    # add to plot
+                    if 'agent_kwargs' in plotter_kwargs:
+                        point_actors[node] = plotter.add_points(np.array([point]), **plotter_kwargs['agent_kwargs'], color='black')
+                    else:
+                        point_actors[node] = plotter.add_points(np.array([point]), color='black')
+            except:
+                print('Error in seed_interactive.')
+
+        plotter.enable_point_picking(callback = callback, show_message='    Right click a point to add an agent\n    Right click the point again to remove it')
+        plotter.show()
     
     def default_schedule(self):
         """
@@ -761,17 +792,74 @@ class Model():
 
         # Create plotter
         plotter = pv.Plotter(notebook=False, off_screen=True)
-        if show_mesh:
-            plotter.add_mesh(pv.wrap(self.mesh.mymesh2meshio()), show_edges=show_mesh_edges, color='white', **mesh_kwargs)
+
+        plotter = self.plotter(frame=0, plotter=plotter, view=view, show_mesh=show_mesh, show_mesh_edges=show_mesh_edges, mesh_kwargs=mesh_kwargs, agent_kwargs=agent_kwargs, state_color=state_color, show_timer=show_timer)
+        camera = plotter.camera.copy()
+        if os.path.splitext(filename)[-1].lower() == '.gif' or '':
+            # Open gif
+            plotter.open_gif(filename, fps=fps)
+        else:
+            plotter.open_movie(filename, framerate=fps)
+        
+        # Iterate through history
+        for i,t in enumerate(self.history['Time']):
+            if timestep is not None:
+                if not np.isclose(t % timestep, 0):
+                    continue
+            
+            for actor in list(plotter.actors.keys()):
+                plotter.remove_actor(actor, reset_camera=False)
+
+            plotter = self.plotter(frame=i, plotter=plotter, view=None, show_mesh=show_mesh, show_mesh_edges=show_mesh_edges, mesh_kwargs=mesh_kwargs, agent_kwargs=agent_kwargs, state_color=state_color, show_timer=show_timer, reset_camera=False)
+            # plotter.camera = camera
+            plotter.write_frame()
+        plotter.close()
+
+    def plotter(self, frame=-1, view='isometric', show_mesh=True, show_mesh_edges=True, mesh_kwargs={}, agent_kwargs={}, state_color=None, show_timer=False, plotter=None, reset_camera=True):
+
+        if plotter is None:
+            plotter = pv.Plotter()
+
+        if frame == -1:
+            agent_states = self.agent_states 
+            agent_nodes = self.agent_nodes       
+        else:
+            agent_states = self.history['Agent States'][frame]
+            agent_nodes = self.history['Agent Nodes'][frame]
+
+        if state_color is None:
+            default_colors = [
+                '#5e81ac',
+                '#bf616a',
+                '#ebcb8b',
+                '#a3be8c',
+                '#b48ead',
+                '#d08770',
+            ]
+            states = set()
+            for state in agent_states:
+                states.add(str(state))
+            state_color = {}
+            for state, color in zip(states, itertools.cycle(default_colors)):
+                    state_color[str(state)] = color
+
+        
+        mesh_actor = plotter.add_mesh(pv.wrap(self.mesh.mymesh2meshio()), show_edges=show_mesh_edges, color='white', **mesh_kwargs,reset_camera=reset_camera)
+        if not show_mesh:
+            plotter.remove_actor(mesh_actor, reset_camera=False)
 
         # Add agents
         point_actors = []
-        for state in np.unique(self.history['Agent States'][0]):
-            if state_color[state] is not None:
-                nodes = self.history['Agent Nodes'][0][self.history['Agent States'][0] == state]
-                point_actors.append(plotter.add_points(self.mesh.NodeCoords[nodes], color=state_color[state], **agent_kwargs))
-        if show_timer and len(self.history['Time'])==len(self.history['Agent States']):
-            text_actor = plotter.add_text(f"Time = {self.history['Time'][0]:.2f}", position='upper_edge')
+        for state in np.unique(agent_states):
+            if state_color[str(state)] is not None:
+                nodes = agent_nodes[agent_states == state]
+                point_actors.append(plotter.add_points(self.mesh.NodeCoords[nodes], color=state_color[str(state)], **agent_kwargs, reset_camera=reset_camera))
+        if show_timer:
+            if 'Time' in self.history and len(self.history['Time']) > 0:
+                time = self.history['Time'][frame]
+            else:
+                time = 0
+            text_actor = plotter.add_text(f"Time = {time:.2f}", position='upper_edge')
 
         # Set view
         if view is not None:
@@ -794,35 +882,8 @@ class Model():
                 plotter.view_vector(view)
             else:
                 warnings.warn('Invalid view option')
-
-        if os.path.splitext(filename)[-1].lower() == '.gif' or '':
-            # Open gif
-            plotter.open_gif(filename, fps=fps)
-        else:
-            plotter.open_movie(filename, framerate=fps)
-
-        # Iterate through history
-        for i,t in enumerate(self.history['Time']):
-            if timestep is not None:
-                if not np.isclose(t % timestep, 0):
-                    continue
-
-            for actor in point_actors:
-                plotter.remove_actor(actor)
-
-            point_actors = []
-            for state in np.unique(self.history['Agent States'][i]):
-                if state_color[state] is not None:
-                    nodes = self.history['Agent Nodes'][i][self.history['Agent States'][i] == state]
-                    point_actors.append(plotter.add_points(self.mesh.NodeCoords[nodes], color=state_color[state], **agent_kwargs))
-
-            if show_timer and len(self.history['Time'])==len(self.history['Agent States']):
-                plotter.remove_actor(text_actor)
-                text_actor = plotter.add_text(f"Time = {self.history['Time'][i]:.2f}", position='upper_edge')
-
-            plotter.write_frame()
-        plotter.close()
-
+        return plotter
+    
     @property
     def NNode(self):
         """
