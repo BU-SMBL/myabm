@@ -49,9 +49,10 @@ class OrthoModel(Model):
         # Default parameters for OrthoModel:
         self.grid_parameters['Mineral Walk Threshold'] = 0.4  # mg/mm^3
         self.grid_parameters['Tissue Threshold'] = 0.2 # volume fraction
-        self.grid_parameters['Max Mineral'] = 0.8 # mg/mm^3
-        self.grid_parameters['Mineralization Rate'] = 1680.56 # mg/mm^3/day?
-        self.grid_parameters['Mineral Solute Concentration'] = 7.2e-5 # mg/mm^3 (based on αMEM)
+        self.grid_parameters['Max Mineral'] = 0.8 # mg/mm^3 (HA)
+        self.grid_parameters['Mineralization Rate'] = 669.25 # mg/mm^3/day (Proportional to rate used in Tourolle et al)
+        self.grid_parameters['Mineral Solute Concentration'] = 1.8e-4 # mg/mm^3 (based on αMEM: Ca concentration is 7.2e-5, weight percent of calcium in HA in ~40% -> 1.8e-4)
+        self.grid_parameters['Tissue Degradation'] = 1e-6
         if grid_parameters is not None:
             for key in grid_parameters:
                 self.grid_parameters[key] = grid_parameters[key]
@@ -129,10 +130,9 @@ class OrthoModel(Model):
         
         for substep in range(nsubstep):
             self.agent_grid.run_agents(self.agent_actions)
-            self.agent_grid.run_grid((actions.update_mineral,))
+            self.agent_grid.run_grid(self.grid_actions)
             
-        # Run grid and model actions after the last substep
-        self.agent_grid.run_grid(self.grid_actions)
+        # Run model actions after the last substep
         for f in self.model_actions:
             f(self)
         # update history
@@ -264,7 +264,7 @@ class OrthoModel(Model):
             plotter.write_frame()
         plotter.close()
     
-    def plotter(self, frame=-1, view='isometric', show_agents=True, show_mesh=True, show_mesh_edges=True, mesh_kwargs={}, agent_kwargs={}, state_color=None, show_timer=False, tissue_threshold=True, tissue_opacity=False, scale_colors=False, scalars=None, clim=None, cmap=None, clip=None, plotter=None):
+    def plotter(self, frame=-1, view='isometric', show_agents=True, show_mesh=True, show_mesh_edges=True, mesh_kwargs={}, agent_kwargs={}, state_color=None, show_timer=False, tissue_threshold=True, tissue_opacity=False, scale_colors=False, scale_modulus=True, scalars=None, clim=None, cmap=None, clip=None, plotter=None):
         
         if plotter is None:
             plotter = pv.Plotter()
@@ -273,12 +273,12 @@ class OrthoModel(Model):
             # Current state, rather than using history
             ElemData = self.ElemData
             NodeData = self.NodeData
-            AgentStates = self.agent_states
+            AgentStates = np.array(self.agent_states)
             AgentNodes = self.agent_nodes
         else:
             ElemData = self.history['ElemData'][frame]
             NodeData = self.history['NodeData'][frame]
-            AgentStates = self.history['Agent States'][frame]
+            AgentStates = np.array(self.history['Agent States'][frame])
             AgentNodes = self.history['Agent Nodes'][frame]
 
 
@@ -300,6 +300,7 @@ class OrthoModel(Model):
                 fibroblast = fibrous,
                 chondrocyte = cartilage,
                 osteoblast = bone,
+                osteocyte = np.array([0/255, 0/255, 128/255, 1]) 
             )
         
         neotissue_soft = (neotissue + 2*np.array([1, 1, 1, 1]))/3
@@ -325,6 +326,7 @@ class OrthoModel(Model):
                 if tissue_threshold is not False:
                     ids[ElemData['Volume Fraction'] < tissue_threshold] = -1
                 m = self.mesh.copy()
+                m.ElemData = ElemData
                 
                 if 'Smoothed Surface Coordinates' in NodeData:
                     m.NodeCoords = NodeData['Smoothed Surface Coordinates']
@@ -357,29 +359,50 @@ class OrthoModel(Model):
                     cart_opacity = None
                     bone_opacity = None
                 
+                if scale_modulus and 'modulus' in ElemData:
+                    neotissue_scalars = 'modulus'
+                    fibrous_scalars = 'modulus'
+                    cartilaginous_scalars = 'modulus'
+                    osseous_scalars = 'modulus'
+                    
+                    neotissue_clim = (0, 0.2)
+                    fibrous_clim = (0, 2)
+                    cartilaginous_clim = (0, 10)
+                    osseous_clim = (0, 14000)
+                else:
+                    neotissue_scalars = 'ECM Fraction'
+                    fibrous_scalars = 'Fibrous Fraction'
+                    cartilaginous_scalars = 'Cartilaginous Fraction'
+                    osseous_scalars = 'Osseous Fraction'
+                    neotissue_clim = (0, 1)
+                    fibrous_clim = (0, 1)
+                    cartilaginous_clim = (0, 1)
+                    osseous_clim = (0, 1)
+                    
+                
                 if clip is not None:
                     if clip is True:
                         clip = [1,0,0]
                         
                     if Neotissue.NElem > 0 : 
-                        mesh_actors.append(plotter.add_mesh(pv.wrap(Neotissue.mymesh2meshio()).clip(normal=clip), show_edges=show_mesh_edges, scalars='ECM Fraction', cmap=neotissue_cmap, clim=(0,1), scalar_bar_args=dict(title='Neotissue'), show_scalar_bar=False, log_scale=False, opacity=neo_opacity, **mesh_kwargs))
+                        mesh_actors.append(plotter.add_mesh(pv.wrap(Neotissue.mymesh2meshio()).clip(normal=clip), show_edges=show_mesh_edges, scalars=neotissue_scalars, cmap=neotissue_cmap, clim=neotissue_clim, scalar_bar_args=dict(title='Neotissue'), show_scalar_bar=False, log_scale=False, opacity=neo_opacity, **mesh_kwargs))
                     if Fibrous.NElem > 0 : 
-                        mesh_actors.append(plotter.add_mesh(pv.wrap(Fibrous.mymesh2meshio()).clip(normal=clip), show_edges=show_mesh_edges, scalars='Fibrous Fraction', cmap=fibrous_cmap, clim=(0,1), scalar_bar_args=dict(title='Fibrous'), show_scalar_bar=False, log_scale=False, opacity=fib_opacity, **mesh_kwargs))
+                        mesh_actors.append(plotter.add_mesh(pv.wrap(Fibrous.mymesh2meshio()).clip(normal=clip), show_edges=show_mesh_edges, scalars=fibrous_scalars, cmap=fibrous_cmap, clim=fibrous_clim, scalar_bar_args=dict(title='Fibrous'), show_scalar_bar=False, log_scale=False, opacity=fib_opacity, **mesh_kwargs))
                     if Cartilage.NElem > 0 : 
-                        mesh_actors.append(plotter.add_mesh(pv.wrap(Cartilage.mymesh2meshio()).clip(normal=clip), show_edges=show_mesh_edges, scalars='Cartilaginous Fraction', cmap=cartilage_cmap, clim=(0,1), scalar_bar_args=dict(title='Cartilage'), show_scalar_bar=False, log_scale=False, opacity=cart_opacity, **mesh_kwargs))
+                        mesh_actors.append(plotter.add_mesh(pv.wrap(Cartilage.mymesh2meshio()).clip(normal=clip), show_edges=show_mesh_edges, scalars=cartilaginous_scalars, cmap=cartilage_cmap, clim=cartilaginous_clim, scalar_bar_args=dict(title='Cartilage'), show_scalar_bar=False, log_scale=False, opacity=cart_opacity, **mesh_kwargs))
                     if Bone.NElem > 0 :
-                        mesh_actors.append(plotter.add_mesh(pv.wrap(Bone.mymesh2meshio()).clip(normal=clip),show_edges=show_mesh_edges,  cmap=bone_cmap, scalars='Osseous Fraction', scalar_bar_args=dict(title='Bone'), show_scalar_bar=False, clim=(0,1), log_scale=False, opacity=bone_opacity))
+                        mesh_actors.append(plotter.add_mesh(pv.wrap(Bone.mymesh2meshio()).clip(normal=clip),show_edges=show_mesh_edges,  cmap=bone_cmap, scalars=osseous_scalars, scalar_bar_args=dict(title='Bone'), show_scalar_bar=False, clim=osseous_clim, log_scale=False, opacity=bone_opacity))
                     if Scaffold.NElem > 0 : 
                         mesh_actors.append(plotter.add_mesh(pv.wrap(Scaffold.mymesh2meshio()).clip(normal=clip), show_edges=show_mesh_edges, color=scaffold, opacity=1, **mesh_kwargs))
                 else:
                     if Neotissue.NElem > 0 : 
-                        mesh_actors.append(plotter.add_mesh(pv.wrap(Neotissue.mymesh2meshio()), show_edges=show_mesh_edges, scalars='ECM Fraction', cmap=neotissue_cmap, clim=(0,1), scalar_bar_args=dict(title='Neotissue'), show_scalar_bar=False, log_scale=False, opacity=neo_opacity, **mesh_kwargs))
+                        mesh_actors.append(plotter.add_mesh(pv.wrap(Neotissue.mymesh2meshio()), show_edges=show_mesh_edges, scalars=neotissue_scalars, cmap=neotissue_cmap, clim=neotissue_clim, scalar_bar_args=dict(title='Neotissue'), show_scalar_bar=False, log_scale=False, opacity=neo_opacity, **mesh_kwargs))
                     if Fibrous.NElem > 0 : 
-                        mesh_actors.append(plotter.add_mesh(pv.wrap(Fibrous.mymesh2meshio()), show_edges=show_mesh_edges, scalars='Fibrous Fraction', cmap=fibrous_cmap, clim=(0,1), scalar_bar_args=dict(title='Fibrous'), show_scalar_bar=False, log_scale=False, opacity=fib_opacity, **mesh_kwargs))
+                        mesh_actors.append(plotter.add_mesh(pv.wrap(Fibrous.mymesh2meshio()), show_edges=show_mesh_edges, scalars=fibrous_scalars, cmap=fibrous_cmap, clim=fibrous_clim, scalar_bar_args=dict(title='Fibrous'), show_scalar_bar=False, log_scale=False, opacity=fib_opacity, **mesh_kwargs))
                     if Cartilage.NElem > 0 : 
-                        mesh_actors.append(plotter.add_mesh(pv.wrap(Cartilage.mymesh2meshio()), show_edges=show_mesh_edges, scalars='Cartilaginous Fraction', cmap=cartilage_cmap, clim=(0,1), scalar_bar_args=dict(title='Cartilage'), show_scalar_bar=False, log_scale=False, opacity=cart_opacity, **mesh_kwargs))
+                        mesh_actors.append(plotter.add_mesh(pv.wrap(Cartilage.mymesh2meshio()), show_edges=show_mesh_edges, scalars=cartilaginous_scalars, cmap=cartilage_cmap, clim=cartilaginous_clim, scalar_bar_args=dict(title='Cartilage'), show_scalar_bar=False, log_scale=False, opacity=cart_opacity, **mesh_kwargs))
                     if Bone.NElem > 0 :
-                        mesh_actors.append(plotter.add_mesh(pv.wrap(Bone.mymesh2meshio()),show_edges=show_mesh_edges,  cmap=bone_cmap, scalars='Osseous Fraction', scalar_bar_args=dict(title='Bone'), show_scalar_bar=False, clim=(0,1), log_scale=False, opacity=bone_opacity))
+                        mesh_actors.append(plotter.add_mesh(pv.wrap(Bone.mymesh2meshio()),show_edges=show_mesh_edges,  cmap=bone_cmap, scalars=osseous_scalars, scalar_bar_args=dict(title='Bone'), show_scalar_bar=False, clim=osseous_clim, log_scale=False, opacity=bone_opacity))
                     if Scaffold.NElem > 0 : 
                         mesh_actors.append(plotter.add_mesh(pv.wrap(Scaffold.mymesh2meshio()), show_edges=show_mesh_edges, color=scaffold, opacity=1, **mesh_kwargs))
             else:
@@ -394,7 +417,13 @@ class OrthoModel(Model):
             for state in np.unique(AgentStates):
                 if state_color[state] is not None:
                     nodes = AgentNodes[AgentStates == state]
-                    point_actors.append(plotter.add_points(self.mesh.NodeCoords[nodes], color=state_color[state], **agent_kwargs))
+                    if len(nodes) > 0:
+                        if clip is not None and clip is not False:
+                            pts = pv.PolyData(self.mesh.NodeCoords[nodes]).clip(normal=clip, origin=pv.wrap(m.mymesh2meshio()).center)
+                        else:
+                            pts = pv.PolyData(self.mesh.NodeCoords[nodes])
+                        if len(pts.points) > 0:
+                            point_actors.append(plotter.add_points(pts, color=state_color[state], **agent_kwargs))
         if show_timer and 'Time' in self.history:
             if len(self.history['Time']) > 0:
                 time = self.history['Time'][frame]
@@ -425,3 +454,9 @@ class OrthoModel(Model):
                 warnings.warn('Invalid view option')
         
         return plotter
+    
+    def export_history(self, filename, *args, **kwargs):
+        
+        if 'agent_lookup' not in kwargs:
+            kwargs['agent_lookup'] = {'msc':0, 'fibroblast':1, 'chondrocyte':2, 'osteoblast':3, 'osteocyte':4}
+        super().export_history(filename, *args, **kwargs)

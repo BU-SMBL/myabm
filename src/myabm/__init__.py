@@ -673,7 +673,7 @@ class Model():
 
         if time is None:
             dt = self.agent_grid.TimeStep
-            time = np.arange(len(self.history['ElemData']))*dt
+            time = self.history['Time']
 
         with meshio.xdmf.TimeSeriesWriter(filename) as writer:
             writer.write_points_cells(M.points, M.cells)
