@@ -369,13 +369,14 @@ def differentiate_prendergast(agent, grid):
                 agent.parameters['ApopRate'] = 0.16 # Isaksson 2008
                 agent.parameters['MigrRate'] = 0.167 # proportional to Isaksson 2008
                 agent.parameters['Production'] = 3e-6 # (mm^3/cell/day) Isaksson 2008
+                agent.parameters['DiffRate'] = 0.1
                 
             elif 1 < S <= 3:
                 agent.state = 'chondrocyte'
                 agent.age = 0
                 agent.parameters['ProlifRate'] = 0.2 # Isaksson 2008
                 agent.parameters['ApopRate'] = 0.1 # Isaksson 2008
-                agent.parameters['MigrRate'] = 0.0 # Checa 2011 (See also Morales 2007)
+                agent.parameters['MigrRate'] = 0.05 # Checa 2011 (See also Morales 2007)
                 agent.parameters['Production'] = 5e-6 # (mm^3/cell/day) Isaksson 2008
                 
             elif 3 < S:
@@ -386,12 +387,18 @@ def differentiate_prendergast(agent, grid):
                 agent.parameters['MigrRate'] = 0.667 # proportional to Isaksson 2008
                 agent.parameters['Production'] = 5e-6 # (mm^3/cell/day) Isaksson 2008
     elif agent.state == 'osteoblast':
-        if 0.01 <= S <= 1:
-            agent.parameters['ApopRate'] = 0.16
-            agent.parameters['Production'] = 3e-6
+        if np.all(grid.ElemData['Mineral Density'][grid.ElemConn[agent.node]] > .18) and np.random.rand() < DiffProb:
+            agent.state = 'osteocyte'
+            agent.parameters['ProlifRate'] = 0.
+            agent.parameters['ApopRate'] = 0.
+            agent.parameters['Production'] = 1e-6
         else:
-            agent.parameters['ApopRate'] = 0.3
-            agent.parameters['Production'] = 0
+            if 0.01 <= S <= 1:
+                agent.parameters['ApopRate'] = 0.16
+                agent.parameters['Production'] = 3e-6
+            else:
+                agent.parameters['ApopRate'] = 0.3
+                agent.parameters['Production'] = 0
     elif agent.state == 'chondrocyte':
         if 1 < S <= 3:
             agent.parameters['ApopRate'] = 0.1
@@ -617,6 +624,8 @@ def produce_oriented(agent, grid):
         available = (1 - grid.ElemData['Volume Fraction'][neighbor_elems]) + (1 - grid.ElemData['ECM Fraction'][neighbor_elems]) + (1 - grid.ElemData['Fibrous Fraction'][neighbor_elems])
     elif agent.state == 'osteoblast':
         available = (1 - grid.ElemData['Volume Fraction'][neighbor_elems]) + (1 - grid.ElemData['ECM Fraction'][neighbor_elems]) + (1 - grid.ElemData['Fibrous Fraction'][neighbor_elems]) + (1 - grid.ElemData['Cartilaginous Fraction'][neighbor_elems])
+    elif agent.state == 'osteocyte':
+        return
     total = np.sum(available)
     
     # Volume fraction update
@@ -700,8 +709,37 @@ def update_mineral(grid):
     -------
         None.    
     """    
-    dmineraldt = np.maximum(grid.parameters['Mineralization Rate'] * (grid.ElemData['Osseous Fraction'] - grid.ElemData['Mineral Density']/grid.parameters['Max Mineral']) * grid.parameters['Mineral Solute Concentration'], 0)
+    dmineraldt = grid.parameters['Mineralization Rate'] * (grid.ElemData['Osseous Fraction'] - grid.ElemData['Mineral Density']/grid.parameters['Max Mineral']) * grid.parameters['Mineral Solute Concentration']
+    dmineraldt[grid.ElemData['Scaffold Fraction'] == 1] = 0 # Assume no degradation of calcium from scaffold
     grid.ElemData['Mineral Density'] += dmineraldt*grid.TimeStep
+
+@numba.njit
+def degrade_tissue(grid):
+    """
+    Update mineralization of osseous tissue
+
+    Parameters
+    ----------
+    grid : myabm.AgentGrid
+        AgentGrid of the model
+    
+    Returns
+    -------
+        None.    
+    """    
+    degradation_rate = grid.parameters['Tissue Degradation']
+    
+    elem_stimulus = np.array([np.mean(grid.NodeData['Stimulus'][grid.NodeConn[i]]) for i in range(grid.NElem)])
+    grid.ElemData['Osseous Fraction'][(elem_stimulus < .01) | (elem_stimulus > 1)] = np.maximum(grid.ElemData['Osseous Fraction'][(elem_stimulus < .01) | (elem_stimulus > 1)] - degradation_rate / grid.parameters['Volume'] * grid.TimeStep, 0)
+    grid.ElemData['Cartilaginous Fraction'][(elem_stimulus < 1) | (elem_stimulus > 3)] = np.maximum(grid.ElemData['Cartilaginous Fraction'][(elem_stimulus < 1) | (elem_stimulus > 3)] - degradation_rate / grid.parameters['Volume'] * grid.TimeStep, 0)
+    grid.ElemData['Fibrous Fraction'][(elem_stimulus < 3)] = np.maximum(grid.ElemData['Fibrous Fraction'][(elem_stimulus < 3)] - degradation_rate / grid.parameters['Volume'] * grid.TimeStep, 0)
+    
+    grid.ElemData['Volume Fraction'] = grid.ElemData['ECM Fraction'] + \
+                grid.ElemData['Fibrous Fraction'] + \
+                grid.ElemData['Cartilaginous Fraction'] + \
+                grid.ElemData['Osseous Fraction'] + \
+                grid.ElemData['Scaffold Fraction']    
+    
 
 # Model Actions
 def update_scaffold_curvature(model):
@@ -917,118 +955,6 @@ def update_curvature(model):
     """
     h = model.agent_grid.parameters['h']
     Grid, constraints, boundaries, inv = _grid_padding(model)
-    # Grid = model.mesh.copy()
-    # Grid.ElemData['Volume Fraction'] = model.agent_grid.ElemData['Volume Fraction']
-    # Grid.ElemData['Scaffold Fraction'] = model.agent_grid.ElemData['Scaffold Fraction']
-    # h = model.agent_grid.parameters['h']
-    # maxxn = np.max(Grid.NodeCoords[:,0])
-    # minxn = np.min(Grid.NodeCoords[:,0])
-    # maxyn = np.max(Grid.NodeCoords[:,1])
-    # minyn = np.min(Grid.NodeCoords[:,1])
-    # maxzn = np.max(Grid.NodeCoords[:,2])
-    # minzn = np.min(Grid.NodeCoords[:,2])
-    
-    # if model.model_parameters['Periodic'] and model.model_parameters['Symmetric']:
-    #     raise ValueError('A model that is both Periodic and Symmetric is not supported.\n Change model.model_parameters["Periodic"] and/or model.model_parameters["Symmetric"] to False.')
-    
-    # elif model.model_parameters['Periodic']:
-    #     maxxe = np.max(Grid.Centroids[:,0])
-    #     minxe = np.min(Grid.Centroids[:,0])
-    #     maxye = np.max(Grid.Centroids[:,1])
-    #     minye = np.min(Grid.Centroids[:,1])
-    #     maxze = np.max(Grid.Centroids[:,2])
-    #     minze = np.min(Grid.Centroids[:,2])
-
-    #     maxx_pad = Grid.Threshold(Grid.Centroids[:,0], minxe, '==')
-    #     maxx_pad.NodeCoords[:,0] += (maxxe-minxe + h)
-    #     minx_pad = Grid.Threshold(Grid.Centroids[:,0], maxxe, '==') 
-    #     minx_pad.NodeCoords[:,0] -= (maxxe-minxe + h)
-        
-    #     maxy_pad = Grid.Threshold(Grid.Centroids[:,1], minye, '==')
-    #     maxy_pad.NodeCoords[:,1] += (maxye-minye + h)
-    #     miny_pad = Grid.Threshold(Grid.Centroids[:,1], maxye, '==') 
-    #     miny_pad.NodeCoords[:,1] -= (maxye-minye + h)
-        
-    #     maxz_pad = Grid.Threshold(Grid.Centroids[:,2], minze, '==')
-    #     maxz_pad.NodeCoords[:,2] += (maxze-minze + h)
-    #     minz_pad = Grid.Threshold(Grid.Centroids[:,2], maxze, '==') 
-    #     minz_pad.NodeCoords[:,2] -= (maxze-minze + h)
-                            
-    #     pad = mesh()
-    #     pad.merge([maxx_pad, minx_pad, maxy_pad, miny_pad, maxz_pad, minz_pad])
-    #     # Grid_copy = Grid.copy()
-    #     Grid.ElemData['original'] = np.ones(Grid.NElem)
-    #     pad.ElemData['original'] = np.zeros(pad.NElem)
-    #     Grid.merge(pad, cleanup=False)
-    #     Grid.NodeCoords, Grid.NodeConn, idx, inv = utils.DeleteDuplicateNodes(Grid.NodeCoords, Grid.NodeConn, return_inv=True, return_idx=True, tol=1e-9)
-    #     Grid._Surface = None
-    #     Grid.reset('SurfConn')
-    #     Grid._SurfNodes = None
-
-    #     xnodes = np.where((np.isclose(Grid.NodeCoords[:,0], minxn)) | (np.isclose(Grid.NodeCoords[:,0], maxxn)))[0]
-    #     ynodes = np.where((np.isclose(Grid.NodeCoords[:,1], minyn)) | (np.isclose(Grid.NodeCoords[:,1], maxyn)))[0]
-    #     znodes = np.where((np.isclose(Grid.NodeCoords[:,2], minzn)) | (np.isclose(Grid.NodeCoords[:,2], maxzn)))[0]
-        
-    #     constraints = np.vstack([
-    #             np.column_stack((xnodes, np.repeat(0, len(xnodes)), np.zeros(len(xnodes)))),
-    #             np.column_stack((ynodes, np.repeat(1, len(ynodes)), np.zeros(len(ynodes)))),
-    #             np.column_stack((znodes, np.repeat(2, len(znodes)), np.zeros(len(znodes)))),
-    #             ])
-
-    #     boundaries = set(np.where(
-    #                 (Grid.NodeCoords[:,0] == Grid.NodeCoords[:,0].min()) |
-    #                 (Grid.NodeCoords[:,0] == Grid.NodeCoords[:,0].max()) |
-    #                 (Grid.NodeCoords[:,1] == Grid.NodeCoords[:,1].min()) |
-    #                 (Grid.NodeCoords[:,1] == Grid.NodeCoords[:,1].max()) |
-    #                 (Grid.NodeCoords[:,2] == Grid.NodeCoords[:,2].min()) |
-    #                 (Grid.NodeCoords[:,2] == Grid.NodeCoords[:,2].max())
-    #             )[0].tolist())
-
-    # elif model.model_parameters['Symmetric']:
-          
-    #     maxxe = np.max(Grid.Centroids[:,0])
-    #     maxye = np.max(Grid.Centroids[:,1])
-    #     maxze = np.max(Grid.Centroids[:,2])
-
-    #     pad_width = 2
-    #     pad_dist = (pad_width-1)*h
-
-    #     maxx_pad = Grid.Threshold(Grid.Centroids[:,0], Grid.Centroids[:,0].max()-pad_dist, '>=', cleanup=True).Mirror(x=Grid.NodeCoords[:,0].max(), InPlace=True)
-    #     maxy_pad = Grid.Threshold(Grid.Centroids[:,1], Grid.Centroids[:,1].max()-pad_dist, '>=', cleanup=True).Mirror(y=Grid.NodeCoords[:,1].max(), InPlace=True)
-    #     maxz_pad = Grid.Threshold(Grid.Centroids[:,2], Grid.Centroids[:,2].max()-pad_dist, '>=', cleanup=True).Mirror(z=Grid.NodeCoords[:,2].max(), InPlace=True)
-
-    #     pad = mesh()
-    #     pad.merge([maxx_pad, maxy_pad, maxz_pad])
-    #     # Grid_copy = Grid.copy()
-    #     Grid.ElemData['original'] = np.ones(Grid.NElem)
-    #     pad.ElemData['original'] = np.zeros(pad.NElem)
-    #     Grid.merge(pad.copy(), cleanup=False)
-    #     Grid.NodeCoords, Grid.NodeConn, idx, inv = utils.DeleteDuplicateNodes(Grid.NodeCoords, Grid.NodeConn, return_inv=True, return_idx=True, tol=1e-9)
-    #     Grid._Surface = None
-    #     Grid.reset('SurfConn')
-    #     Grid._SurfNodes = None
-
-        
-    #     xnodes = np.where((np.isclose(Grid.NodeCoords[:,0], maxxn)))[0]
-    #     ynodes = np.where((np.isclose(Grid.NodeCoords[:,1], maxyn)))[0]
-    #     znodes = np.where((np.isclose(Grid.NodeCoords[:,2], maxzn)))[0]
-        
-    #     constraints = np.vstack([
-    #             np.column_stack((xnodes, np.repeat(0, len(xnodes)), np.zeros(len(xnodes)))),
-    #             np.column_stack((ynodes, np.repeat(1, len(ynodes)), np.zeros(len(ynodes)))),
-    #             np.column_stack((znodes, np.repeat(2, len(znodes)), np.zeros(len(znodes)))),
-    #             ])
-
-    #     boundaries = set(np.where(
-    #                 (Grid.NodeCoords[:,0] == Grid.NodeCoords[:,0].max()) |
-    #                 (Grid.NodeCoords[:,1] == Grid.NodeCoords[:,1].max()) |
-    #                 (Grid.NodeCoords[:,2] == Grid.NodeCoords[:,2].max())
-    #             )[0].tolist())
-    
-    # else:
-    #     constraints = np.empty((0,3))
-    #     boundaries = set()
-
     # Surface Curvature
     Tissue = Grid.Threshold('Volume Fraction', model.agent_grid.parameters['Tissue Threshold'])
     
@@ -1157,7 +1083,8 @@ def update_curvature(model):
                 warnings.warn('Iteration limit reached for mean curvature calculation.\nThis could indicate unexpected values or a significantly larger than expected grid size.')
                 break
         model.agent_grid.NodeData['Mean Curvature'] = MeanCurvature[:-1]
-    
+        for curve in ['Max Principal Curvature', 'Min Principal Curvature', 'Mean Curvature', 'Gaussian Curvature']:
+            model.agent_grid.NodeData[curve][model.agent_grid.NodeData[curve] == sys.float_info.max] = np.nan
 # def run_compression(model):
 
 #     matprop = (self.agent_grid.ElemData['modulus'],
@@ -1199,7 +1126,8 @@ def update_properties(model):
     
     # Calculate properties of mineralized tissue
     agent_grid = model.agent_grid
-    mineral_density = np.divide(agent_grid.ElemData['Mineral Density'], agent_grid.ElemData['Osseous Fraction'], where=agent_grid.ElemData['Osseous Fraction']>0, out=np.zeros(agent_grid.NElem))
+    # mineral_density = np.divide(agent_grid.ElemData['Mineral Density'], agent_grid.ElemData['Osseous Fraction'], where=agent_grid.ElemData['Osseous Fraction']>0, out=np.zeros(agent_grid.NElem))
+    mineral_density = np.divide(agent_grid.ElemData['Mineral Density'], 1, where=agent_grid.ElemData['Osseous Fraction']>0, out=np.zeros(agent_grid.NElem))
     max_modulus = modulus_mineral(np.array([0.8])) # max mineralization .8 mg/mm^3
     min_modulus = modulus_mineral(np.array([0.0]))
     modulus = modulus_mineral(mineral_density)
