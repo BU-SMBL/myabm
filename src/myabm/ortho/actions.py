@@ -415,6 +415,92 @@ def differentiate_prendergast(agent, grid):
             agent.parameters['Production'] = 0
 
 @numba.njit
+def differentiate_carter(agent, grid):
+    r"""
+    Mechanobiological cell differentiation based on :cite:`Carter1998`, using 
+    threshold values from :cite:`Isaksson2006`, :cite:`Isaksson2006a`. 
+    :code:`'Hydrostatic Stress'` must be stored in :code:`grid.NodeData` and 
+    :code:`'Principal Strain'` must be stored in :code:`grid.NodeVectorData`. 
+    Hydrostatic Stress is expected in units of MPa and principal strains should not be given as percentages.
+
+    See also: :ref:`Differentiation`
+
+    Parameters
+    ----------
+    agent : myabm.Agent
+        Cell agent to perform the action.
+    grid : myabm.AgentGrid
+        Grid environment that the agent is in.
+    """    
+
+    for required in ['DiffRate', 'DiffMaturity']:
+        assert required in agent.parameters, 'agent.parameters must contain "'+required+'"'
+    for required in ['Hydrostatic Stress']:
+        assert required in grid.NodeData, 'agent_grid.NodeData must contain "'+required+'"'
+    for required in ['Principal Strain']:
+        assert required in grid.NodeVectorData, 'agent_grid.NodeVectorData must contain "'+required+'"'
+
+    TimeStep = grid.TimeStep
+    DiffProb = 1 - np.exp(-agent.parameters['DiffRate'] * TimeStep)
+    
+    stress = grid.NodeData['Hydrostatic Stress'][agent.node]
+    strain = np.max(grid.NodeVectorData['Principal Strain'][agent.node])
+    if agent.state == 'msc':
+        
+        if (agent.age > agent.parameters['DiffMaturity']) & (np.random.rand() < DiffProb):
+            if stress <=  0.2 and strain <= 5/100:
+                agent.state = 'osteoblast'
+                agent.age = 0
+                agent.parameters['ProlifRate'] = 0.3 # Isaksson 2008
+                agent.parameters['ApopRate'] = 0.16 # Isaksson 2008
+                agent.parameters['MigrRate'] = 0.167 # proportional to Isaksson 2008
+                agent.parameters['Production'] = 3e-6 # (mm^3/cell/day) Isaksson 2008
+                agent.parameters['DiffRate'] = 0.1
+                
+            elif stress > 0.2:
+                agent.state = 'chondrocyte'
+                agent.age = 0
+                agent.parameters['ProlifRate'] = 0.2 # Isaksson 2008
+                agent.parameters['ApopRate'] = 0.1 # Isaksson 2008
+                agent.parameters['MigrRate'] = 0.05 # Checa 2011 (See also Morales 2007)
+                agent.parameters['Production'] = 5e-6 # (mm^3/cell/day) Isaksson 2008
+                
+            elif stress <=  0.2 and strain > 5/100:
+                agent.state = 'fibroblast'
+                agent.age = 0
+                agent.parameters['ProlifRate'] = 0.55 # Isaksson 2008
+                agent.parameters['ApopRate'] = 0.05 # Isaksson 2008
+                agent.parameters['MigrRate'] = 0.667 # proportional to Isaksson 2008
+                agent.parameters['Production'] = 5e-6 # (mm^3/cell/day) Isaksson 2008
+    elif agent.state == 'osteoblast':
+        if np.all(grid.ElemData['Mineral Density'][grid.ElemConn[agent.node]] > .18) and np.random.rand() < DiffProb:
+            agent.state = 'osteocyte'
+            agent.parameters['ProlifRate'] = 0.
+            agent.parameters['ApopRate'] = 0.
+            agent.parameters['Production'] = 1e-6
+        else:
+            if stress <=  0.2 and strain <= 5/100:
+                agent.parameters['ApopRate'] = 0.16
+                agent.parameters['Production'] = 3e-6
+            else:
+                agent.parameters['ApopRate'] = 0.3
+                agent.parameters['Production'] = 0
+    elif agent.state == 'chondrocyte':
+        if stress > 0.2:
+            agent.parameters['ApopRate'] = 0.1
+            agent.parameters['Production'] = 5e-6
+        else:
+            agent.parameters['ApopRate'] = 0.3
+            agent.parameters['Production'] = 0
+    elif agent.state == 'fibroblast':
+        if stress <=  0.2 and strain > 5/100:
+            agent.parameters['ApopRate'] = 0.05
+            agent.parameters['Production'] = 5e-6
+        else:
+            agent.parameters['ApopRate'] = 0.3
+            agent.parameters['Production'] = 0
+
+@numba.njit
 def produce(agent, grid):
     """
     Constant tissue production. Cells will fill surrounding elements with 
