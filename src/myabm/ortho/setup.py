@@ -210,6 +210,7 @@ def wellplate(size, h, media_volume=False, zstep=None, ncells=None, parameters=N
     Grid = primitives.Grid(bounds, (h, h, zstep))
     Grid2 = primitives.Grid([bounds[0], bounds[1], bounds[2], bounds[3], -h, bounds[4]], h)
     Grid.merge(Grid2)
+    Grid.SurfNodes
     if size == 6:
         r = np.sqrt(960/np.pi)
         if ncells is None:

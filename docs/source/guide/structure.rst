@@ -1,20 +1,19 @@
 Structure of MyABM models
 =========================
 
-Models contain three main components, the mesh, the agent grid, and the agents
+Models in :code:`myabm` contain three main components, the mesh, the environment, and the agents
 
 .. image:: ../_static/myabm_schematic.png
 
 The Model
 ---------
-The :class:`~myabm.Model` is the top-level container and primary interface to all model 
-components. 
+The :class:`~myabm.Model` is the top-level container and primary interface to all model components. 
+It enables setup, execution, and post-processing (including static and dynamic visualization).
 
 The Mesh
 --------
-The :class:`~mymesh.mesh` defines the geometry and connectivity of the model. A key benefit
-of MyABM is that models can be easily defined on arbitrary meshes, not just
-uniform grids. 
+The :class:`~mymesh.mesh` defines the geometry and connectivity of the model. 
+A key benefit of MyABM is that models can be easily defined on arbitrary meshes, not just uniform grids. 
 
 MyABM is built on `MyMesh <https://bu-smbl.github.io/mymesh/index.html>`_ 
 which enables the construction of a wide variety of meshes, including 
@@ -24,12 +23,12 @@ or `implicitly defined <https://bu-smbl.github.io/mymesh/generated/mymesh.implic
 Meshes can also easily be loaded from a variety of file types using 
 :func:`mymesh.mesh.read`, facilitated by `meshio <https://github.com/nschloe/meshio>`_
 
-The Agent Grid
---------------
-The :class:`~myabm.AgentGrid` constitutes the environment that 
-agents operate within. It contains key :ref:`connectivity <Connectivity Information>` information from the 
-mesh to enable agent migration, neighboring agent interactions, and more. 
+The Environment
+---------------
+The environment describes the space agents operate within and is used to manage agents and other data associated with the model. 
+It contains key :ref:`connectivity <Connectivity Information>` information from the mesh to enable agent migration, neighboring agent interactions, and more. 
 
 Agents
 ------
-:class:`~myabm.Agent` s can perform actions within their environment
+:class:`~myabm.Agent`\ s can sense and perform actions within their environment.
+This can include movement within the grid, interactions with or creation of other agents, etc.

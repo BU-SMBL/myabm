@@ -19,6 +19,7 @@ Ortho Agent Actions
     produce
     produce_oriented
     differentiate_prendergast
+    differentiate_carter
 
 Ortho Grid Actions
 ------------------
@@ -329,9 +330,9 @@ def apoptose(agent, grid):
 @numba.njit
 def differentiate_prendergast(agent, grid):
     r"""
-    Mechanobiological cell differentiation based on :cite:`Prendergast1997a`. 
+    Mechanobiological cell differentiation based on :cite:t:`Prendergast1997a`. 
     :code:`'Stimulus'` must be stored in :code:`grid.NodeData` and should be the 
-    stimulus value described by :cite:`Huiskes1997`:
+    stimulus value described by :cite:t:`Huiskes1997`:
 
     .. math::
         
@@ -417,8 +418,7 @@ def differentiate_prendergast(agent, grid):
 @numba.njit
 def differentiate_carter(agent, grid):
     r"""
-    Mechanobiological cell differentiation based on :cite:`Carter1998`, using 
-    threshold values from :cite:`Isaksson2006`, :cite:`Isaksson2006a`. 
+    Mechanobiological cell differentiation based on :cite:t:`Carter1998`. Theshold values are from :cite:t:`Isaksson2006`, :cite:t:`Isaksson2006a`. 
     :code:`'Hydrostatic Stress'` must be stored in :code:`grid.NodeData` and 
     :code:`'Principal Strain'` must be stored in :code:`grid.NodeVectorData`. 
     Hydrostatic Stress is expected in units of MPa and principal strains should not be given as percentages.
@@ -636,7 +636,7 @@ def produce_oriented(agent, grid):
     :code:`grid.parameters['Tissue Threshold']`, the cell will move to the new
     surface, as if the cell is creating tissue beneath it.
 
-    See also: ref:`Tissue Growth`
+    See also: :ref:`Tissue Growth`
 
     Parameters
     ----------
@@ -832,7 +832,7 @@ def update_scaffold_curvature(model):
     """
     Calculate curvatures on a scaffold surface.
 
-    See also: ref:`Tissue Growth`
+    See also: :ref:`Tissue Growth`
 
     Parameters
     ----------
@@ -1031,7 +1031,7 @@ def update_curvature(model):
     """
     Calculate curvatures on the tissue boundary and within the tissue.
 
-    See also: ref:`Tissue Growth`
+    See also: :ref:`Tissue Growth`
 
     Parameters
     ----------

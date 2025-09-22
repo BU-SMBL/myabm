@@ -1,6 +1,8 @@
 """
 The ortho submodule defines an agent based model for studying formation
-and differentiation of skeletal cells/tissues
+and differentiation of skeletal cells/tissues.
+
+
 
 Ortho Objects
 =============

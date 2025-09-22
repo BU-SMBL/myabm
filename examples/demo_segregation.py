@@ -142,17 +142,17 @@ model.animate('segregation2d.gif', view='xy', show_mesh=False)
 # -------------------
 # The model can easily be implemented on different meshes, in 2D or 3D.
 
-Mesh = mymesh.primitives.Torus([0,0,0], 1, 0.5, phi_resolution=40)
+Mesh = mymesh.primitives.Torus([0,0,0], 1, 0.5, phi_resolution=80, theta_resolution=80)
 
 model = Model(Mesh, agent_parameters={'B': 0.3, 'happy':0})
 model.agent_actions = (decide,)
 model.grid_actions = (relocate,)
 
-model.seed(200, state='0')
-model.seed(200, state='1')
-model.seed(200, state='2')
+model.seed(2000, state='0')
+model.seed(2000, state='1')
+model.seed(2000, state='2')
 
-model.iterate(20)
+model.iterate(10)
 
 model.animate('segregation3d.gif', show_mesh_edges=False, agent_kwargs={'render_points_as_spheres':True, 'point_size':8})
 
