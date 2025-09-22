@@ -42,6 +42,7 @@ dependencies = [
     "numba>=0.59.0",
     "pyvista>=0.45.2",
     "trame_vtk>=2.9.1",
+    "imageio>=2.37.0"
     ]
 
 
