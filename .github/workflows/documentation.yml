@@ -122,7 +122,8 @@ jobs:
           jupyter-sphinx \
           setuptools \
           sphinx-design \
-          sphinx-tabs 
+          sphinx-tabs \
+          plotly
         pip install mymesh[all]
         # Install vispy last
         pip install vispy
