@@ -1,0 +1,6 @@
+myabm.ortho.OrthoModel.seed
+===========================
+
+.. currentmodule:: myabm.ortho
+
+.. automethod:: OrthoModel.seed

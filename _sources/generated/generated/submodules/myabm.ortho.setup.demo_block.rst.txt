@@ -1,0 +1,6 @@
+myabm.ortho.setup.demo\_block
+=============================
+
+.. currentmodule:: myabm.ortho.setup
+
+.. autofunction:: demo_block

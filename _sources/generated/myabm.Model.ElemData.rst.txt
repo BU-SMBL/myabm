@@ -1,0 +1,6 @@
+myabm.Model.ElemData
+====================
+
+.. currentmodule:: myabm
+
+.. autoproperty:: Model.ElemData

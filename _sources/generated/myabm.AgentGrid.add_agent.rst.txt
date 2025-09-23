@@ -1,0 +1,6 @@
+myabm.AgentGrid.add\_agent
+==========================
+
+.. currentmodule:: myabm
+
+.. automethod:: AgentGrid.add_agent

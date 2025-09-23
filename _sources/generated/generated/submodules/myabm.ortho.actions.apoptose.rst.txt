@@ -1,0 +1,6 @@
+myabm.ortho.actions.apoptose
+============================
+
+.. currentmodule:: myabm.ortho.actions
+
+.. autofunction:: apoptose

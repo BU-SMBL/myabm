@@ -1,0 +1,6 @@
+myabm.Model.NodeData
+====================
+
+.. currentmodule:: myabm
+
+.. autoproperty:: Model.NodeData

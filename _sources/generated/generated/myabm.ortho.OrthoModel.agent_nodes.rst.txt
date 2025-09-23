@@ -1,0 +1,6 @@
+myabm.ortho.OrthoModel.agent\_nodes
+===================================
+
+.. currentmodule:: myabm.ortho
+
+.. autoproperty:: OrthoModel.agent_nodes

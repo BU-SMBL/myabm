@@ -1,0 +1,6 @@
+myabm.AgentGrid.change\_agent
+=============================
+
+.. currentmodule:: myabm
+
+.. automethod:: AgentGrid.change_agent

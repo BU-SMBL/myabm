@@ -1,0 +1,6 @@
+myabm.ortho.OrthoModel.agents
+=============================
+
+.. currentmodule:: myabm.ortho
+
+.. autoproperty:: OrthoModel.agents

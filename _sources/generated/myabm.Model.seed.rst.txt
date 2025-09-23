@@ -1,0 +1,6 @@
+myabm.Model.seed
+================
+
+.. currentmodule:: myabm
+
+.. automethod:: Model.seed

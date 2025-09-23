@@ -1,0 +1,6 @@
+myabm.Model.export\_history
+===========================
+
+.. currentmodule:: myabm
+
+.. automethod:: Model.export_history

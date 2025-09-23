@@ -1,0 +1,6 @@
+myabm.Model.animate
+===================
+
+.. currentmodule:: myabm
+
+.. automethod:: Model.animate

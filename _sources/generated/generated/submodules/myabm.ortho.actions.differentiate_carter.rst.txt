@@ -1,0 +1,6 @@
+myabm.ortho.actions.differentiate\_carter
+=========================================
+
+.. currentmodule:: myabm.ortho.actions
+
+.. autofunction:: differentiate_carter

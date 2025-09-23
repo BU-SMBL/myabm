@@ -1,0 +1,6 @@
+myabm.ortho.actions.proliferate
+===============================
+
+.. currentmodule:: myabm.ortho.actions
+
+.. autofunction:: proliferate

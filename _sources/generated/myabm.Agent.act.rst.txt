@@ -1,0 +1,6 @@
+myabm.Agent.act
+===============
+
+.. currentmodule:: myabm
+
+.. automethod:: Agent.act

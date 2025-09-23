@@ -1,0 +1,6 @@
+myabm.AgentGrid.remove\_agent
+=============================
+
+.. currentmodule:: myabm
+
+.. automethod:: AgentGrid.remove_agent

@@ -1,0 +1,6 @@
+myabm.ortho.actions.update\_mineral
+===================================
+
+.. currentmodule:: myabm.ortho.actions
+
+.. autofunction:: update_mineral

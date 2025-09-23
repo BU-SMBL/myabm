@@ -1,0 +1,6 @@
+myabm.Model.act
+===============
+
+.. currentmodule:: myabm
+
+.. automethod:: Model.act

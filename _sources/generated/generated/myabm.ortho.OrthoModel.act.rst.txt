@@ -1,0 +1,6 @@
+myabm.ortho.OrthoModel.act
+==========================
+
+.. currentmodule:: myabm.ortho
+
+.. automethod:: OrthoModel.act

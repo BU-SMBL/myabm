@@ -1,0 +1,6 @@
+myabm.ortho.OrthoModel.NElem
+============================
+
+.. currentmodule:: myabm.ortho
+
+.. autoproperty:: OrthoModel.NElem

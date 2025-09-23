@@ -1,0 +1,6 @@
+myabm.ortho.actions.migrate\_curvotaxis
+=======================================
+
+.. currentmodule:: myabm.ortho.actions
+
+.. autofunction:: migrate_curvotaxis

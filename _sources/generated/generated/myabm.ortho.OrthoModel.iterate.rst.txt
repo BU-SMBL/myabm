@@ -1,0 +1,6 @@
+myabm.ortho.OrthoModel.iterate
+==============================
+
+.. currentmodule:: myabm.ortho
+
+.. automethod:: OrthoModel.iterate

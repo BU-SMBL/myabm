@@ -1,0 +1,6 @@
+myabm.Model.plotter
+===================
+
+.. currentmodule:: myabm
+
+.. automethod:: Model.plotter

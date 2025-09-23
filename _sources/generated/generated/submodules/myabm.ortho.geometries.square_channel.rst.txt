@@ -1,0 +1,6 @@
+myabm.ortho.geometries.square\_channel
+======================================
+
+.. currentmodule:: myabm.ortho.geometries
+
+.. autofunction:: square_channel

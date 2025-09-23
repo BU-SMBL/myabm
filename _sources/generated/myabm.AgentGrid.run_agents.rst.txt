@@ -1,0 +1,6 @@
+myabm.AgentGrid.run\_agents
+===========================
+
+.. currentmodule:: myabm
+
+.. automethod:: AgentGrid.run_agents

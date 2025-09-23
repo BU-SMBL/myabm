@@ -1,0 +1,6 @@
+myabm.Model.default\_schedule
+=============================
+
+.. currentmodule:: myabm
+
+.. automethod:: Model.default_schedule

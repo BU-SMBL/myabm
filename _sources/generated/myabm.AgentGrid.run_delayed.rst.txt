@@ -1,0 +1,6 @@
+myabm.AgentGrid.run\_delayed
+============================
+
+.. currentmodule:: myabm
+
+.. automethod:: AgentGrid.run_delayed

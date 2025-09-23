@@ -1,0 +1,6 @@
+myabm.ortho.OrthoModel.NNode
+============================
+
+.. currentmodule:: myabm.ortho
+
+.. autoproperty:: OrthoModel.NNode

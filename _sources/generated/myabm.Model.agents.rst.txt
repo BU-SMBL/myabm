@@ -1,0 +1,6 @@
+myabm.Model.agents
+==================
+
+.. currentmodule:: myabm
+
+.. autoproperty:: Model.agents

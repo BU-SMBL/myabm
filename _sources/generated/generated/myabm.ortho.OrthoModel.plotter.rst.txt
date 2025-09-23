@@ -1,0 +1,6 @@
+myabm.ortho.OrthoModel.plotter
+==============================
+
+.. currentmodule:: myabm.ortho
+
+.. automethod:: OrthoModel.plotter

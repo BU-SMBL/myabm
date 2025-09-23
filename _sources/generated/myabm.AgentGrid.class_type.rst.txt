@@ -1,0 +1,6 @@
+myabm.AgentGrid.class\_type
+===========================
+
+.. currentmodule:: myabm
+
+.. autoattribute:: AgentGrid.class_type

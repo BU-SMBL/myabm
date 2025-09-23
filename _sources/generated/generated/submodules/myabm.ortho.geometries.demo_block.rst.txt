@@ -1,0 +1,6 @@
+myabm.ortho.geometries.demo\_block
+==================================
+
+.. currentmodule:: myabm.ortho.geometries
+
+.. autofunction:: demo_block

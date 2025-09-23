@@ -1,0 +1,6 @@
+myabm.Model.iterate
+===================
+
+.. currentmodule:: myabm
+
+.. automethod:: Model.iterate

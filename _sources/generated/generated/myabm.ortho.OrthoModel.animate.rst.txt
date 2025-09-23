@@ -1,0 +1,6 @@
+myabm.ortho.OrthoModel.animate
+==============================
+
+.. currentmodule:: myabm.ortho
+
+.. automethod:: OrthoModel.animate

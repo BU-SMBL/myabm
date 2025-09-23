@@ -1,0 +1,6 @@
+myabm.Model.NNode
+=================
+
+.. currentmodule:: myabm
+
+.. autoproperty:: Model.NNode

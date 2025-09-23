@@ -1,0 +1,6 @@
+myabm.Model.export\_mesh
+========================
+
+.. currentmodule:: myabm
+
+.. automethod:: Model.export_mesh

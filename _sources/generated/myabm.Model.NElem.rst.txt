@@ -1,0 +1,6 @@
+myabm.Model.NElem
+=================
+
+.. currentmodule:: myabm
+
+.. autoproperty:: Model.NElem

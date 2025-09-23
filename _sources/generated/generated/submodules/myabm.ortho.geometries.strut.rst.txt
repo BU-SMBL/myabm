@@ -1,0 +1,6 @@
+myabm.ortho.geometries.strut
+============================
+
+.. currentmodule:: myabm.ortho.geometries
+
+.. autofunction:: strut

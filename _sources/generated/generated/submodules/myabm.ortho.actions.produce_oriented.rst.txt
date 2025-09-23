@@ -1,0 +1,6 @@
+myabm.ortho.actions.produce\_oriented
+=====================================
+
+.. currentmodule:: myabm.ortho.actions
+
+.. autofunction:: produce_oriented

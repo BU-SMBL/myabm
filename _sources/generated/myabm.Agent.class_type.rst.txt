@@ -1,0 +1,6 @@
+myabm.Agent.class\_type
+=======================
+
+.. currentmodule:: myabm
+
+.. autoattribute:: Agent.class_type

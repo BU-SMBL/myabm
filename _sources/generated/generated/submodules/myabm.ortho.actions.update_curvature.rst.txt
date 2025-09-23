@@ -1,0 +1,6 @@
+myabm.ortho.actions.update\_curvature
+=====================================
+
+.. currentmodule:: myabm.ortho.actions
+
+.. autofunction:: update_curvature

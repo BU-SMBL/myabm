@@ -1,0 +1,6 @@
+myabm.ortho.setup.implicit\_scaffold
+====================================
+
+.. currentmodule:: myabm.ortho.setup
+
+.. autofunction:: implicit_scaffold

@@ -1,0 +1,1556 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>myabm &#8212; MyABM vdev Manual</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/thebelab.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/myabm.css?v=1e1bb860" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=3ce10a4d"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=4ea706d9"></script>
+    <script src="../_static/thebelab-helper.js"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/myabm';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="dev" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/myabm_logo.png" class="logo__image only-light" alt="MyABM vdev Manual - Home"/>
+    <img src="../_static/myabm_logo.png" class="logo__image only-dark pst-js-only" alt="MyABM vdev Manual - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples/index.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/BU-SMBL/Tim-Josephson" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples/index.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/BU-SMBL/Tim-Josephson" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">myabm</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for myabm</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># @author: toj</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. currentmodule:: myabm</span>
+
+<span class="sd">Classes</span>
+<span class="sd">=======</span>
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+
+<span class="sd">    Model</span>
+<span class="sd">    AgentGrid</span>
+<span class="sd">    Agent</span>
+
+<span class="sd">Submodules</span>
+<span class="sd">==========</span>
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: generated/</span>
+<span class="sd">    </span>
+<span class="sd">    ortho</span>
+<span class="sd">    actions</span>
+<span class="sd">    utils</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1">#%%</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span><span class="o">,</span><span class="w"> </span><span class="nn">copy</span><span class="o">,</span><span class="w"> </span><span class="nn">itertools</span><span class="o">,</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numba</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numba.experimental</span><span class="w"> </span><span class="kn">import</span> <span class="n">jitclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numba</span><span class="w"> </span><span class="kn">import</span> <span class="n">int32</span><span class="p">,</span> <span class="n">int64</span><span class="p">,</span> <span class="n">float32</span><span class="p">,</span> <span class="n">float64</span><span class="p">,</span> <span class="n">literal_unroll</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numba.typed</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numba.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">string</span><span class="p">,</span> <span class="n">DictType</span><span class="p">,</span> <span class="n">ListType</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">meshio</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyvista</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pv</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">mymesh</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">actions</span><span class="p">,</span> <span class="n">utils</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">numba</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">NumbaExperimentalFeatureWarning</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Agent">
+<a class="viewcode-back" href="../generated/myabm.Agent.html#myabm.Agent">[docs]</a>
+<span class="nd">@jitclass</span><span class="p">({</span>
+    <span class="s1">&#39;id&#39;</span> <span class="p">:</span> <span class="n">int64</span><span class="p">,</span>
+    <span class="s1">&#39;node&#39;</span> <span class="p">:</span> <span class="n">int64</span><span class="p">,</span>
+    <span class="s1">&#39;state&#39;</span> <span class="p">:</span> <span class="n">string</span><span class="p">,</span>
+    <span class="s1">&#39;age&#39;</span> <span class="p">:</span> <span class="n">float64</span><span class="p">,</span>
+    <span class="s1">&#39;parameters&#39;</span><span class="p">:</span> <span class="n">DictType</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">float64</span><span class="p">),</span>
+    <span class="s1">&#39;vector_parameters&#39;</span><span class="p">:</span> <span class="n">DictType</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">float64</span><span class="p">[:]),</span>
+<span class="p">})</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Agent</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generic agent class</span>
+<span class="sd">    &quot;&quot;&quot;</span>    
+    <span class="c1"># NOTE: Agent() methods cannot create new Agent() instances directly</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node</span> <span class="o">=</span> <span class="n">node</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">state</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">age</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">Dict</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">key_type</span><span class="o">=</span><span class="n">string</span><span class="p">,</span><span class="n">value_type</span><span class="o">=</span><span class="n">float64</span><span class="p">)</span>
+    
+        <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">parameters</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">vector_parameters</span> <span class="o">=</span> <span class="n">Dict</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">key_type</span><span class="o">=</span><span class="n">numba</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">string</span><span class="p">,</span> <span class="n">value_type</span><span class="o">=</span><span class="n">float64</span><span class="p">[:])</span>
+    
+<div class="viewcode-block" id="Agent.act">
+<a class="viewcode-back" href="../generated/myabm.Agent.act.html#myabm.Agent.act">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">act</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent_grid</span><span class="p">,</span> <span class="n">actions</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Perform a set of actions. Each agent action should take as input only</span>
+<span class="sd">        the agent and the AgentGrid</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        agent_grid : myabm.AgentGrid</span>
+<span class="sd">            AgentGrid  object that contains the agent</span>
+<span class="sd">        actions : tuple</span>
+<span class="sd">            Tuple of agent action functions. For a single action, it should</span>
+<span class="sd">            still be contained in a tuple (e.g. `(action_function,)`).</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="c1"># NOTE: Currently if migration happens, it will prevent apoptosis in the same step due to the way the agents are managed within the grid</span>
+        <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">literal_unroll</span><span class="p">(</span><span class="n">actions</span><span class="p">):</span>
+            <span class="n">action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent_grid</span><span class="p">)</span></div>
+</div>
+
+    
+
+<span class="nd">@jitclass</span><span class="p">({</span>
+    <span class="s1">&#39;action_id&#39;</span> <span class="p">:</span> <span class="n">int64</span><span class="p">,</span>
+    <span class="s1">&#39;agent_id&#39;</span> <span class="p">:</span> <span class="n">int64</span><span class="p">,</span>
+    <span class="s1">&#39;node&#39;</span> <span class="p">:</span> <span class="n">int64</span><span class="p">,</span>
+    <span class="s1">&#39;state&#39;</span> <span class="p">:</span> <span class="n">string</span><span class="p">,</span>
+    <span class="s1">&#39;parameters&#39;</span> <span class="p">:</span> <span class="n">DictType</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">float64</span><span class="p">),</span>
+<span class="p">})</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DelayedAgentAction</span><span class="p">():</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action_id</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">agent_id</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">node</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">action_id</span> <span class="o">=</span> <span class="n">action_id</span>
+        <span class="c1"># 0 : remove</span>
+        <span class="c1"># 1 : add</span>
+        <span class="c1"># 2 : move</span>
+        <span class="c1"># 3: change state</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">agent_id</span> <span class="o">=</span> <span class="n">agent_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node</span> <span class="o">=</span> <span class="n">node</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">state</span>
+        <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">Dict</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">key_type</span><span class="o">=</span><span class="n">string</span><span class="p">,</span><span class="n">value_type</span><span class="o">=</span><span class="n">float64</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">parameters</span>
+
+<span class="n">AgentValue</span> <span class="o">=</span> <span class="n">Agent</span><span class="p">()</span><span class="o">.</span><span class="n">_numba_type_</span>
+<span class="n">DelayedType</span> <span class="o">=</span> <span class="n">DelayedAgentAction</span><span class="p">()</span><span class="o">.</span><span class="n">_numba_type_</span>
+<div class="viewcode-block" id="AgentGrid">
+<a class="viewcode-back" href="../generated/myabm.AgentGrid.html#myabm.AgentGrid">[docs]</a>
+<span class="nd">@jitclass</span><span class="p">({</span>
+    <span class="s1">&#39;NNode&#39;</span> <span class="p">:</span> <span class="n">int64</span><span class="p">,</span>
+    <span class="s1">&#39;NElem&#39;</span> <span class="p">:</span> <span class="n">int64</span><span class="p">,</span>
+    <span class="s1">&#39;TimeStep&#39;</span> <span class="p">:</span> <span class="n">float64</span><span class="p">,</span>
+    <span class="s1">&#39;NodeConn&#39;</span> <span class="p">:</span> <span class="n">DictType</span><span class="p">(</span><span class="n">int64</span><span class="p">,</span> <span class="n">int64</span><span class="p">[:]),</span>
+    <span class="s1">&#39;Edges&#39;</span> <span class="p">:</span> <span class="n">int64</span><span class="p">[:,:],</span>
+    <span class="s1">&#39;EdgeElemConn&#39;</span> <span class="p">:</span> <span class="n">DictType</span><span class="p">(</span><span class="n">int64</span><span class="p">,</span> <span class="n">int64</span><span class="p">[:]),</span>
+    <span class="s1">&#39;NodeEdgeConn&#39;</span> <span class="p">:</span> <span class="n">DictType</span><span class="p">(</span><span class="n">int64</span><span class="p">,</span> <span class="n">int64</span><span class="p">[:]),</span>
+    <span class="s1">&#39;ElemConn&#39;</span> <span class="p">:</span> <span class="n">DictType</span><span class="p">(</span><span class="n">int64</span><span class="p">,</span> <span class="n">int64</span><span class="p">[:]),</span>
+    <span class="s1">&#39;NodeNeighbors&#39;</span> <span class="p">:</span> <span class="n">DictType</span><span class="p">(</span><span class="n">int64</span><span class="p">,</span> <span class="n">int64</span><span class="p">[:]),</span>
+    <span class="s1">&#39;NodeMooreNeighbors&#39;</span> <span class="p">:</span> <span class="n">DictType</span><span class="p">(</span><span class="n">int64</span><span class="p">,</span> <span class="n">int64</span><span class="p">[:]),</span>
+    <span class="s1">&#39;parameters&#39;</span> <span class="p">:</span> <span class="n">DictType</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">float64</span><span class="p">),</span>
+    <span class="s1">&#39;vector_parameters&#39;</span> <span class="p">:</span> <span class="n">DictType</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">float64</span><span class="p">[:]),</span>
+    <span class="s1">&#39;Agents&#39;</span> <span class="p">:</span> <span class="n">DictType</span><span class="p">(</span><span class="n">int64</span><span class="p">,</span> <span class="n">AgentValue</span><span class="p">),</span>
+    <span class="s1">&#39;NodeAgents&#39;</span> <span class="p">:</span> <span class="n">DictType</span><span class="p">(</span><span class="n">int64</span><span class="p">,</span> <span class="n">int64</span><span class="p">),</span>
+    <span class="s1">&#39;_next_id&#39;</span> <span class="p">:</span> <span class="n">int64</span><span class="p">,</span>
+    <span class="s1">&#39;ElemData&#39;</span> <span class="p">:</span> <span class="n">DictType</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">float64</span><span class="p">[:]),</span>
+    <span class="s1">&#39;NodeData&#39;</span> <span class="p">:</span> <span class="n">DictType</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">float64</span><span class="p">[:]),</span>
+    <span class="s1">&#39;ElemVectorData&#39;</span> <span class="p">:</span> <span class="n">DictType</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">float64</span><span class="p">[:,:]),</span>
+    <span class="s1">&#39;NodeVectorData&#39;</span> <span class="p">:</span> <span class="n">DictType</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">float64</span><span class="p">[:,:]),</span>
+    <span class="s1">&#39;queue&#39;</span> <span class="p">:</span> <span class="n">ListType</span><span class="p">(</span><span class="n">DelayedType</span><span class="p">),</span>
+<span class="p">})</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">AgentGrid</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    NNode : int</span>
+<span class="sd">        Number of nodes in the mesh</span>
+<span class="sd">    NElem : int</span>
+<span class="sd">        Number of elements in the mesh</span>
+<span class="sd">    TimeStep : float</span>
+<span class="sd">        Time step size for the model</span>
+<span class="sd">    NodeConn : dict</span>
+<span class="sd">        Dictionary containing nodes that define each element</span>
+<span class="sd">    Edges : np.ndarray(dtype=np.int64)</span>
+<span class="sd">        Node connectivity of edges</span>
+<span class="sd">    EdgeElemConn : numba.typed.Dict</span>
+<span class="sd">        Dictionary containing element IDs connected to an edge</span>
+<span class="sd">    NodeEdgeConn : numba.typed.Dict</span>
+<span class="sd">        Dictionary containing edge IDs connected to a node</span>
+<span class="sd">    ElemConn : numba.typed.Dict</span>
+<span class="sd">        Dictionary containing element IDs connected to a node</span>
+<span class="sd">    NodeNeighbors : numba.typed.Dict</span>
+<span class="sd">        Dictionary containing node ids connected to a node</span>
+<span class="sd">    NodeMooreNeighbors : numba.typed.Dict</span>
+<span class="sd">        Dictionary containing node ids in the Moore neighborhood of a node</span>
+<span class="sd">    parameters : numba.typed.Dict</span>
+<span class="sd">        Dictionary containing scalar model parameters for the agent grid, keyed </span>
+<span class="sd">        by strings.</span>
+<span class="sd">    parameters : numba.typed.Dict</span>
+<span class="sd">        Dictionary containing vector model parameters for the agent grid, keyed </span>
+<span class="sd">        by strings.</span>
+<span class="sd">    </span>
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Agents : numba.typed.Dict</span>
+<span class="sd">        Dictionary of agents keyed by agent ID</span>
+<span class="sd">    NodeAgents : numba.typed.Dict</span>
+<span class="sd">        Dictionary of agent ids keyed by node</span>
+<span class="sd">    ElemData : numba.typed.Dict</span>
+<span class="sd">        Dictionary containing scalar data associated with elements</span>
+<span class="sd">    NodeData : numba.typed.Dict</span>
+<span class="sd">        Dictionary containing scalar data associated with nodes</span>
+<span class="sd">    ElemVectorData : numba.typed.Dict</span>
+<span class="sd">        Dictionary containing vector data associated with elements</span>
+<span class="sd">    NodeVectorData : numba.typed.Dict</span>
+<span class="sd">        Dictionary containing vector data associated with nodes</span>
+
+<span class="sd">    </span>
+
+<span class="sd">    </span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">NNode</span><span class="p">,</span> <span class="n">NElem</span><span class="p">,</span> <span class="n">TimeStep</span><span class="p">,</span> <span class="n">NodeConn</span><span class="p">,</span> <span class="n">Edges</span><span class="p">,</span> <span class="n">EdgeElemConn</span><span class="p">,</span> <span class="n">NodeEdgeConn</span><span class="p">,</span> <span class="n">ElemConn</span><span class="p">,</span> <span class="n">NodeNeighbors</span><span class="p">,</span> <span class="n">NodeMooreNeighbors</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vector_parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">NNode</span> <span class="o">=</span> <span class="n">NNode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">NElem</span> <span class="o">=</span> <span class="n">NElem</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">TimeStep</span> <span class="o">=</span> <span class="n">TimeStep</span> 
+        
+        <span class="c1"># Mesh Connectivity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">NodeConn</span> <span class="o">=</span> <span class="n">NodeConn</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Edges</span> <span class="o">=</span> <span class="n">Edges</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">EdgeElemConn</span> <span class="o">=</span> <span class="n">EdgeElemConn</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">NodeEdgeConn</span> <span class="o">=</span> <span class="n">NodeEdgeConn</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ElemConn</span> <span class="o">=</span> <span class="n">ElemConn</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">NodeNeighbors</span> <span class="o">=</span> <span class="n">NodeNeighbors</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">NodeMooreNeighbors</span> <span class="o">=</span> <span class="n">NodeMooreNeighbors</span>
+        
+        <span class="c1"># Agents</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Agents</span> <span class="o">=</span> <span class="n">Dict</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">key_type</span><span class="o">=</span><span class="n">int64</span><span class="p">,</span> <span class="n">value_type</span><span class="o">=</span><span class="n">AgentValue</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">NodeAgents</span> <span class="o">=</span> <span class="n">Dict</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">key_type</span><span class="o">=</span><span class="n">int64</span><span class="p">,</span> <span class="n">value_type</span><span class="o">=</span><span class="n">int64</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_next_id</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">queue</span> <span class="o">=</span> <span class="n">List</span><span class="o">.</span><span class="n">empty_list</span><span class="p">(</span><span class="n">DelayedType</span><span class="p">)</span>
+
+        <span class="c1"># Data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ElemData</span> <span class="o">=</span> <span class="n">Dict</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">key_type</span><span class="o">=</span><span class="n">numba</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">string</span><span class="p">,</span> <span class="n">value_type</span><span class="o">=</span><span class="n">float64</span><span class="p">[:])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">NodeData</span> <span class="o">=</span> <span class="n">Dict</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">key_type</span><span class="o">=</span><span class="n">numba</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">string</span><span class="p">,</span> <span class="n">value_type</span><span class="o">=</span><span class="n">float64</span><span class="p">[:])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ElemVectorData</span> <span class="o">=</span> <span class="n">Dict</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">key_type</span><span class="o">=</span><span class="n">numba</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">string</span><span class="p">,</span> <span class="n">value_type</span><span class="o">=</span><span class="n">float64</span><span class="p">[:,:])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">NodeVectorData</span> <span class="o">=</span> <span class="n">Dict</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">key_type</span><span class="o">=</span><span class="n">numba</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">string</span><span class="p">,</span> <span class="n">value_type</span><span class="o">=</span><span class="n">float64</span><span class="p">[:,:])</span>
+
+        <span class="c1"># Parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">Dict</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">key_type</span><span class="o">=</span><span class="n">string</span><span class="p">,</span><span class="n">value_type</span><span class="o">=</span><span class="n">float64</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">parameters</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">vector_parameters</span> <span class="o">=</span> <span class="n">Dict</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">key_type</span><span class="o">=</span><span class="n">string</span><span class="p">,</span><span class="n">value_type</span><span class="o">=</span><span class="n">float64</span><span class="p">[:])</span>
+        <span class="k">if</span> <span class="n">vector_parameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">vector_parameters</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">vector_parameters</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">vector_parameters</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        
+<div class="viewcode-block" id="AgentGrid.seed">
+<a class="viewcode-back" href="../generated/myabm.AgentGrid.seed.html#myabm.AgentGrid.seed">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">seed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">nodes</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">),</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;random&#39;</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Seed the grid with agents</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        N : int</span>
+<span class="sd">            Number of agents to be added to the mesh</span>
+<span class="sd">        state : str, optional</span>
+<span class="sd">            Agent state applied to the created agents, by default &#39;none&#39;</span>
+<span class="sd">        nodes : np.ndarray(dtype=np.int64), optional</span>
+<span class="sd">            Array of node indices that agents can be seeded onto. If none are</span>
+<span class="sd">            provided, all nodes are considered seedable, by default </span>
+<span class="sd">            np.empty(0,dtype=np.int64). If N &gt;= len(nodes), all seedable nodes </span>
+<span class="sd">            will be seeded. If agents have already been seeded onto the mesh,</span>
+<span class="sd">            only unoccupied agents will be seeded.</span>
+<span class="sd">        method : str, optional</span>
+<span class="sd">            Seeding method, by default &#39;random&#39;.</span>
+
+<span class="sd">            Options:</span>
+
+<span class="sd">            - &#39;random&#39; : Agents are randomly seeded on the available nodes.</span>
+
+<span class="sd">        parameters : DictType[unicode_type,float64] or NoneType, optional</span>
+<span class="sd">            Numba Dict of agent parameters, by default None</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>   
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">nodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NNode</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NodeAgents</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># Mesh already has agents, don&#39;t overwrite</span>
+            <span class="n">occupied</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NodeAgents</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+            <span class="n">nodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">nodes</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">occupied</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">nodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">N</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">nodes</span><span class="p">):</span>
+            <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;random&#39;</span><span class="p">:</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+                <span class="n">node</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_agent</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Invalid seeding method.&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AgentGrid.remove_agent">
+<a class="viewcode-back" href="../generated/myabm.AgentGrid.remove_agent.html#myabm.AgentGrid.remove_agent">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">remove_agent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Remove an agent from the mesh at the specified node</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        agent : myabm.Agent</span>
+<span class="sd">            Agent to be removed</span>
+<span class="sd">        delay : bool</span>
+<span class="sd">            If True, this action won&#39;t occur immediately but will be added to </span>
+<span class="sd">            :attr:`myabm.AgentGrid.queue` to be processed later.</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="k">if</span> <span class="n">agent</span><span class="o">.</span><span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">NodeAgents</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">delay</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DelayedAgentAction</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">agent</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">Agents</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">NodeAgents</span><span class="p">[</span><span class="n">agent</span><span class="o">.</span><span class="n">node</span><span class="p">]]</span>
+                <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">NodeAgents</span><span class="p">[</span><span class="n">agent</span><span class="o">.</span><span class="n">node</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="AgentGrid.add_agent">
+<a class="viewcode-back" href="../generated/myabm.AgentGrid.add_agent.html#myabm.AgentGrid.add_agent">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_agent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add an agent to the mesh</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        node : int</span>
+<span class="sd">            Node ID to place the agent. </span>
+<span class="sd">        state : str, optional</span>
+<span class="sd">            Agent state descriptor, by default &#39;&#39;</span>
+<span class="sd">        parameters : DictType[unicode_type,float64] or NoneType, optional</span>
+<span class="sd">            Numba Dict of agent parameters, by default None</span>
+<span class="sd">        delay : bool</span>
+<span class="sd">            If True, this action won&#39;t occur immediately but will be added to </span>
+<span class="sd">            :attr:`myabm.AgentGrid.queue` to be processed later.</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="k">if</span> <span class="n">delay</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DelayedAgentAction</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">parameters</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">agent</span> <span class="o">=</span> <span class="n">Agent</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">next_id</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Agents</span><span class="p">[</span><span class="n">agent</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">agent</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">NodeAgents</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">id</span></div>
+
+
+<div class="viewcode-block" id="AgentGrid.move_agent">
+<a class="viewcode-back" href="../generated/myabm.AgentGrid.move_agent.html#myabm.AgentGrid.move_agent">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">move_agent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Move an agent from it&#39;s current location to a new node.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        agent : myabm.Agent</span>
+<span class="sd">            Agent to be moved</span>
+<span class="sd">        node : int</span>
+<span class="sd">            Node ID that the agent will be moved to</span>
+<span class="sd">        delay : bool</span>
+<span class="sd">            If True, this action won&#39;t occur immediately but will be added to </span>
+<span class="sd">            :attr:`myabm.AgentGrid.queue` to be processed later.</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="k">if</span> <span class="n">delay</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DelayedAgentAction</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">agent</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">agent</span><span class="o">.</span><span class="n">node</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">old_node</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">node</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">NodeAgents</span><span class="p">[</span><span class="n">old_node</span><span class="p">]</span>           <span class="c1"># Remove cell from old node</span>
+            <span class="n">agent</span><span class="o">.</span><span class="n">node</span> <span class="o">=</span> <span class="n">node</span>                       <span class="c1"># Update cell&#39;s node id</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">NodeAgents</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">id</span>        <span class="c1"># Move cell to new node</span></div>
+
+
+<div class="viewcode-block" id="AgentGrid.change_agent">
+<a class="viewcode-back" href="../generated/myabm.AgentGrid.change_agent.html#myabm.AgentGrid.change_agent">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">change_agent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Change the agent&#39;s state</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        agent : myabm.Agent</span>
+<span class="sd">            Agent that will have its state (:attr:`myabm.Agent.state`) changed</span>
+<span class="sd">        state : str</span>
+<span class="sd">            New agent state</span>
+<span class="sd">        delay : bool</span>
+<span class="sd">            If True, this action won&#39;t occur immediately but will be added to </span>
+<span class="sd">            :attr:`myabm.AgentGrid.queue` to be processed later.</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="k">if</span> <span class="n">delay</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DelayedAgentAction</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">agent</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">agent</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">state</span></div>
+
+
+<div class="viewcode-block" id="AgentGrid.run_agents">
+<a class="viewcode-back" href="../generated/myabm.AgentGrid.run_agents.html#myabm.AgentGrid.run_agents">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_agents</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">actions</span><span class="o">=</span><span class="p">()):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run a set of agent actions. Each agent action function should take</span>
+<span class="sd">        as its input only an AgentGrid object. Action functions must also be</span>
+<span class="sd">        numba.njit compiled functions.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        actions : tuple, optional</span>
+<span class="sd">            Tuple of agent actions to run, by default ()</span>
+<span class="sd">        &quot;&quot;&quot;</span> 
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span> 
+            <span class="n">keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Agents</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Agents</span><span class="p">:</span>
+                    <span class="c1"># TODO: Need to figure out why sometimes this isn&#39;t true - seems to be related to apoptosis, maybe specifically migration followed by apoptosis</span>
+                    <span class="n">agent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Agents</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+                    <span class="n">agent</span><span class="o">.</span><span class="n">age</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">TimeStep</span>
+                    <span class="n">agent</span><span class="o">.</span><span class="n">act</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">actions</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">run_delayed</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="AgentGrid.run_grid">
+<a class="viewcode-back" href="../generated/myabm.AgentGrid.run_grid.html#myabm.AgentGrid.run_grid">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">actions</span><span class="o">=</span><span class="p">()):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run a set of grid actions. Each grid action function should take</span>
+<span class="sd">        as its input only an AgentGrid object. Action functions must also be</span>
+<span class="sd">        numba.njit compiled functions.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        actions : tuple, optional</span>
+<span class="sd">            Tuple of grid actions to run, by default ()</span>
+<span class="sd">        &quot;&quot;&quot;</span>    
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>    
+            <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">literal_unroll</span><span class="p">(</span><span class="n">actions</span><span class="p">):</span>
+                <span class="n">action</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AgentGrid.run_delayed">
+<a class="viewcode-back" href="../generated/myabm.AgentGrid.run_delayed.html#myabm.AgentGrid.run_delayed">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_delayed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run all delayed actions stored in :attr:`myabm.AgentGrid.queue`. </span>
+<span class="sd">        Used when :code:`delay=True` is given to </span>
+<span class="sd">        :meth:`myabm.AgentGrid.remove_agent`, :meth:`myabm.AgentGrid.add_agent`,</span>
+<span class="sd">        :meth:`myabm.AgentGrid.move_agent`, or :meth:`myabm.AgentGrid.change_agent`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="k">for</span> <span class="n">delayed</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">delayed</span><span class="o">.</span><span class="n">action_id</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">remove_agent</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Agents</span><span class="p">[</span><span class="n">delayed</span><span class="o">.</span><span class="n">agent_id</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">delayed</span><span class="o">.</span><span class="n">action_id</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_agent</span><span class="p">(</span><span class="n">delayed</span><span class="o">.</span><span class="n">node</span><span class="p">,</span> <span class="n">delayed</span><span class="o">.</span><span class="n">state</span><span class="p">,</span> <span class="n">delayed</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">delayed</span><span class="o">.</span><span class="n">action_id</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">move_agent</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Agents</span><span class="p">[</span><span class="n">delayed</span><span class="o">.</span><span class="n">agent_id</span><span class="p">],</span> <span class="n">delayed</span><span class="o">.</span><span class="n">node</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">delayed</span><span class="o">.</span><span class="n">action_id</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">change_agent</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Agents</span><span class="p">[</span><span class="n">delayed</span><span class="o">.</span><span class="n">agent_id</span><span class="p">],</span> <span class="n">delayed</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">next_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_next_id</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_next_id</span></div>
+
+
+<div class="viewcode-block" id="Model">
+<a class="viewcode-back" href="../generated/myabm.Model.html#myabm.Model">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Model</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Model class, containing :class:`~mymesh.mesh`, :class:`AgentGrid`, and :class:`Agent`</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Mesh : mymesh.mesh</span>
+<span class="sd">        Mesh object defining the geometry of the model</span>
+<span class="sd">    agent_grid : myabm.AgentGrid</span>
+<span class="sd">        Agent grid of the model</span>
+<span class="sd">    model_parameters : dict</span>
+<span class="sd">        Dictionary containing model parameters</span>
+<span class="sd">    grid_parameters : dict</span>
+<span class="sd">        Parameters passed to the :class:`myabm.AgentGrid`. </span>
+<span class="sd">    agent_parameters : dict</span>
+<span class="sd">        Parameters passed to :class:`myabm.Agent` instances seeded in the model by</span>
+<span class="sd">        :meth:`myabm.Model.seed`. Note that this doesn&#39;t change the parameters </span>
+<span class="sd">        of agents already in the model.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Mesh</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">agent_grid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+        <span class="n">model_parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">grid_parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">agent_parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span> <span class="o">=</span> <span class="n">Mesh</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span>
+        <span class="k">if</span> <span class="n">agent_grid</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">Mesh</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">initialize_grid</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">agent_grid</span> <span class="o">=</span> <span class="n">agent_grid</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">agent_actions</span> <span class="o">=</span> <span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_actions</span> <span class="o">=</span> <span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model_actions</span> <span class="o">=</span> <span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">model_parameters</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_parameters</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">agent_parameters</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">model_parameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">model_parameters</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">model_parameters</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">model_parameters</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        
+        <span class="k">if</span> <span class="n">grid_parameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">grid_parameters</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">grid_parameters</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid_parameters</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">agent_parameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">agent_parameters</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">agent_parameters</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">agent_parameters</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">dict_to_Dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid_parameters</span><span class="p">,</span> <span class="n">numba</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">string</span><span class="p">,</span> <span class="n">numba</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;Agent Nodes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;Agent States&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;ElemData&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;NodeData&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+<div class="viewcode-block" id="Model.initialize_grid">
+<a class="viewcode-back" href="../generated/myabm.Model.initialize_grid.html#myabm.Model.initialize_grid">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">initialize_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the :class:`myabm.AgentGrid` from the mesh</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="bp">self</span><span class="o">.</span><span class="n">agent_grid</span> <span class="o">=</span> <span class="n">initialize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Model.seed">
+<a class="viewcode-back" href="../generated/myabm.Model.seed.html#myabm.Model.seed">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">seed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">nodes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;random&#39;</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Seed the grid with agents. </span>
+<span class="sd">        This passes through arguments to :func:`AgentGrid.seed`, but is more </span>
+<span class="sd">        flexible with typing.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        N : int, NoneType</span>
+<span class="sd">            Number of agents to be added to the mesh. If not provided, all</span>
+<span class="sd">            nodes specified by the `nodes` input will be seeded. If neither</span>
+<span class="sd">            `N` nor `nodes` are defined, all nodes will be seeded.</span>
+<span class="sd">        state : str, optional</span>
+<span class="sd">            Agent state applied to the created agents, by default &#39;none&#39;</span>
+<span class="sd">        nodes : array_like, NoneType, optional</span>
+<span class="sd">            Array of node indices that agents can be seeded onto. If none are</span>
+<span class="sd">            provided, all nodes are considered seedable, by default None. </span>
+<span class="sd">            If N &gt;= len(nodes), all seedable nodes  will be seeded. </span>
+<span class="sd">            If agents have already been seeded onto the mesh, only unoccupied </span>
+<span class="sd">            agents will be seeded. If N is not provided, all `nodes` will be </span>
+<span class="sd">            seeded.</span>
+<span class="sd">        method : str, optional</span>
+<span class="sd">            Seeding method, by default &#39;random&#39;.</span>
+
+<span class="sd">            Options:</span>
+
+<span class="sd">            - &#39;random&#39; : Agents are randomly seeded on the available nodes.</span>
+
+<span class="sd">        parameters : DictType[unicode_type,float64] or NoneType, optional</span>
+<span class="sd">            Numba Dict of agent parameters, by default None</span>
+<span class="sd">            self.agent_parameters will be applied unless overridden by </span>
+<span class="sd">            a value in the `parameters` input</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="k">if</span> <span class="n">nodes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">nodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">NNode</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)):</span>
+            <span class="n">nodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+            
+        <span class="k">if</span> <span class="n">N</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span>
+
+        
+        <span class="c1"># TODO: convert dict to numba Dict</span>
+        <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">parameters</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_parameters</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">parameters</span><span class="p">:</span>
+                <span class="n">parameters</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_parameters</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+        <span class="n">parameters</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">dict_to_Dict</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="n">numba</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">string</span><span class="p">,</span> <span class="n">numba</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="Model.seed_interactive">
+<a class="viewcode-back" href="../generated/myabm.Model.seed_interactive.html#myabm.Model.seed_interactive">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">seed_interactive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">plotter_kwargs</span><span class="p">):</span>
+        
+        <span class="n">point_actors</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="n">plotter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plotter</span><span class="p">(</span><span class="o">**</span><span class="n">plotter_kwargs</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">NodeData</span><span class="p">[</span><span class="s1">&#39;picked&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NNode</span><span class="p">)</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">callback</span><span class="p">(</span><span class="n">point</span><span class="p">):</span> 
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">node</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">NodeCoords</span><span class="p">,</span><span class="n">point</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">point_actors</span><span class="p">:</span>
+                    <span class="c1"># remove from plot</span>
+                    <span class="n">plotter</span><span class="o">.</span><span class="n">remove_actor</span><span class="p">(</span><span class="n">point_actors</span><span class="p">[</span><span class="n">node</span><span class="p">])</span>
+                    <span class="c1"># remove from agent_grid</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">remove_agent</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">Agents</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">NodeAgents</span><span class="p">[</span><span class="n">node</span><span class="p">]])</span>
+                    <span class="c1"># remove from dict</span>
+                    <span class="k">del</span> <span class="n">point_actors</span><span class="p">[</span><span class="n">node</span><span class="p">]</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># add agent</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">add_agent</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+                    <span class="c1"># add to plot</span>
+                    <span class="k">if</span> <span class="s1">&#39;agent_kwargs&#39;</span> <span class="ow">in</span> <span class="n">plotter_kwargs</span><span class="p">:</span>
+                        <span class="n">point_actors</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="n">plotter</span><span class="o">.</span><span class="n">add_points</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">point</span><span class="p">]),</span> <span class="o">**</span><span class="n">plotter_kwargs</span><span class="p">[</span><span class="s1">&#39;agent_kwargs&#39;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">point_actors</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="n">plotter</span><span class="o">.</span><span class="n">add_points</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">point</span><span class="p">]),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Error in seed_interactive.&#39;</span><span class="p">)</span>
+
+        <span class="n">plotter</span><span class="o">.</span><span class="n">enable_point_picking</span><span class="p">(</span><span class="n">callback</span> <span class="o">=</span> <span class="n">callback</span><span class="p">,</span> <span class="n">show_message</span><span class="o">=</span><span class="s1">&#39;    Right click a point to add an agent</span><span class="se">\n</span><span class="s1">    Right click the point again to remove it&#39;</span><span class="p">)</span>
+        <span class="n">plotter</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+    
+<div class="viewcode-block" id="Model.default_schedule">
+<a class="viewcode-back" href="../generated/myabm.Model.default_schedule.html#myabm.Model.default_schedule">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">default_schedule</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Default scheduler that performs agent actions, grid actions, and model</span>
+<span class="sd">        actions. Actions must be defined in :attr:`myabm.Model.agent_actions`, </span>
+<span class="sd">        :attr:`myabm.Model.grid_actions`, and :attr:`myabm.Model.model_actions`</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        self : myabm.Model</span>
+<span class="sd">            Model to perform the schedule on</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">run_agents</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_actions</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">run_grid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid_actions</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_actions</span><span class="p">:</span>
+            <span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># update history</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;Agent Nodes&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_nodes</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;Agent States&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_states</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;ElemData&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ElemData</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;NodeData&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NodeData</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">TimeStep</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Model.act">
+<a class="viewcode-back" href="../generated/myabm.Model.act.html#myabm.Model.act">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">act</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">schedule</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Execute a :ref:`model action &lt;Model Action Template&gt;` action or a </span>
+<span class="sd">        :ref:`schedule &lt;Schedule Templates&gt;`</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        schedule : callable, optional</span>
+<span class="sd">            A function directing execution of model actions, by default </span>
+<span class="sd">            :meth:`myabm.Model.default_schedule`. A single model action </span>
+<span class="sd">            can also be provided.</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="k">if</span> <span class="n">schedule</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">default_schedule</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">schedule</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Model.iterate">
+<a class="viewcode-back" href="../generated/myabm.Model.iterate.html#myabm.Model.iterate">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">iterate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">schedule</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Repeatedly run a schedule for a specified number of steps</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        n : int</span>
+<span class="sd">            Number of iterations</span>
+<span class="sd">        schedule : callable, optional</span>
+<span class="sd">            A function directing execution of model actions, by default </span>
+<span class="sd">            :meth:`myabm.Model.default_schedule`. A single model action </span>
+<span class="sd">            can also be provided.</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="c1"># Set initial history</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;Agent Nodes&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_nodes</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;Agent States&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_states</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;ElemData&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ElemData</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;NodeData&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NodeData</span><span class="p">))</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">TimeStep</span><span class="p">)</span>
+        <span class="c1"># Iterate</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">act</span><span class="p">(</span><span class="n">schedule</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Model.export_history">
+<a class="viewcode-back" href="../generated/myabm.Model.export_history.html#myabm.Model.export_history">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">export_history</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">agent_lookup</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">noagent_value</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Export model history to an XDMF file.</span>
+<span class="sd">        XDMF files can be visualized in ParaView.</span>
+<span class="sd">        The exported data will contain all node and element data, as well</span>
+<span class="sd">        as node data field called &#39;Agent States&#39; that numerically labels agent </span>
+<span class="sd">        states. </span>
+<span class="sd">        By default, numeric labels will be arbitrarily assigned to each</span>
+<span class="sd">        unique state that occurs over the course of the history. Alternatively,</span>
+<span class="sd">        an `agent_lookup` dict can be provided with keys indicating agent</span>
+<span class="sd">        states and values assigning numbers to each state, for example:</span>
+<span class="sd">        `agent_lookup = {&#39;state 1&#39;: 1, &#39;state 2&#39;: 2}`. By default, a value of</span>
+<span class="sd">        -1 will be assigned to nodes with no agents. This can be changed by </span>
+<span class="sd">        setting `noagent_value`.</span>
+
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename : str</span>
+<span class="sd">            Filename for the exported file</span>
+<span class="sd">        time : array_like, NoneType, optional</span>
+<span class="sd">            Array of time steps that correspond to the model history, by default </span>
+<span class="sd">            None. If not provided,</span>
+<span class="sd">            time = np.arange(len(self.history[&#39;ElemData&#39;]))*self.agent_grid.TimeStep</span>
+<span class="sd">        agent_lookup : dict, optional</span>
+<span class="sd">            Dictionary to map agent states to numeric values, by default None.</span>
+<span class="sd">            If none is provided, one will be created, but it may not be possible</span>
+<span class="sd">            to determine which state is assigned which value.</span>
+<span class="sd">            Example: `agent_lookup = {&#39;state 1&#39;: 1, &#39;state 2&#39;: 2}`</span>
+<span class="sd">        noagent_value : int, float, optional</span>
+<span class="sd">            Value to assign to nodes that don&#39;t contain an agent, by default -1.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">mymesh2meshio</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">agent_lookup</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Create a lookup table to map agent states to numeric</span>
+            <span class="n">agent_lookup</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+            <span class="n">states</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">agent_states</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;Agent States&#39;</span><span class="p">]:</span>
+                <span class="n">states</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">agent_states</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">state</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">states</span><span class="p">):</span>
+                <span class="n">agent_lookup</span><span class="p">[</span><span class="n">state</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+
+        <span class="k">if</span> <span class="n">time</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">dt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">TimeStep</span>
+            <span class="n">time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span>
+
+        <span class="k">with</span> <span class="n">meshio</span><span class="o">.</span><span class="n">xdmf</span><span class="o">.</span><span class="n">TimeSeriesWriter</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">writer</span><span class="p">:</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">write_points_cells</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">points</span><span class="p">,</span> <span class="n">M</span><span class="o">.</span><span class="n">cells</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">t</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">time</span><span class="p">):</span>
+                <span class="n">m</span><span class="o">.</span><span class="n">ElemData</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;ElemData&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
+                <span class="n">m</span><span class="o">.</span><span class="n">NodeData</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;NodeData&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
+
+                <span class="c1"># Add agent state info into node data</span>
+                <span class="n">m</span><span class="o">.</span><span class="n">NodeData</span><span class="p">[</span><span class="s1">&#39;Agent State&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">NNode</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;Agent Nodes&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">m</span><span class="o">.</span><span class="n">NodeData</span><span class="p">[</span><span class="s1">&#39;Agent State&#39;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;Agent Nodes&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span><span class="n">agent_lookup</span><span class="p">[</span><span class="n">state</span><span class="p">]</span> <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;Agent States&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]]</span>
+                <span class="n">meshio_mesh</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">mymesh2meshio</span><span class="p">()</span>
+                <span class="n">writer</span><span class="o">.</span><span class="n">write_data</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">point_data</span><span class="o">=</span><span class="n">meshio_mesh</span><span class="o">.</span><span class="n">point_data</span><span class="p">,</span> <span class="n">cell_data</span><span class="o">=</span><span class="n">meshio_mesh</span><span class="o">.</span><span class="n">cell_data</span><span class="p">)</span></div>
+
+            
+<div class="viewcode-block" id="Model.export_mesh">
+<a class="viewcode-back" href="../generated/myabm.Model.export_mesh.html#myabm.Model.export_mesh">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">export_mesh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Export the mesh with NodeData and ElemData at the current state.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename : str</span>
+<span class="sd">            File name/path to write the mesh file to. Any mesh file types </span>
+<span class="sd">            supported by `meshio &lt;https://github.com/nschloe/meshio&gt;`_ are </span>
+<span class="sd">            allowed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ElemData</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ElemData</span><span class="p">[</span><span class="n">key</span><span class="p">])</span> <span class="o">==</span> <span class="n">m</span><span class="o">.</span><span class="n">NElem</span><span class="p">:</span>
+                <span class="n">m</span><span class="o">.</span><span class="n">ElemData</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ElemData</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">NodeData</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NodeData</span><span class="p">[</span><span class="n">key</span><span class="p">])</span> <span class="o">==</span> <span class="n">m</span><span class="o">.</span><span class="n">NNode</span><span class="p">:</span>
+                <span class="n">m</span><span class="o">.</span><span class="n">NodeData</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">NodeData</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>    
+
+        <span class="n">m</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="Model.animate">
+<a class="viewcode-back" href="../generated/myabm.Model.animate.html#myabm.Model.animate">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">animate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">timestep</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">view</span><span class="o">=</span><span class="s1">&#39;isometric&#39;</span><span class="p">,</span> <span class="n">show_mesh</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show_mesh_edges</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">mesh_kwargs</span><span class="o">=</span><span class="p">{},</span> <span class="n">agent_kwargs</span><span class="o">=</span><span class="p">{},</span> <span class="n">state_color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show_timer</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create an animated gif of the model.</span>
+<span class="sd">        Model should have already been run with agent history stored in </span>
+<span class="sd">        model.history[&#39;Agent Nodes&#39;] and model.history[&#39;Agent States&#39;].</span>
+
+<span class="sd">        .. note::</span>
+
+<span class="sd">            While this method provides a reasonable amount of flexibility,</span>
+<span class="sd">            some models may require custom visualization. This method uses</span>
+<span class="sd">            pyvista to visualize the model; the source of this method can</span>
+<span class="sd">            be used as a starting point for custom visualization methods.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename : str</span>
+<span class="sd">            Name of the file to be written. If the name does not contain a </span>
+<span class="sd">            .gif extension, one will be added.</span>
+<span class="sd">        fps : int</span>
+<span class="sd">            Frames per second for the animation</span>
+<span class="sd">        timestep : float, NoneType</span>
+<span class="sd">            Time increment at which frames will be rendered in the animation.</span>
+<span class="sd">            This must be a value that lines up with the time data in </span>
+<span class="sd">            :code:`model.history[&#39;Time&#39;]`. Frames will be rendered if </span>
+<span class="sd">            :code:`np.isclose(model.history[&#39;Time&#39;] % timestep, 0)`.</span>
+<span class="sd">        view : str, NoneType, array_like, optional</span>
+<span class="sd">            Specify how to view the model, by default isometric.</span>
+<span class="sd">            If given as a string, options are:</span>
+
+<span class="sd">                - &#39;isometric&#39;</span>
+<span class="sd">                - &#39;xy&#39;</span>
+<span class="sd">                - &#39;xz&#39;</span>
+<span class="sd">                - &#39;yx&#39;</span>
+<span class="sd">                - &#39;yz&#39;</span>
+<span class="sd">                - &#39;zx&#39;</span>
+<span class="sd">                - &#39;zy&#39;</span>
+
+<span class="sd">            If given as an three element list, tuple, or np.ndarray, this</span>
+<span class="sd">            will be passed to :func:`pyvista.Plotter.view_vector`</span>
+
+<span class="sd">        show_mesh : bool, optional</span>
+<span class="sd">            Option to display the model&#39;s mesh, by default True</span>
+<span class="sd">        show_mesh_edges : bool, optional</span>
+<span class="sd">            Option to display the model mesh&#39;s edges, by default True</span>
+<span class="sd">        mesh_kwargs : dict, optional</span>
+<span class="sd">            Optional keyword arguments passed to :func:`pyvista.Plotter.add_mesh`</span>
+<span class="sd">            when plotting the mesh, by default {}.</span>
+<span class="sd">        agent_kwargs : dict, optional</span>
+<span class="sd">            Optional keyword arguments passed to :func:`pyvista.Plotter.add_points` </span>
+<span class="sd">            when plotting the agents, by default {}.</span>
+<span class="sd">        state_color : dict, NoneType, optional</span>
+<span class="sd">            Dictionary to map agent states to colors, by default None.</span>
+<span class="sd">            If None, default colors will be assigned - only 6 colors are in</span>
+<span class="sd">            the default color scheme, so if there are more than 6 agent states,</span>
+<span class="sd">            colors will be repeated. To hide a particular state, assign it </span>
+<span class="sd">            `None`.</span>
+
+<span class="sd">            Example:</span>
+<span class="sd">                :code:`state_color = {&#39;state 1&#39; : &#39;blue&#39;, &#39;state 2&#39; : &#39;red&#39;}`</span>
+<span class="sd">        show_timer : bool</span>
+<span class="sd">            If True, attach a timer to display the current model time in each </span>
+<span class="sd">            frame, by default True.</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+
+        <span class="c1"># Set default color mapping</span>
+        <span class="k">if</span> <span class="n">state_color</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">default_colors</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s1">&#39;#5e81ac&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;#bf616a&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;#ebcb8b&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;#a3be8c&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;#b48ead&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;#d08770&#39;</span><span class="p">,</span>
+            <span class="p">]</span>
+            <span class="n">states</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">agent_states</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;Agent States&#39;</span><span class="p">]:</span>
+                <span class="n">states</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">agent_states</span><span class="p">)</span>
+            <span class="n">state_color</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">state</span><span class="p">,</span> <span class="n">color</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">states</span><span class="p">,</span> <span class="n">itertools</span><span class="o">.</span><span class="n">cycle</span><span class="p">(</span><span class="n">default_colors</span><span class="p">)):</span>
+                    <span class="n">state_color</span><span class="p">[</span><span class="n">state</span><span class="p">]</span> <span class="o">=</span> <span class="n">color</span>
+
+        <span class="c1"># Create plotter</span>
+        <span class="n">plotter</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">Plotter</span><span class="p">(</span><span class="n">notebook</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">off_screen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">plotter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plotter</span><span class="p">(</span><span class="n">frame</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">plotter</span><span class="o">=</span><span class="n">plotter</span><span class="p">,</span> <span class="n">view</span><span class="o">=</span><span class="n">view</span><span class="p">,</span> <span class="n">show_mesh</span><span class="o">=</span><span class="n">show_mesh</span><span class="p">,</span> <span class="n">show_mesh_edges</span><span class="o">=</span><span class="n">show_mesh_edges</span><span class="p">,</span> <span class="n">mesh_kwargs</span><span class="o">=</span><span class="n">mesh_kwargs</span><span class="p">,</span> <span class="n">agent_kwargs</span><span class="o">=</span><span class="n">agent_kwargs</span><span class="p">,</span> <span class="n">state_color</span><span class="o">=</span><span class="n">state_color</span><span class="p">,</span> <span class="n">show_timer</span><span class="o">=</span><span class="n">show_timer</span><span class="p">)</span>
+        <span class="n">camera</span> <span class="o">=</span> <span class="n">plotter</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">filename</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;.gif&#39;</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="c1"># Open gif</span>
+            <span class="n">plotter</span><span class="o">.</span><span class="n">open_gif</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="n">fps</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">plotter</span><span class="o">.</span><span class="n">open_movie</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">framerate</span><span class="o">=</span><span class="n">fps</span><span class="p">)</span>
+        
+        <span class="c1"># Iterate through history</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">t</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]):</span>
+            <span class="k">if</span> <span class="n">timestep</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">t</span> <span class="o">%</span> <span class="n">timestep</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
+                    <span class="k">continue</span>
+            
+            <span class="k">for</span> <span class="n">actor</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">plotter</span><span class="o">.</span><span class="n">actors</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                <span class="n">plotter</span><span class="o">.</span><span class="n">remove_actor</span><span class="p">(</span><span class="n">actor</span><span class="p">,</span> <span class="n">reset_camera</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+            <span class="n">plotter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plotter</span><span class="p">(</span><span class="n">frame</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">plotter</span><span class="o">=</span><span class="n">plotter</span><span class="p">,</span> <span class="n">view</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show_mesh</span><span class="o">=</span><span class="n">show_mesh</span><span class="p">,</span> <span class="n">show_mesh_edges</span><span class="o">=</span><span class="n">show_mesh_edges</span><span class="p">,</span> <span class="n">mesh_kwargs</span><span class="o">=</span><span class="n">mesh_kwargs</span><span class="p">,</span> <span class="n">agent_kwargs</span><span class="o">=</span><span class="n">agent_kwargs</span><span class="p">,</span> <span class="n">state_color</span><span class="o">=</span><span class="n">state_color</span><span class="p">,</span> <span class="n">show_timer</span><span class="o">=</span><span class="n">show_timer</span><span class="p">,</span> <span class="n">reset_camera</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="c1"># plotter.camera = camera</span>
+            <span class="n">plotter</span><span class="o">.</span><span class="n">write_frame</span><span class="p">()</span>
+        <span class="n">plotter</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Model.plotter">
+<a class="viewcode-back" href="../generated/myabm.Model.plotter.html#myabm.Model.plotter">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">plotter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">view</span><span class="o">=</span><span class="s1">&#39;isometric&#39;</span><span class="p">,</span> <span class="n">show_mesh</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show_mesh_edges</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">mesh_kwargs</span><span class="o">=</span><span class="p">{},</span> <span class="n">agent_kwargs</span><span class="o">=</span><span class="p">{},</span> <span class="n">state_color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show_timer</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plotter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reset_camera</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="n">plotter</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">plotter</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">Plotter</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">frame</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">agent_states</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_states</span> 
+            <span class="n">agent_nodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_nodes</span>       
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">agent_states</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;Agent States&#39;</span><span class="p">][</span><span class="n">frame</span><span class="p">]</span>
+            <span class="n">agent_nodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;Agent Nodes&#39;</span><span class="p">][</span><span class="n">frame</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">state_color</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">default_colors</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s1">&#39;#5e81ac&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;#bf616a&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;#ebcb8b&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;#a3be8c&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;#b48ead&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;#d08770&#39;</span><span class="p">,</span>
+            <span class="p">]</span>
+            <span class="n">states</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">agent_states</span><span class="p">:</span>
+                <span class="n">states</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">state</span><span class="p">))</span>
+            <span class="n">state_color</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">state</span><span class="p">,</span> <span class="n">color</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">states</span><span class="p">,</span> <span class="n">itertools</span><span class="o">.</span><span class="n">cycle</span><span class="p">(</span><span class="n">default_colors</span><span class="p">)):</span>
+                    <span class="n">state_color</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">state</span><span class="p">)]</span> <span class="o">=</span> <span class="n">color</span>
+
+        
+        <span class="n">mesh_actor</span> <span class="o">=</span> <span class="n">plotter</span><span class="o">.</span><span class="n">add_mesh</span><span class="p">(</span><span class="n">pv</span><span class="o">.</span><span class="n">wrap</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">mymesh2meshio</span><span class="p">()),</span> <span class="n">show_edges</span><span class="o">=</span><span class="n">show_mesh_edges</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">mesh_kwargs</span><span class="p">,</span><span class="n">reset_camera</span><span class="o">=</span><span class="n">reset_camera</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">show_mesh</span><span class="p">:</span>
+            <span class="n">plotter</span><span class="o">.</span><span class="n">remove_actor</span><span class="p">(</span><span class="n">mesh_actor</span><span class="p">,</span> <span class="n">reset_camera</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># Add agents</span>
+        <span class="n">point_actors</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">agent_states</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">state_color</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">state</span><span class="p">)]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">nodes</span> <span class="o">=</span> <span class="n">agent_nodes</span><span class="p">[</span><span class="n">agent_states</span> <span class="o">==</span> <span class="n">state</span><span class="p">]</span>
+                <span class="n">point_actors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">plotter</span><span class="o">.</span><span class="n">add_points</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">NodeCoords</span><span class="p">[</span><span class="n">nodes</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">state_color</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">state</span><span class="p">)],</span> <span class="o">**</span><span class="n">agent_kwargs</span><span class="p">,</span> <span class="n">reset_camera</span><span class="o">=</span><span class="n">reset_camera</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">show_timer</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s1">&#39;Time&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">][</span><span class="n">frame</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">time</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">text_actor</span> <span class="o">=</span> <span class="n">plotter</span><span class="o">.</span><span class="n">add_text</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Time = </span><span class="si">{</span><span class="n">time</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s1">&#39;upper_edge&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Set view</span>
+        <span class="k">if</span> <span class="n">view</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">view</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">view</span> <span class="o">==</span> <span class="s1">&#39;xy&#39;</span><span class="p">:</span>
+                    <span class="n">plotter</span><span class="o">.</span><span class="n">view_xy</span><span class="p">()</span>
+                <span class="k">elif</span> <span class="n">view</span> <span class="o">==</span> <span class="s1">&#39;xz&#39;</span><span class="p">:</span>
+                    <span class="n">plotter</span><span class="o">.</span><span class="n">view_xz</span><span class="p">()</span>
+                <span class="k">elif</span> <span class="n">view</span> <span class="o">==</span> <span class="s1">&#39;yx&#39;</span><span class="p">:</span>
+                    <span class="n">plotter</span><span class="o">.</span><span class="n">view_yx</span><span class="p">()</span>
+                <span class="k">elif</span> <span class="n">view</span> <span class="o">==</span> <span class="s1">&#39;yz&#39;</span><span class="p">:</span>
+                    <span class="n">plotter</span><span class="o">.</span><span class="n">view_yz</span><span class="p">()</span>
+                <span class="k">elif</span> <span class="n">view</span> <span class="o">==</span> <span class="s1">&#39;zx&#39;</span><span class="p">:</span>
+                    <span class="n">plotter</span><span class="o">.</span><span class="n">view_zx</span><span class="p">()</span>
+                <span class="k">elif</span> <span class="n">view</span> <span class="o">==</span> <span class="s1">&#39;zy&#39;</span><span class="p">:</span>
+                    <span class="n">plotter</span><span class="o">.</span><span class="n">view_zy</span><span class="p">()</span>
+                <span class="k">elif</span> <span class="n">view</span> <span class="o">==</span> <span class="s1">&#39;isometric&#39;</span> <span class="ow">or</span> <span class="n">view</span> <span class="o">==</span> <span class="s1">&#39;iso&#39;</span><span class="p">:</span>
+                    <span class="n">plotter</span><span class="o">.</span><span class="n">view_isometric</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">view</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)):</span>
+                <span class="n">plotter</span><span class="o">.</span><span class="n">view_vector</span><span class="p">(</span><span class="n">view</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Invalid view option&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">plotter</span></div>
+
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">NNode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Number of nodes in the mesh.</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">NNode</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">NElem</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Number of elements in the mesh.</span>
+<span class="sd">        &quot;&quot;&quot;</span>  
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">NElem</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">agents</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a list of all agents currently in the :class:`myabm.AgentGrid`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        agent_list : list</span>
+<span class="sd">            A list of each agent in the agent_grid.</span>
+<span class="sd">            </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">agent_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">Agents</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+        <span class="k">return</span> <span class="n">agent_list</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">agent_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a list of all nodes that agents are occupying.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        nodes : np.ndarray</span>
+<span class="sd">            Array of node IDs </span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="n">nodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">agent</span><span class="o">.</span><span class="n">node</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">nodes</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">agent_states</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a list of all nodes states.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        states : list</span>
+<span class="sd">            list of agent states</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="n">states</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">agent</span><span class="o">.</span><span class="n">state</span> <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">states</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ElemData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a read-only dictionary of the element data.</span>
+<span class="sd">        This pulls data from the agent_grid and merges `agent_grid.ElemData`</span>
+<span class="sd">        and `agent_grid.ElemVectorData`</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        data : dict</span>
+<span class="sd">            dictionary of element data</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">ElemData</span><span class="p">)</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">ElemVectorData</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">data</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">NodeData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a read-only dictionary of the node data.</span>
+<span class="sd">        This pulls data from the agent_grid and merges `agent_grid.NodeData`</span>
+<span class="sd">        and `agent_grid.NodeVectorData`</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        data : dict</span>
+<span class="sd">            dictionary of element data</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">NodeData</span><span class="p">)</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">NodeVectorData</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">data</span></div>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">initialize</span><span class="p">(</span><span class="n">Mesh</span><span class="p">,</span> <span class="n">TimeStep</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate an AgentGrid from a mesh</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Mesh : mymesh.mesh</span>
+<span class="sd">        Mesh object the defines the underlying structure and connectivity</span>
+<span class="sd">        of the agent mesh</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    agent_grid : myabm.AgentGrid</span>
+<span class="sd">        AgentGrid object initialized from the mesh</span>
+<span class="sd">    &quot;&quot;&quot;</span>    
+    <span class="c1"># NodeEdgeConn = {i:[] for i in range(Mesh.NNode)}</span>
+    <span class="c1"># h = np.linalg.norm(np.diff(Mesh.NodeCoords[Mesh.Edges[0]],axis=0))</span>
+    <span class="c1"># for i,edge in enumerate(Mesh.Edges):</span>
+    <span class="c1">#     NodeEdgeConn[edge[0]].append(i)</span>
+    <span class="c1">#     NodeEdgeConn[edge[1]].append(i)</span>
+
+    <span class="c1"># NodeEdgeConn = mymesh.utils.PadRagged(list(NodeEdgeConnDict.values()))</span>
+    <span class="c1"># try:</span>
+    <span class="c1">#     Mesh.NodeConn = np.asarray(Mesh.NodeConn, dtype=np.int64)</span>
+    <span class="c1"># except:</span>
+    <span class="c1">#     raise NotImplementedError(&#39;Mixed-element meshes not yet supported.&#39;)</span>
+    <span class="n">NodeConnDict</span> <span class="o">=</span> <span class="n">Dict</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">key_type</span><span class="o">=</span><span class="n">int64</span><span class="p">,</span> <span class="n">value_type</span><span class="o">=</span><span class="n">int64</span><span class="p">[:])</span>
+
+    <span class="n">ElemConnDict</span> <span class="o">=</span> <span class="n">Dict</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">key_type</span><span class="o">=</span><span class="n">int64</span><span class="p">,</span> <span class="n">value_type</span><span class="o">=</span><span class="n">int64</span><span class="p">[:])</span>
+    <span class="n">NodeNeighborDict</span> <span class="o">=</span> <span class="n">Dict</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">key_type</span><span class="o">=</span><span class="n">int64</span><span class="p">,</span> <span class="n">value_type</span><span class="o">=</span><span class="n">int64</span><span class="p">[:])</span>
+    <span class="n">MooreNeighborDict</span> <span class="o">=</span> <span class="n">Dict</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">key_type</span><span class="o">=</span><span class="n">int64</span><span class="p">,</span> <span class="n">value_type</span><span class="o">=</span><span class="n">int64</span><span class="p">[:])</span>
+
+    <span class="n">EdgeElemConnDict</span> <span class="o">=</span> <span class="n">Dict</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">key_type</span><span class="o">=</span><span class="n">int64</span><span class="p">,</span> <span class="n">value_type</span><span class="o">=</span><span class="n">int64</span><span class="p">[:])</span>
+    <span class="n">NodeEdgeConnDict</span> <span class="o">=</span> <span class="n">Dict</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">key_type</span><span class="o">=</span><span class="n">int64</span><span class="p">,</span> <span class="n">value_type</span><span class="o">=</span><span class="n">int64</span><span class="p">[:])</span>
+
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Mesh</span><span class="o">.</span><span class="n">NElem</span><span class="p">):</span>
+        <span class="n">NodeConnDict</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Mesh</span><span class="o">.</span><span class="n">NodeConn</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Mesh</span><span class="o">.</span><span class="n">NNode</span><span class="p">):</span>
+        <span class="n">ElemConnDict</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Mesh</span><span class="o">.</span><span class="n">ElemConn</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+        <span class="n">NodeNeighborDict</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Mesh</span><span class="o">.</span><span class="n">NodeNeighbors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+        <span class="n">MooreNeighborDict</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">setdiff1d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">([</span><span class="n">Mesh</span><span class="o">.</span><span class="n">NodeConn</span><span class="p">[</span><span class="n">e</span><span class="p">]</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">Mesh</span><span class="o">.</span><span class="n">ElemConn</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">),</span><span class="n">i</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Mesh</span><span class="o">.</span><span class="n">NEdge</span><span class="p">):</span>
+        <span class="n">EdgeElemConnDict</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Mesh</span><span class="o">.</span><span class="n">EdgeElemConn</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+        
+        <span class="n">edge</span> <span class="o">=</span> <span class="n">Mesh</span><span class="o">.</span><span class="n">Edges</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">NodeEdgeConnDict</span><span class="p">:</span>
+            <span class="n">NodeEdgeConnDict</span><span class="p">[</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">NodeEdgeConnDict</span><span class="p">[</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">i</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">NodeEdgeConnDict</span><span class="p">[</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">i</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="n">NodeEdgeConnDict</span><span class="p">:</span>
+            <span class="n">NodeEdgeConnDict</span><span class="p">[</span><span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">NodeEdgeConnDict</span><span class="p">[</span><span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="n">i</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">NodeEdgeConnDict</span><span class="p">[</span><span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">i</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    
+    <span class="n">agent_grid</span> <span class="o">=</span> <span class="n">AgentGrid</span><span class="p">(</span>
+                        <span class="n">Mesh</span><span class="o">.</span><span class="n">NNode</span><span class="p">,</span> 
+                        <span class="n">Mesh</span><span class="o">.</span><span class="n">NElem</span><span class="p">,</span>
+                        <span class="n">TimeStep</span><span class="p">,</span>
+                        <span class="n">NodeConnDict</span><span class="p">,</span>           <span class="c1"># NodeConn</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">Mesh</span><span class="o">.</span><span class="n">Edges</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">),</span>
+                        <span class="n">EdgeElemConnDict</span><span class="p">,</span><span class="c1"># EdgeElemConn</span>
+                        <span class="n">NodeEdgeConnDict</span><span class="p">,</span>                 <span class="c1"># NodeEdgeConn    </span>
+                        <span class="n">ElemConnDict</span><span class="p">,</span>           <span class="c1"># ElemConn</span>
+                        <span class="n">NodeNeighborDict</span><span class="p">,</span>      <span class="c1"># Node Neighbors </span>
+                        <span class="n">MooreNeighborDict</span><span class="p">,</span> <span class="c1"># Node Moore Neighborhood</span>
+                        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">agent_grid</span>
+
+<span class="c1"># def get_AgentMesh(AgentGrid):</span>
+
+<span class="c1">#     nodes = list(AgentGrid.NodeAgents.keys())</span>
+<span class="c1">#     A = mesh(AgentGrid.NodeCoords[nodes])</span>
+<span class="c1">#     A.NodeData[&#39;state&#39;] = [AgentGrid.NodeAgents[i].state for i in nodes]</span>
+
+<span class="c1">#     return A</span>
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2023, Timothy O. Josephson.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

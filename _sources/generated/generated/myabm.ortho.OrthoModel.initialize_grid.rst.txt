@@ -1,0 +1,6 @@
+myabm.ortho.OrthoModel.initialize\_grid
+=======================================
+
+.. currentmodule:: myabm.ortho
+
+.. automethod:: OrthoModel.initialize_grid

@@ -1,0 +1,724 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>myabm.ortho.setup &#8212; MyABM vdev Manual</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/jupyter-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/thebelab.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/myabm.css?v=1e1bb860" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=3ce10a4d"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=4ea706d9"></script>
+    <script src="../../../_static/thebelab-helper.js"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/myabm/ortho/setup';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="dev" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../../../_static/myabm_logo.png" class="logo__image only-light" alt="MyABM vdev Manual - Home"/>
+    <img src="../../../_static/myabm_logo.png" class="logo__image only-dark pst-js-only" alt="MyABM vdev Manual - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../examples/index.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/BU-SMBL/Tim-Josephson" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../examples/index.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/BU-SMBL/Tim-Josephson" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../../myabm.html" class="nav-link">myabm</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../ortho.html" class="nav-link">myabm.ortho</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">myabm.ortho.setup</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for myabm.ortho.setup</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># Created on Thu Jun  5 11:08:02 2025</span>
+<span class="c1"># @author: toj</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">Setup functions for initializing ortho models</span>
+<span class="sd">=============================================</span>
+<span class="sd">.. autosummary::</span>
+<span class="sd">    :toctree: submodules/</span>
+
+<span class="sd">    implicit_scaffold</span>
+<span class="sd">    demo_block</span>
+<span class="sd">    wellplate</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span><span class="o">,</span><span class="w"> </span><span class="nn">os</span><span class="o">,</span><span class="w"> </span><span class="nn">warnings</span><span class="o">,</span><span class="w">  </span><span class="nn">copy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tqdm</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mymesh</span><span class="w"> </span><span class="kn">import</span> <span class="n">converter</span><span class="p">,</span> <span class="n">curvature</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">implicit</span><span class="p">,</span> <span class="n">improvement</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">primitives</span><span class="p">,</span> <span class="n">utils</span><span class="p">,</span> <span class="n">quality</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">Model</span><span class="p">,</span> <span class="n">AgentGrid</span><span class="p">,</span> <span class="n">Agent</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">actions</span><span class="p">,</span> <span class="n">geometries</span><span class="p">,</span> <span class="n">mechanobiology</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">OrthoModel</span>
+
+<div class="viewcode-block" id="implicit_scaffold">
+<a class="viewcode-back" href="../../../generated/generated/submodules/myabm.ortho.setup.implicit_scaffold.html#myabm.ortho.setup.implicit_scaffold">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">implicit_scaffold</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">seeding_density</span><span class="o">=</span><span class="mf">1e3</span><span class="p">,</span> <span class="n">agent_parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filled</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ncells</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Setup an Ortho model with a scaffold defined by an implicit function</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    func : callable</span>
+<span class="sd">        Implicit function of the form :math:`\phi = f(x,y,z)`</span>
+<span class="sd">    bounds : array_like</span>
+<span class="sd">        6 element list of bounds, :code:`[minx, maxx, miny, maxy, minz, maxz]`</span>
+<span class="sd">    h : float</span>
+<span class="sd">        Grid spacing</span>
+<span class="sd">    seeding_density : float, optional</span>
+<span class="sd">        Density of cells to seed on the scaffold, in cells/mm^3, by default 1e3</span>
+<span class="sd">    agent_parameters : dict, optional</span>
+<span class="sd">        Dictionary of parameters to use for the seeded cells, by default None.</span>
+<span class="sd">        If None are provided, default parameters for MSCs are used</span>
+<span class="sd">    filled : bool, optional</span>
+<span class="sd">        If True, generate a model where the scaffold is pre-filled with tissue, by default False</span>
+<span class="sd">    ncells : int, optional</span>
+<span class="sd">        Number of cells to seed on the surface. If provided, will override </span>
+<span class="sd">        :code:`seeding_density`, by default None</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    model : myabm.ortho.OrthoModel</span>
+<span class="sd">        Initialized model seeded with cells</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># seeding_density is default, but if ncells is provided it takes precedence</span>
+    
+    <span class="c1"># Create mesh grid</span>
+    <span class="n">Grid</span> <span class="o">=</span> <span class="n">primitives</span><span class="o">.</span><span class="n">Grid</span><span class="p">(</span><span class="n">bounds</span><span class="p">,</span> <span class="n">h</span><span class="p">)</span>
+    <span class="n">Grid</span><span class="o">.</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">OrthoModel</span><span class="p">(</span><span class="n">Grid</span><span class="p">)</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;h&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">h</span>
+
+    <span class="c1"># initialize properties</span>
+    <span class="k">if</span> <span class="n">filled</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span><span class="p">:</span>
+        
+        <span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">ElemData</span><span class="p">[</span><span class="s1">&#39;material&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">Grid</span><span class="o">.</span><span class="n">NElem</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">filled</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">number</span><span class="p">)):</span>
+            <span class="n">fill</span> <span class="o">=</span> <span class="n">filled</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fill</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">ElemData</span><span class="p">[</span><span class="s1">&#39;material&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">Grid</span><span class="o">.</span><span class="n">NElem</span><span class="p">)</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">ElemData</span><span class="p">[</span><span class="s1">&#39;material&#39;</span><span class="p">][</span><span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">Grid</span><span class="o">.</span><span class="n">Centroids</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">8</span> <span class="c1"># Scaffold</span>
+    <span class="c1"># Grid.ElemData[&#39;age&#39;] = np.zeros(Grid.NElem)</span>
+    <span class="n">Pore</span> <span class="o">=</span> <span class="n">Grid</span><span class="o">.</span><span class="n">Threshold</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">ElemData</span><span class="p">[</span><span class="s1">&#39;material&#39;</span><span class="p">],</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;!=&#39;</span><span class="p">)</span>
+    <span class="n">Pore</span><span class="o">.</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span>
+    <span class="n">exclude</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">setdiff1d</span><span class="p">(</span><span class="n">Grid</span><span class="o">.</span><span class="n">SurfNodes</span><span class="p">,</span> <span class="n">Pore</span><span class="o">.</span><span class="n">SurfNodes</span><span class="p">)</span>
+    <span class="c1"># Create agent grid</span>
+
+    <span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">NodeData</span><span class="p">[</span><span class="s1">&#39;Cells Allowed&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">NNode</span><span class="p">)</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">NodeData</span><span class="p">[</span><span class="s1">&#39;Cells Allowed&#39;</span><span class="p">][</span><span class="n">exclude</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span> 
+    <span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">ElemData</span><span class="p">[</span><span class="s1">&#39;Scaffold Fraction&#39;</span><span class="p">][</span><span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">ElemData</span><span class="p">[</span><span class="s1">&#39;material&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">8</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">ElemData</span><span class="p">[</span><span class="s1">&#39;Volume Fraction&#39;</span><span class="p">][</span><span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">ElemData</span><span class="p">[</span><span class="s1">&#39;material&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">8</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">filled</span><span class="p">:</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">ElemData</span><span class="p">[</span><span class="s1">&#39;Volume Fraction&#39;</span><span class="p">][</span><span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">ElemData</span><span class="p">[</span><span class="s1">&#39;material&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">fill</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">ElemData</span><span class="p">[</span><span class="s1">&#39;ECM Fraction&#39;</span><span class="p">][</span><span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">ElemData</span><span class="p">[</span><span class="s1">&#39;material&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">fill</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">ElemData</span><span class="p">[</span><span class="s1">&#39;Mineral Density&#39;</span><span class="p">][</span><span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">ElemData</span><span class="p">[</span><span class="s1">&#39;material&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">8</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span> <span class="c1"># mg/mm^3</span>
+    
+    
+    <span class="k">if</span> <span class="n">filled</span><span class="p">:</span>
+        <span class="c1"># Random tissue orientation</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">ElemData</span><span class="p">[</span><span class="s1">&#39;material&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">ElemVectorData</span><span class="p">[</span><span class="s1">&#39;Tissue Orientation&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">Grid</span><span class="o">.</span><span class="n">NElem</span> <span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">ElemVectorData</span><span class="p">[</span><span class="s1">&#39;Tissue Orientation Orthogonal&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">Grid</span><span class="o">.</span><span class="n">NElem</span> <span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">ElemVectorData</span><span class="p">[</span><span class="s1">&#39;Tissue Orientation&#39;</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">idx</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">ElemVectorData</span><span class="p">[</span><span class="s1">&#39;Tissue Orientation&#39;</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">ElemVectorData</span><span class="p">[</span><span class="s1">&#39;Tissue Orientation&#39;</span><span class="p">][</span><span class="n">idx</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span><span class="kc">None</span><span class="p">]</span>
+        <span class="n">rand_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">idx</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">rand_vec</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">rand_vec</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span><span class="kc">None</span><span class="p">]</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">ElemVectorData</span><span class="p">[</span><span class="s1">&#39;Tissue Orientation Orthogonal&#39;</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">ElemVectorData</span><span class="p">[</span><span class="s1">&#39;Tissue Orientation&#39;</span><span class="p">][</span><span class="n">idx</span><span class="p">],</span> <span class="n">rand_vec</span><span class="p">)</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">ElemVectorData</span><span class="p">[</span><span class="s1">&#39;Tissue Orientation Orthogonal&#39;</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">ElemVectorData</span><span class="p">[</span><span class="s1">&#39;Tissue Orientation Orthogonal&#39;</span><span class="p">][</span><span class="n">idx</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span><span class="kc">None</span><span class="p">]</span>
+        
+    <span class="c1"># Seed scaffold</span>
+    <span class="n">Scaffold</span> <span class="o">=</span> <span class="n">Grid</span><span class="o">.</span><span class="n">Threshold</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">ElemData</span><span class="p">[</span><span class="s1">&#39;material&#39;</span><span class="p">],</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;==&#39;</span><span class="p">)</span>
+    <span class="n">Scaffold</span><span class="o">.</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span>
+    <span class="n">ScafSurfNodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">setdiff1d</span><span class="p">(</span><span class="n">Scaffold</span><span class="o">.</span><span class="n">SurfNodes</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Grid</span><span class="o">.</span><span class="n">NNode</span><span class="p">)[</span><span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">NodeData</span><span class="p">[</span><span class="s1">&#39;Cells Allowed&#39;</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span><span class="p">])</span>
+    
+    <span class="k">if</span> <span class="n">filled</span><span class="p">:</span>
+        <span class="n">tissue</span> <span class="o">=</span> <span class="n">Grid</span><span class="o">.</span><span class="n">Threshold</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">ElemData</span><span class="p">[</span><span class="s1">&#39;Volume Fraction&#39;</span><span class="p">],</span> <span class="mf">0.2</span><span class="p">,</span> <span class="s1">&#39;&gt;=&#39;</span><span class="p">)</span>
+        <span class="n">ScafInteriorNodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">setdiff1d</span><span class="p">(</span><span class="n">Scaffold</span><span class="o">.</span><span class="n">MeshNodes</span><span class="p">,</span> <span class="n">Scaffold</span><span class="o">.</span><span class="n">SurfNodes</span><span class="p">)</span>
+        
+        <span class="n">SeedNodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">setdiff1d</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">union1d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">setdiff1d</span><span class="p">(</span><span class="n">tissue</span><span class="o">.</span><span class="n">MeshNodes</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Grid</span><span class="o">.</span><span class="n">NNode</span><span class="p">)[</span><span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">NodeData</span><span class="p">[</span><span class="s1">&#39;Cells Allowed&#39;</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span><span class="p">]),</span> <span class="n">ScafSurfNodes</span><span class="p">),</span>
+                <span class="n">ScafInteriorNodes</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">SeedNodes</span> <span class="o">=</span> <span class="n">ScafSurfNodes</span>
+
+    <span class="n">nSurfElems</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">Scaffold</span><span class="o">.</span><span class="n">SurfConn</span><span class="p">,</span> <span class="n">SeedNodes</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">SurfArea</span> <span class="o">=</span> <span class="n">nSurfElems</span> <span class="o">*</span> <span class="n">h</span><span class="o">**</span><span class="mi">2</span>
+    
+    <span class="k">if</span> <span class="n">ncells</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ncells</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">seeding_density</span><span class="o">*</span><span class="n">SurfArea</span><span class="p">))</span>
+    
+    <span class="n">model</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">ncells</span><span class="p">,</span> <span class="s1">&#39;msc&#39;</span><span class="p">,</span> <span class="n">SeedNodes</span><span class="p">,</span> <span class="s1">&#39;random&#39;</span><span class="p">,</span> <span class="n">agent_parameters</span><span class="p">)</span>
+    
+
+    <span class="k">return</span> <span class="n">model</span></div>
+
+
+<div class="viewcode-block" id="demo_block">
+<a class="viewcode-back" href="../../../generated/generated/submodules/myabm.ortho.setup.demo_block.html#myabm.ortho.setup.demo_block">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">demo_block</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">ncells</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">agent_parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate a 2x2 voxel block, used to demonstrate agent actions</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    h : float</span>
+<span class="sd">        grid spacing</span>
+<span class="sd">    ncells : int, optional</span>
+<span class="sd">        Number of cells to place on the block, by default 1</span>
+<span class="sd">    agent_parameters : dict, optional</span>
+<span class="sd">        Dictionary of parameters to use for the seeded cells, by default None.</span>
+<span class="sd">        If None are provided, default parameters for MSCs are used</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    model : myabm.ortho.OrthoModel</span>
+<span class="sd">        Initialized model of the demo block</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dt</span> <span class="o">=</span> <span class="mf">0.02</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="mf">.025</span>
+    <span class="n">func</span><span class="p">,</span> <span class="n">bounds</span> <span class="o">=</span> <span class="n">geometries</span><span class="o">.</span><span class="n">demo_block</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">implicit_scaffold</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">bounds</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">ncells</span><span class="o">=</span><span class="n">ncells</span><span class="p">,</span> <span class="n">agent_parameters</span><span class="o">=</span><span class="n">agent_parameters</span><span class="p">)</span>
+    <span class="c1"># agent_grid.NodeData[&#39;Cells Allowed&#39;] = np.repeat(np.int32(1), agent_grid.NNode) </span>
+    <span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">TimeStep</span> <span class="o">=</span> <span class="n">dt</span>
+    <span class="n">node</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">NodeAgents</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">ncells</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">node</span> <span class="o">!=</span> <span class="mi">29</span><span class="p">:</span>
+            <span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">move_agent</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">29</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">model</span></div>
+
+
+<div class="viewcode-block" id="wellplate">
+<a class="viewcode-back" href="../../../generated/generated/submodules/myabm.ortho.setup.wellplate.html#myabm.ortho.setup.wellplate">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">wellplate</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">media_volume</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">zstep</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ncells</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate a model of the well of a tissue culture well plate</span>
+
+<span class="sd">    </span>
+<span class="sd">    Well plate specifications based on: </span>
+<span class="sd">    `Useful Numbers for Cell Culture &lt;https://www.thermofisher.com/us/en/home/references/gibco-cell-culture-basics/cell-culture-protocols/cell-culture-useful-numbers.html&gt;`_</span>
+
+<span class="sd">    +------------+-------------------------------------+---------------------------+-----------------------------+</span>
+<span class="sd">    | Well Plate | Surface Area (mm\ :superscript:`2`) | Growth Medium Volume (mL) | Recommended Seeding Density |</span>
+<span class="sd">    +============+=====================================+===========================+=============================+</span>
+<span class="sd">    | 6-well     | 960                                 | 2                         | 0.3e6 cells/well            |</span>
+<span class="sd">    +------------+-------------------------------------+---------------------------+-----------------------------+</span>
+<span class="sd">    | 12-well    | 350                                 | 1                         | 0.1e6 cells/well            |</span>
+<span class="sd">    +------------+-------------------------------------+---------------------------+-----------------------------+</span>
+<span class="sd">    | 24-well    | 190                                 | 0.75                      | 0.05e6 cells/well,          |</span>
+<span class="sd">    +------------+-------------------------------------+---------------------------+-----------------------------+</span>
+<span class="sd">    | 48-well    | 110                                 | 0.3                       | 0.03e6 cells/well           |</span>
+<span class="sd">    +------------+-------------------------------------+---------------------------+-----------------------------+</span>
+<span class="sd">    | 96-well    | 32                                  | 0.15                      | 0.01e6 cells/well           | </span>
+<span class="sd">    +------------+-------------------------------------+---------------------------+-----------------------------+</span>
+<span class="sd">    | 384-well   | 8.4                                 | 0.15                      | 0.0018e6 cells/well         | </span>
+<span class="sd">    +------------+-------------------------------------+---------------------------+-----------------------------+</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    size : int</span>
+<span class="sd">        Size of the well plate, in terms of the number of wells on the plate:</span>
+<span class="sd">        6, 12, 24, 48, 96</span>
+<span class="sd">    h : float</span>
+<span class="sd">        grid spacing</span>
+<span class="sd">    media_volume : bool</span>
+<span class="sd">        Volume of media in the well, used to set a height of empty space in </span>
+<span class="sd">        the mesh grid above the plate, by default False.</span>
+<span class="sd">    zstep : float</span>
+<span class="sd">        Grid spacing in the z direction, used if media_volume is True. By default, equal to h.</span>
+<span class="sd">    ncells : float</span>
+<span class="sd">        Number of cells to seed in the well</span>
+<span class="sd">    parameters : dict, optional</span>
+<span class="sd">        Dictionary of parameters to use for the seeded cells, by default None.</span>
+<span class="sd">        If None are provided, default parameters for MSCs are used</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    model : myabm.ortho.OrthoModel</span>
+<span class="sd">        Initialized model of the well plate, seeded with cells</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">func</span><span class="p">,</span> <span class="n">bounds</span> <span class="o">=</span> <span class="n">geometries</span><span class="o">.</span><span class="n">wellplate</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">media_volume</span><span class="o">=</span><span class="n">media_volume</span><span class="p">)</span>
+    <span class="c1"># Create mesh grid</span>
+    <span class="k">if</span> <span class="n">zstep</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">zstep</span> <span class="o">=</span> <span class="n">h</span>
+    <span class="n">Grid</span> <span class="o">=</span> <span class="n">primitives</span><span class="o">.</span><span class="n">Grid</span><span class="p">(</span><span class="n">bounds</span><span class="p">,</span> <span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">zstep</span><span class="p">))</span>
+    <span class="n">Grid2</span> <span class="o">=</span> <span class="n">primitives</span><span class="o">.</span><span class="n">Grid</span><span class="p">([</span><span class="n">bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">bounds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">bounds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">bounds</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="o">-</span><span class="n">h</span><span class="p">,</span> <span class="n">bounds</span><span class="p">[</span><span class="mi">4</span><span class="p">]],</span> <span class="n">h</span><span class="p">)</span>
+    <span class="n">Grid</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">Grid2</span><span class="p">)</span>
+    <span class="n">Grid</span><span class="o">.</span><span class="n">SurfNodes</span>
+    <span class="k">if</span> <span class="n">size</span> <span class="o">==</span> <span class="mi">6</span><span class="p">:</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">960</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ncells</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ncells</span> <span class="o">=</span> <span class="mf">0.3e6</span>
+    <span class="k">elif</span> <span class="n">size</span> <span class="o">==</span> <span class="mi">12</span><span class="p">:</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">350</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ncells</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ncells</span> <span class="o">=</span> <span class="mf">0.1e6</span>
+    <span class="k">elif</span> <span class="n">size</span> <span class="o">==</span> <span class="mi">24</span><span class="p">:</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">190</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ncells</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ncells</span> <span class="o">=</span> <span class="mf">0.05e6</span>
+    <span class="k">elif</span> <span class="n">size</span> <span class="o">==</span> <span class="mi">48</span><span class="p">:</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">110</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ncells</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ncells</span> <span class="o">=</span> <span class="mf">0.03e6</span>
+    <span class="k">elif</span> <span class="n">size</span> <span class="o">==</span> <span class="mi">96</span><span class="p">:</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">32</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ncells</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ncells</span> <span class="o">=</span> <span class="mf">0.01e6</span>
+    <span class="k">elif</span> <span class="n">size</span> <span class="o">==</span> <span class="mi">384</span><span class="p">:</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">.084</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ncells</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ncells</span> <span class="o">=</span> <span class="mf">0.0018e6</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid well plate size, must be one of: 384, 96, 48, 24, 12, 6.&#39;</span><span class="p">)</span>
+    <span class="n">Grid</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">Grid</span> <span class="o">=</span> <span class="n">Grid</span><span class="o">.</span><span class="n">Threshold</span><span class="p">(</span><span class="n">implicit</span><span class="o">.</span><span class="n">cylinder</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">r</span><span class="p">)(</span><span class="o">*</span><span class="n">Grid</span><span class="o">.</span><span class="n">Centroids</span><span class="o">.</span><span class="n">T</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;&lt;&#39;</span><span class="p">,</span> <span class="n">InPlace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cleanup</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">OrthoModel</span><span class="p">(</span><span class="n">Grid</span><span class="p">)</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;h&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">h</span>
+
+    <span class="c1"># initialize properties</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">ElemData</span><span class="p">[</span><span class="s1">&#39;material&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">Grid</span><span class="o">.</span><span class="n">NElem</span><span class="p">)</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">ElemData</span><span class="p">[</span><span class="s1">&#39;material&#39;</span><span class="p">][</span><span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">Grid</span><span class="o">.</span><span class="n">Centroids</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">8</span> <span class="c1"># Scaffold</span>
+    
+    <span class="c1"># Create agent grid</span>
+    <span class="c1"># agent_grid = abm.initialize(Grid)</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s1">&#39;Volume&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">h</span><span class="o">*</span><span class="n">h</span><span class="o">*</span><span class="n">zstep</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">NodeData</span><span class="p">[</span><span class="s1">&#39;Cells Allowed&#39;</span><span class="p">][</span><span class="n">model</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">SurfNodes</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>     <span class="c1"># TODO: Should make this an option</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">ElemData</span><span class="p">[</span><span class="s1">&#39;Scaffold Fraction&#39;</span><span class="p">][</span><span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">ElemData</span><span class="p">[</span><span class="s1">&#39;material&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">8</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">ElemData</span><span class="p">[</span><span class="s1">&#39;Volume Fraction&#39;</span><span class="p">][</span><span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">ElemData</span><span class="p">[</span><span class="s1">&#39;material&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">8</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">ElemData</span><span class="p">[</span><span class="s1">&#39;Mineral Density&#39;</span><span class="p">][</span><span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">ElemData</span><span class="p">[</span><span class="s1">&#39;material&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">8</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span> <span class="c1"># mg/mm^3</span>
+    
+    <span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">ElemData</span><span class="p">[</span><span class="s1">&#39;Volume Fraction&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">ElemData</span><span class="p">[</span><span class="s1">&#39;Volume Fraction&#39;</span><span class="p">]</span>
+    <span class="c1"># Seed scaffold</span>
+    <span class="n">Scaffold</span> <span class="o">=</span> <span class="n">Grid</span><span class="o">.</span><span class="n">Threshold</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">agent_grid</span><span class="o">.</span><span class="n">ElemData</span><span class="p">[</span><span class="s1">&#39;material&#39;</span><span class="p">],</span> <span class="mi">8</span><span class="p">,</span> <span class="s1">&#39;==&#39;</span><span class="p">)</span>
+    <span class="n">Scaffold</span><span class="o">.</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span>
+    
+    <span class="n">SeedNodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">setdiff1d</span><span class="p">(</span><span class="n">Scaffold</span><span class="o">.</span><span class="n">SurfNodes</span><span class="p">,</span> <span class="n">Grid</span><span class="o">.</span><span class="n">SurfNodes</span><span class="p">)</span>
+    <span class="n">nSurfElems</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">Scaffold</span><span class="o">.</span><span class="n">SurfConn</span><span class="p">,</span> <span class="n">SeedNodes</span><span class="p">),</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">SurfArea</span> <span class="o">=</span> <span class="n">nSurfElems</span> <span class="o">*</span> <span class="n">h</span><span class="o">**</span><span class="mi">2</span>
+    <span class="c1"># ncells = int(np.round(seeding_density*SurfArea))</span>
+    
+    <span class="n">model</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">ncells</span><span class="p">,</span> <span class="s1">&#39;msc&#39;</span><span class="p">,</span> <span class="n">SeedNodes</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">model</span></div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2023, Timothy O. Josephson.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

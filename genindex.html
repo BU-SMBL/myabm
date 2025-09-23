@@ -1,0 +1,794 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Index &#8212; MyABM vdev Manual</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/css/myabm.css?v=1e1bb860" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=3ce10a4d"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=4ea706d9"></script>
+    <script src="_static/thebelab-helper.js"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'genindex';</script>
+    <link rel="index" title="Index" href="#" />
+    <link rel="search" title="Search" href="search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="dev" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="_static/myabm_logo.png" class="logo__image only-light" alt="MyABM vdev Manual - Home"/>
+    <img src="_static/myabm_logo.png" class="logo__image only-dark pst-js-only" alt="MyABM vdev Manual - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="examples/index.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/BU-SMBL/Tim-Josephson" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="guide.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="api.html">
+    API Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="examples/index.html">
+    Examples
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/BU-SMBL/Tim-Josephson" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none"></div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+
+<h1 id="index">Index</h1>
+
+<div class="genindex-jumpbox">
+ <a href="#A"><strong>A</strong></a>
+ | <a href="#C"><strong>C</strong></a>
+ | <a href="#D"><strong>D</strong></a>
+ | <a href="#E"><strong>E</strong></a>
+ | <a href="#I"><strong>I</strong></a>
+ | <a href="#M"><strong>M</strong></a>
+ | <a href="#N"><strong>N</strong></a>
+ | <a href="#O"><strong>O</strong></a>
+ | <a href="#P"><strong>P</strong></a>
+ | <a href="#R"><strong>R</strong></a>
+ | <a href="#S"><strong>S</strong></a>
+ | <a href="#U"><strong>U</strong></a>
+ | <a href="#W"><strong>W</strong></a>
+ 
+</div>
+<h2 id="A">A</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/myabm.Agent.act.html#myabm.Agent.act">act() (myabm.Agent method)</a>
+
+      <ul>
+        <li><a href="generated/myabm.Model.act.html#myabm.Model.act">(myabm.Model method)</a>
+</li>
+        <li><a href="generated/generated/myabm.ortho.OrthoModel.act.html#myabm.ortho.OrthoModel.act">(myabm.ortho.OrthoModel method)</a>
+</li>
+      </ul></li>
+      <li><a href="generated/myabm.AgentGrid.add_agent.html#myabm.AgentGrid.add_agent">add_agent() (myabm.AgentGrid method)</a>
+</li>
+      <li><a href="generated/myabm.Agent.html#myabm.Agent">Agent (class in myabm)</a>
+</li>
+      <li><a href="generated/myabm.Model.agent_nodes.html#myabm.Model.agent_nodes">agent_nodes (myabm.Model property)</a>
+
+      <ul>
+        <li><a href="generated/generated/myabm.ortho.OrthoModel.agent_nodes.html#myabm.ortho.OrthoModel.agent_nodes">(myabm.ortho.OrthoModel property)</a>
+</li>
+      </ul></li>
+      <li><a href="generated/myabm.Model.agent_states.html#myabm.Model.agent_states">agent_states (myabm.Model property)</a>
+
+      <ul>
+        <li><a href="generated/generated/myabm.ortho.OrthoModel.agent_states.html#myabm.ortho.OrthoModel.agent_states">(myabm.ortho.OrthoModel property)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/myabm.AgentGrid.html#myabm.AgentGrid">AgentGrid (class in myabm)</a>
+</li>
+      <li><a href="generated/myabm.AgentGrid.html#myabm.AgentGrid.Agents">Agents (myabm.AgentGrid attribute)</a>
+</li>
+      <li><a href="generated/myabm.Model.agents.html#myabm.Model.agents">agents (myabm.Model property)</a>
+
+      <ul>
+        <li><a href="generated/generated/myabm.ortho.OrthoModel.agents.html#myabm.ortho.OrthoModel.agents">(myabm.ortho.OrthoModel property)</a>
+</li>
+      </ul></li>
+      <li><a href="generated/myabm.Model.animate.html#myabm.Model.animate">animate() (myabm.Model method)</a>
+
+      <ul>
+        <li><a href="generated/generated/myabm.ortho.OrthoModel.animate.html#myabm.ortho.OrthoModel.animate">(myabm.ortho.OrthoModel method)</a>
+</li>
+      </ul></li>
+      <li><a href="generated/generated/submodules/myabm.ortho.actions.apoptose.html#myabm.ortho.actions.apoptose">apoptose() (in module myabm.ortho.actions)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="C">C</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/myabm.AgentGrid.change_agent.html#myabm.AgentGrid.change_agent">change_agent() (myabm.AgentGrid method)</a>
+</li>
+      <li><a href="generated/myabm.Agent.class_type.html#myabm.Agent.class_type">class_type (myabm.Agent attribute)</a>
+
+      <ul>
+        <li><a href="generated/myabm.AgentGrid.class_type.html#myabm.AgentGrid.class_type">(myabm.AgentGrid attribute)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/generated/submodules/myabm.ortho.geometries.cross_channel.html#myabm.ortho.geometries.cross_channel">cross_channel() (in module myabm.ortho.geometries)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="D">D</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/myabm.Model.default_schedule.html#myabm.Model.default_schedule">default_schedule() (myabm.Model method)</a>
+
+      <ul>
+        <li><a href="generated/generated/myabm.ortho.OrthoModel.default_schedule.html#myabm.ortho.OrthoModel.default_schedule">(myabm.ortho.OrthoModel method)</a>
+</li>
+      </ul></li>
+      <li><a href="generated/generated/submodules/myabm.ortho.geometries.demo_block.html#myabm.ortho.geometries.demo_block">demo_block() (in module myabm.ortho.geometries)</a>
+
+      <ul>
+        <li><a href="generated/generated/submodules/myabm.ortho.setup.demo_block.html#myabm.ortho.setup.demo_block">(in module myabm.ortho.setup)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/submodules/myabm.utils.dict_to_Dict.html#myabm.utils.dict_to_Dict">dict_to_Dict() (in module myabm.utils)</a>
+</li>
+      <li><a href="generated/generated/submodules/myabm.ortho.actions.differentiate_carter.html#myabm.ortho.actions.differentiate_carter">differentiate_carter() (in module myabm.ortho.actions)</a>
+</li>
+      <li><a href="generated/generated/submodules/myabm.ortho.actions.differentiate_prendergast.html#myabm.ortho.actions.differentiate_prendergast">differentiate_prendergast() (in module myabm.ortho.actions)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="E">E</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/myabm.AgentGrid.html#myabm.AgentGrid.ElemData">ElemData (myabm.AgentGrid attribute)</a>
+
+      <ul>
+        <li><a href="generated/myabm.Model.ElemData.html#myabm.Model.ElemData">(myabm.Model property)</a>
+</li>
+        <li><a href="generated/generated/myabm.ortho.OrthoModel.ElemData.html#myabm.ortho.OrthoModel.ElemData">(myabm.ortho.OrthoModel property)</a>
+</li>
+      </ul></li>
+      <li><a href="generated/myabm.AgentGrid.html#myabm.AgentGrid.ElemVectorData">ElemVectorData (myabm.AgentGrid attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/myabm.Model.export_history.html#myabm.Model.export_history">export_history() (myabm.Model method)</a>
+
+      <ul>
+        <li><a href="generated/generated/myabm.ortho.OrthoModel.export_history.html#myabm.ortho.OrthoModel.export_history">(myabm.ortho.OrthoModel method)</a>
+</li>
+      </ul></li>
+      <li><a href="generated/myabm.Model.export_mesh.html#myabm.Model.export_mesh">export_mesh() (myabm.Model method)</a>
+
+      <ul>
+        <li><a href="generated/generated/myabm.ortho.OrthoModel.export_mesh.html#myabm.ortho.OrthoModel.export_mesh">(myabm.ortho.OrthoModel method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="I">I</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/generated/submodules/myabm.ortho.setup.implicit_scaffold.html#myabm.ortho.setup.implicit_scaffold">implicit_scaffold() (in module myabm.ortho.setup)</a>
+</li>
+      <li><a href="generated/myabm.Model.initialize_grid.html#myabm.Model.initialize_grid">initialize_grid() (myabm.Model method)</a>
+
+      <ul>
+        <li><a href="generated/generated/myabm.ortho.OrthoModel.initialize_grid.html#myabm.ortho.OrthoModel.initialize_grid">(myabm.ortho.OrthoModel method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/myabm.Model.iterate.html#myabm.Model.iterate">iterate() (myabm.Model method)</a>
+
+      <ul>
+        <li><a href="generated/generated/myabm.ortho.OrthoModel.iterate.html#myabm.ortho.OrthoModel.iterate">(myabm.ortho.OrthoModel method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="M">M</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/generated/submodules/myabm.ortho.actions.migrate.html#myabm.ortho.actions.migrate">migrate() (in module myabm.ortho.actions)</a>
+</li>
+      <li><a href="generated/generated/submodules/myabm.ortho.actions.migrate_curvotaxis.html#myabm.ortho.actions.migrate_curvotaxis">migrate_curvotaxis() (in module myabm.ortho.actions)</a>
+</li>
+      <li><a href="generated/myabm.Model.html#myabm.Model">Model (class in myabm)</a>
+</li>
+      <li>
+    module
+
+      <ul>
+        <li><a href="api.html#module-myabm">myabm</a>
+</li>
+        <li><a href="generated/myabm.actions.html#module-myabm.actions">myabm.actions</a>
+</li>
+        <li><a href="generated/myabm.ortho.html#module-myabm.ortho">myabm.ortho</a>
+</li>
+        <li><a href="generated/generated/myabm.ortho.actions.html#module-myabm.ortho.actions">myabm.ortho.actions</a>
+</li>
+        <li><a href="generated/generated/myabm.ortho.geometries.html#module-myabm.ortho.geometries">myabm.ortho.geometries</a>
+</li>
+        <li><a href="generated/generated/myabm.ortho.setup.html#module-myabm.ortho.setup">myabm.ortho.setup</a>
+</li>
+        <li><a href="generated/myabm.utils.html#module-myabm.utils">myabm.utils</a>
+</li>
+      </ul></li>
+      <li><a href="generated/myabm.AgentGrid.move_agent.html#myabm.AgentGrid.move_agent">move_agent() (myabm.AgentGrid method)</a>
+</li>
+      <li>
+    myabm
+
+      <ul>
+        <li><a href="api.html#module-myabm">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    myabm.actions
+
+      <ul>
+        <li><a href="generated/myabm.actions.html#module-myabm.actions">module</a>
+</li>
+      </ul></li>
+      <li>
+    myabm.ortho
+
+      <ul>
+        <li><a href="generated/myabm.ortho.html#module-myabm.ortho">module</a>
+</li>
+      </ul></li>
+      <li>
+    myabm.ortho.actions
+
+      <ul>
+        <li><a href="generated/generated/myabm.ortho.actions.html#module-myabm.ortho.actions">module</a>
+</li>
+      </ul></li>
+      <li>
+    myabm.ortho.geometries
+
+      <ul>
+        <li><a href="generated/generated/myabm.ortho.geometries.html#module-myabm.ortho.geometries">module</a>
+</li>
+      </ul></li>
+      <li>
+    myabm.ortho.setup
+
+      <ul>
+        <li><a href="generated/generated/myabm.ortho.setup.html#module-myabm.ortho.setup">module</a>
+</li>
+      </ul></li>
+      <li>
+    myabm.utils
+
+      <ul>
+        <li><a href="generated/myabm.utils.html#module-myabm.utils">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="N">N</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/myabm.Model.NElem.html#myabm.Model.NElem">NElem (myabm.Model property)</a>
+
+      <ul>
+        <li><a href="generated/generated/myabm.ortho.OrthoModel.NElem.html#myabm.ortho.OrthoModel.NElem">(myabm.ortho.OrthoModel property)</a>
+</li>
+      </ul></li>
+      <li><a href="generated/myabm.AgentGrid.next_id.html#myabm.AgentGrid.next_id">next_id (myabm.AgentGrid property)</a>
+</li>
+      <li><a href="generated/myabm.Model.NNode.html#myabm.Model.NNode">NNode (myabm.Model property)</a>
+
+      <ul>
+        <li><a href="generated/generated/myabm.ortho.OrthoModel.NNode.html#myabm.ortho.OrthoModel.NNode">(myabm.ortho.OrthoModel property)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/myabm.AgentGrid.html#myabm.AgentGrid.NodeAgents">NodeAgents (myabm.AgentGrid attribute)</a>
+</li>
+      <li><a href="generated/myabm.AgentGrid.html#myabm.AgentGrid.NodeData">NodeData (myabm.AgentGrid attribute)</a>
+
+      <ul>
+        <li><a href="generated/myabm.Model.NodeData.html#myabm.Model.NodeData">(myabm.Model property)</a>
+</li>
+        <li><a href="generated/generated/myabm.ortho.OrthoModel.NodeData.html#myabm.ortho.OrthoModel.NodeData">(myabm.ortho.OrthoModel property)</a>
+</li>
+      </ul></li>
+      <li><a href="generated/myabm.AgentGrid.html#myabm.AgentGrid.NodeVectorData">NodeVectorData (myabm.AgentGrid attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="O">O</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/generated/myabm.ortho.OrthoModel.html#myabm.ortho.OrthoModel">OrthoModel (class in myabm.ortho)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="P">P</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/myabm.Model.plotter.html#myabm.Model.plotter">plotter() (myabm.Model method)</a>
+
+      <ul>
+        <li><a href="generated/generated/myabm.ortho.OrthoModel.plotter.html#myabm.ortho.OrthoModel.plotter">(myabm.ortho.OrthoModel method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/generated/submodules/myabm.ortho.actions.produce.html#myabm.ortho.actions.produce">produce() (in module myabm.ortho.actions)</a>
+</li>
+      <li><a href="generated/generated/submodules/myabm.ortho.actions.produce_oriented.html#myabm.ortho.actions.produce_oriented">produce_oriented() (in module myabm.ortho.actions)</a>
+</li>
+      <li><a href="generated/generated/submodules/myabm.ortho.actions.proliferate.html#myabm.ortho.actions.proliferate">proliferate() (in module myabm.ortho.actions)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="R">R</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/myabm.AgentGrid.remove_agent.html#myabm.AgentGrid.remove_agent">remove_agent() (myabm.AgentGrid method)</a>
+</li>
+      <li><a href="generated/myabm.AgentGrid.run_agents.html#myabm.AgentGrid.run_agents">run_agents() (myabm.AgentGrid method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/myabm.AgentGrid.run_delayed.html#myabm.AgentGrid.run_delayed">run_delayed() (myabm.AgentGrid method)</a>
+</li>
+      <li><a href="generated/myabm.AgentGrid.run_grid.html#myabm.AgentGrid.run_grid">run_grid() (myabm.AgentGrid method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="S">S</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/myabm.AgentGrid.seed.html#myabm.AgentGrid.seed">seed() (myabm.AgentGrid method)</a>
+
+      <ul>
+        <li><a href="generated/myabm.Model.seed.html#myabm.Model.seed">(myabm.Model method)</a>
+</li>
+        <li><a href="generated/generated/myabm.ortho.OrthoModel.seed.html#myabm.ortho.OrthoModel.seed">(myabm.ortho.OrthoModel method)</a>
+</li>
+      </ul></li>
+      <li><a href="generated/myabm.Model.seed_interactive.html#myabm.Model.seed_interactive">seed_interactive() (myabm.Model method)</a>
+
+      <ul>
+        <li><a href="generated/generated/myabm.ortho.OrthoModel.seed_interactive.html#myabm.ortho.OrthoModel.seed_interactive">(myabm.ortho.OrthoModel method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/generated/submodules/myabm.ortho.geometries.sinusoidal_surface.html#myabm.ortho.geometries.sinusoidal_surface">sinusoidal_surface() (in module myabm.ortho.geometries)</a>
+</li>
+      <li><a href="generated/generated/submodules/myabm.ortho.geometries.square_channel.html#myabm.ortho.geometries.square_channel">square_channel() (in module myabm.ortho.geometries)</a>
+</li>
+      <li><a href="generated/generated/submodules/myabm.ortho.geometries.strut.html#myabm.ortho.geometries.strut">strut() (in module myabm.ortho.geometries)</a>
+</li>
+      <li><a href="generated/generated/myabm.ortho.OrthoModel.substep_saver_schedule.html#myabm.ortho.OrthoModel.substep_saver_schedule">substep_saver_schedule() (myabm.ortho.OrthoModel method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="U">U</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/generated/submodules/myabm.ortho.actions.update_curvature.html#myabm.ortho.actions.update_curvature">update_curvature() (in module myabm.ortho.actions)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/generated/submodules/myabm.ortho.actions.update_mineral.html#myabm.ortho.actions.update_mineral">update_mineral() (in module myabm.ortho.actions)</a>
+</li>
+      <li><a href="generated/generated/submodules/myabm.ortho.actions.update_scaffold_curvature.html#myabm.ortho.actions.update_scaffold_curvature">update_scaffold_curvature() (in module myabm.ortho.actions)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="W">W</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="generated/generated/submodules/myabm.ortho.geometries.wellplate.html#myabm.ortho.geometries.wellplate">wellplate() (in module myabm.ortho.geometries)</a>
+
+      <ul>
+        <li><a href="generated/generated/submodules/myabm.ortho.setup.wellplate.html#myabm.ortho.setup.wellplate">(in module myabm.ortho.setup)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2023, Timothy O. Josephson.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

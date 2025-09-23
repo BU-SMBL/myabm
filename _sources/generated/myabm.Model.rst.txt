@@ -1,0 +1,49 @@
+﻿myabm.Model
+===========
+
+.. currentmodule:: myabm
+
+.. autoclass:: Model
+    :no-members:
+    :no-inherited-members:
+    :show-inheritance:
+    :no-special-members:
+
+Properties
+----------
+
+
+
+    .. autosummary::
+        :toctree:
+            
+    
+            Model.ElemData
+            Model.NElem
+            Model.NNode
+            Model.NodeData
+            Model.agent_nodes
+            Model.agent_states
+            Model.agents
+
+
+
+Methods
+-------
+
+
+    .. autosummary::
+        :toctree:
+
+    
+                Model.act
+                Model.animate
+                Model.default_schedule
+                Model.export_history
+                Model.export_mesh
+                Model.initialize_grid
+                Model.iterate
+                Model.plotter
+                Model.seed
+                Model.seed_interactive
+    

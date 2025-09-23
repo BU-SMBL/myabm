@@ -1,0 +1,42 @@
+﻿myabm.AgentGrid
+===============
+
+.. currentmodule:: myabm
+
+.. autoclass:: AgentGrid
+    :no-members:
+    :no-inherited-members:
+    :show-inheritance:
+    :no-special-members:
+
+Properties
+----------
+
+
+
+    .. autosummary::
+        :toctree:
+            
+    
+            AgentGrid.class_type
+            AgentGrid.next_id
+
+
+
+Methods
+-------
+
+
+    .. autosummary::
+        :toctree:
+
+    
+                AgentGrid.add_agent
+                AgentGrid.change_agent
+                AgentGrid.move_agent
+                AgentGrid.remove_agent
+                AgentGrid.run_agents
+                AgentGrid.run_delayed
+                AgentGrid.run_grid
+                AgentGrid.seed
+    

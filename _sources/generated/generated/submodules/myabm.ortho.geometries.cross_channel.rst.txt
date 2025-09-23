@@ -1,0 +1,6 @@
+myabm.ortho.geometries.cross\_channel
+=====================================
+
+.. currentmodule:: myabm.ortho.geometries
+
+.. autofunction:: cross_channel

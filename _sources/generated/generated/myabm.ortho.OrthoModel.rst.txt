@@ -1,0 +1,50 @@
+myabm.ortho.OrthoModel
+======================
+
+.. currentmodule:: myabm.ortho
+
+.. autoclass:: OrthoModel
+    :no-members:
+    :no-inherited-members:
+    :show-inheritance:
+    :no-special-members:
+
+Properties
+----------
+
+
+
+    .. autosummary::
+        :toctree:
+            
+    
+            OrthoModel.ElemData
+            OrthoModel.NElem
+            OrthoModel.NNode
+            OrthoModel.NodeData
+            OrthoModel.agent_nodes
+            OrthoModel.agent_states
+            OrthoModel.agents
+
+
+
+Methods
+-------
+
+
+    .. autosummary::
+        :toctree:
+
+    
+                OrthoModel.act
+                OrthoModel.animate
+                OrthoModel.default_schedule
+                OrthoModel.export_history
+                OrthoModel.export_mesh
+                OrthoModel.initialize_grid
+                OrthoModel.iterate
+                OrthoModel.plotter
+                OrthoModel.seed
+                OrthoModel.seed_interactive
+                OrthoModel.substep_saver_schedule
+    

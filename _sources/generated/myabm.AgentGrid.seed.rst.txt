@@ -1,0 +1,6 @@
+myabm.AgentGrid.seed
+====================
+
+.. currentmodule:: myabm
+
+.. automethod:: AgentGrid.seed

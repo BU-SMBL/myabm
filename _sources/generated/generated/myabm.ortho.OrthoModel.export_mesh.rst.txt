@@ -1,0 +1,6 @@
+myabm.ortho.OrthoModel.export\_mesh
+===================================
+
+.. currentmodule:: myabm.ortho
+
+.. automethod:: OrthoModel.export_mesh

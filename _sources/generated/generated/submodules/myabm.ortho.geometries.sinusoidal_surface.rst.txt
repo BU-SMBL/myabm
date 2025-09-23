@@ -1,0 +1,6 @@
+myabm.ortho.geometries.sinusoidal\_surface
+==========================================
+
+.. currentmodule:: myabm.ortho.geometries
+
+.. autofunction:: sinusoidal_surface

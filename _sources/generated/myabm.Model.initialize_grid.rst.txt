@@ -1,0 +1,6 @@
+myabm.Model.initialize\_grid
+============================
+
+.. currentmodule:: myabm
+
+.. automethod:: Model.initialize_grid

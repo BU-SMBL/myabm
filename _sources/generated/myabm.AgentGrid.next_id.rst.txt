@@ -1,0 +1,6 @@
+myabm.AgentGrid.next\_id
+========================
+
+.. currentmodule:: myabm
+
+.. autoproperty:: AgentGrid.next_id

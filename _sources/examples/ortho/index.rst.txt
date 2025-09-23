@@ -1,0 +1,99 @@
+
+
+.. _sphx_glr_examples_ortho:
+
+Ortho Examples
+==============
+
+Examples highlighting the ortho model for skeletal tissue formation
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Tissue has been shown to grow in a curvature-dependent manner, with faster growth in regions of higher concave curvatures while being suppressed in  regions of convex curvature. Curvature dependent tissue growth is implemented through the myabm.ortho.actions.produce_oriented cell action, and  requires the model action: myabm.ortho.actions.update_curvature to  calculate the local curvatures.">
+
+.. only:: html
+
+  .. image:: /examples/ortho/images/thumb/sphx_glr_demo_tissue_growth_thumb.gif
+    :alt:
+
+  :ref:`sphx_glr_examples_ortho_demo_tissue_growth.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Tissue Growth</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Cell culture are often performed by seeding cells in well plates, which come in  a few standard sizes (6, 12, 24, 38, 96, 384 wells/plate). Simulating cell  behavior in a culture plate well can be a convenient way to see if the  population of cells follows experimental expectations.">
+
+.. only:: html
+
+  .. image:: /examples/ortho/images/thumb/sphx_glr_demo_wellplate_thumb.gif
+    :alt:
+
+  :ref:`sphx_glr_examples_ortho_demo_wellplate.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">in vitro cell culture</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="These demos illustrate the basic behaviors of skeletal cells in the ortho model, proliferation, apoptosis, migration, tissue production, and differentiation. ">
+
+.. only:: html
+
+  .. image:: /examples/ortho/images/thumb/sphx_glr_demo_skeletal_cells_thumb.gif
+    :alt:
+
+  :ref:`sphx_glr_examples_ortho_demo_skeletal_cells.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Skeletal Cell Behaviors</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Cells have been shown to migrate in response to a variety of cues, including  chemical signaling (&quot;chemotaxis&quot;) and substrate/ECM stiffness (&quot;durotaxis&quot;).  Pieuchot2018a demonstrated that cells also exhibit &quot;curvotaxis&quot;, or  curvature-dependent migration. Both migration rate and preferential migration direction were demonstrated to be curvature dependent, which can be implemented in the model by weighting the probability of migration by the curvature at  the cells current location and the probabilities of which site to move to by  the curvatures at the surrounding sites. ">
+
+.. only:: html
+
+  .. image:: /examples/ortho/images/thumb/sphx_glr_demo_curvotaxis_thumb.gif
+    :alt:
+
+  :ref:`sphx_glr_examples_ortho_demo_curvotaxis.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Curvotaxis</div>
+    </div>
+
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/ortho/demo_tissue_growth
+   /examples/ortho/demo_wellplate
+   /examples/ortho/demo_skeletal_cells
+   /examples/ortho/demo_curvotaxis
+
